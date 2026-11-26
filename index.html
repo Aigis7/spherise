@@ -259,6 +259,27 @@ textarea{width:100%;font-family:var(--f-mono);font-size:.72rem}
 .peek p{margin:0;font-size:.74rem;color:#d9d3f6}
 
 /* 引き出し（ログ・戦績・設定） */
+/* 対戦中のメニュー */
+.side.gmenu{background:linear-gradient(180deg,#141a2e,#07080e);color:#eef1f8;border-left:1px solid rgb(232 200 121 / .35);gap:12px}
+.gm-view{display:grid;gap:12px;align-content:start}
+.gm-head{display:flex;align-items:center;gap:8px;padding-bottom:6px;border-bottom:1px solid rgb(232 200 121 / .25)}
+.gm-title{flex:1;font-family:var(--f-logo);font-weight:900;letter-spacing:.3em;font-size:1rem;color:#f3d995}
+.gm-x,.gm-back{all:unset;cursor:pointer;width:34px;height:34px;display:grid;place-items:center;border-radius:50%;font-size:1.3rem;color:#eef1f8;background:rgb(255 255 255 / .07)}
+.gm-x:focus-visible,.gm-back:focus-visible,.gm-btn:focus-visible,.gm-mini:focus-visible{outline:2px solid #ffd27a;outline-offset:2px}
+.gm-btn{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:14px;background:radial-gradient(circle at 92% 20%,rgb(232 200 121 / .22),transparent 45%),linear-gradient(135deg,#232c4a,#11152a);border:1px solid rgb(232 200 121 / .45);box-shadow:0 6px 18px rgb(0 0 0 / .35);transition:transform .12s,border-color .12s}
+.gm-btn:hover{transform:translateY(-2px);border-color:#ffd27a}
+.gm-btn b{display:block;font-family:var(--f-display);font-weight:400;font-size:1.1rem;letter-spacing:.06em}
+.gm-btn small{display:block;font-size:.72rem;color:#c2c8d8}
+.gm-ico{width:40px;height:40px;flex:0 0 40px;border-radius:50%;display:grid;place-items:center;font-size:1.25rem;color:#2a1f08;background:radial-gradient(circle at 35% 30%,#fff2c4,#e8c879 55%,#9a7226);box-shadow:0 0 12px rgb(232 200 121 / .5)}
+.gm-confirm{padding:12px 14px;border-radius:12px;background:rgb(255 255 255 / .05);border:1px solid rgb(255 255 255 / .12)}
+.gm-confirm p{margin:0 0 10px;font-weight:700}
+.gm-confirm small{font-weight:400;color:#c2c8d8}
+.gm-row{display:flex;gap:8px}
+.gm-mini{all:unset;cursor:pointer;flex:1;text-align:center;padding:8px 10px;border-radius:999px;border:1px solid rgb(255 255 255 / .25);font-weight:700}
+.gm-mini.gold{color:#2a1a00;background:linear-gradient(180deg,#ffe7a6,#f5b941);border-color:transparent}
+.gm-log *{border-color:rgb(255 255 255 / .08)!important}
+.gm-log{max-height:none;background:rgb(255 255 255 / .04);border-radius:10px;padding:8px 10px;color:#e3e6f0}
+.gm-extra .panel{background:rgb(255 255 255 / .04);border-color:rgb(255 255 255 / .1);color:#e3e6f0}
 .side{position:fixed;top:0;right:0;bottom:0;width:min(340px,92vw);z-index:45;overflow-y:auto;display:grid;align-content:start;gap:8px;background:var(--bg);border-left:1px solid var(--line);padding:12px max(14px,env(safe-area-inset-right,0px)) calc(14px + env(safe-area-inset-bottom,0px)) 14px;transform:translateX(105%);visibility:hidden;transition:transform .22s,visibility .22s}
 body.menu-open .side{transform:none;visibility:visible}
 .panel{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 10px;min-width:0}
@@ -737,19 +758,19 @@ body.drag-reserve [data-drop="reserve"] .stack{box-shadow:0 0 0 3px #ffd27a,0 0 
       </div>
     </div>
     <div class="peek" id="peek" hidden aria-hidden="true"></div>
-    <aside class="side" id="side" aria-label="メニュー">
-      <div class="panel" id="menuCtl"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><h2 style="margin:0">メニュー</h2><button class="btn" id="btnMenuClose" type="button">閉じる</button></div>
-        <div class="controls">
-          <button class="btn" type="button" id="btnRestart">この組み合わせでやり直す</button>
-          <button class="btn" type="button" data-go="battle">デッキを選び直す</button>
-          <button class="btn" type="button" data-go="home">ホームへ</button>
-          <label><input type="checkbox" id="chkCpuHand"> CPUの手札を見る</label>
-          <label><input type="checkbox" id="chkSfx"> 効果音</label>
-        </div></div>
-      <div class="panel" id="detailPanel"><h2>カード詳細</h2><div class="detail" id="detail"><span class="note">カードをクリックすると詳細が出ます。</span></div></div>
-      <div class="panel"><h2>ログ</h2><div class="log" id="log" aria-live="polite"></div></div>
-      <div class="panel"><h2>あなたの戦績</h2><div class="simres" id="myStats"></div></div>
-      <details class="panel" id="simPanel">
+    <aside class="side gmenu" id="side" aria-label="メニュー">
+      <div class="gm-view" id="gmMain">
+        <div class="gm-head"><span class="gm-title">MENU</span><button class="gm-x" id="btnMenuClose" type="button" aria-label="閉じる">×</button></div>
+        <button class="gm-btn" type="button" id="gmLog"><span class="gm-ico" aria-hidden="true">≣</span><span><b>ログ</b><small>これまでの流れを見る</small></span></button>
+        <button class="gm-btn" type="button" id="gmTitle"><span class="gm-ico" aria-hidden="true">◎</span><span><b>タイトルに戻る</b><small>対戦をやめて、はじめの画面へ</small></span></button>
+        <div class="gm-confirm" id="gmConfirm" hidden><p>対戦をやめて、タイトルに戻る？<br><small>この対戦の結果は残らない。</small></p><div class="gm-row"><button class="gm-mini gold" type="button" id="gmYes">戻る</button><button class="gm-mini" type="button" id="gmNo">続ける</button></div></div>
+      </div>
+      <div class="gm-view" id="gmLogView" hidden>
+        <div class="gm-head"><button class="gm-back" id="gmBack" type="button" aria-label="メニューにもどる">‹</button><span class="gm-title">LOG</span><button class="gm-x" type="button" data-gmclose aria-label="閉じる">×</button></div>
+        <div class="log gm-log" id="log" aria-live="polite"></div>
+        <div class="gm-extra" id="gmExtra">
+          <div class="panel"><h2>あなたの戦績</h2><div class="simres" id="myStats"></div></div>
+          <details class="panel" id="simPanel">
         <summary>自動対戦（CPU同士）</summary>
         <div class="simgrid">
           <select id="simA" aria-label="デッキA"></select><select id="simB" aria-label="デッキB"></select>
@@ -758,7 +779,7 @@ body.drag-reserve [data-drop="reserve"] .stack{box-shadow:0 0 0 3px #ffd27a,0 0 
         </div>
         <div class="simres" id="simRes"><span class="note">CPUの動きは単純です。数字は目安です。</span></div>
       </details>
-      <details class="panel">
+          <details class="panel">
         <summary>ルールのまとめ</summary>
         <ul>
           <li>ライフ25。0にしたら勝ち。ライフが20・15・10・5になるたびに1枚引く。山札から引けなかったら負け。</li>
@@ -773,6 +794,13 @@ body.drag-reserve [data-drop="reserve"] .stack{box-shadow:0 0 0 3px #ffd27a,0 0 
           <li>領域：条件を満たしたら、次の自分のターン開始時に昇華。1ターン1回。次の条件は昇華のあとから数える。</li>
         </ul>
       </details>
+        </div>
+      </div>
+      <div hidden>
+        <div id="menuCtl"></div><div id="detailPanel"><div id="detail"></div></div>
+        <button type="button" id="btnRestart"></button>
+        <input type="checkbox" id="chkCpuHand"><input type="checkbox" id="chkSfx">
+      </div>
     </aside>
   </section>
 
@@ -2146,8 +2174,17 @@ function humanBlock(g, o, att, target, blockers) {
 const mq = matchMedia('(max-width:600px)');
 const isMobile = () => mq.matches;
 mq.addEventListener('change', () => { if (G && activeTab === 'game') render(); });
-function setMenu(open) { document.body.classList.toggle('menu-open', open); $('#scrim').hidden = !open; $('#btnMenu').setAttribute('aria-expanded', open ? 'true' : 'false'); }
+function setMenu(open) { if (open && $('#gmMain')) gmShow('main'); document.body.classList.toggle('menu-open', open); $('#scrim').hidden = !open; $('#btnMenu').setAttribute('aria-expanded', open ? 'true' : 'false'); }
 $('#btnMenu').addEventListener('click', () => setMenu(true));
+/* 対戦中のメニュー */
+function gmShow(v) { const sp = $('#simPanel'); if (sp) sp.hidden = !DATA_STATE.canEdit; $('#gmMain').hidden = v !== 'main'; $('#gmLogView').hidden = v !== 'log'; $('#gmConfirm').hidden = true; }
+$('#gmLog').addEventListener('click', () => { gmShow('log'); const l = $('#log'); l.scrollTop = l.scrollHeight; });
+$('#gmBack').addEventListener('click', () => gmShow('main'));
+document.querySelectorAll('[data-gmclose]').forEach(b => b.addEventListener('click', () => setMenu(false)));
+$('#gmTitle').addEventListener('click', () => { $('#gmConfirm').hidden = false; $('#gmYes').focus(); });
+$('#gmNo').addEventListener('click', () => { $('#gmConfirm').hidden = true; });
+$('#gmYes').addEventListener('click', () => { setMenu(false); if (G) { G.over = true; if (G.turnResolve) G.turnResolve(); } G = null; paintTitle(); setTab('title'); });
+
 $('#btnMenuClose').addEventListener('click', () => setMenu(false));
 $('#scrim').addEventListener('click', () => setMenu(false));
 function closeSheet() { $('#sheet').hidden = true; $('#sheetBox').innerHTML = ''; }
