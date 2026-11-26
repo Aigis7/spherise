@@ -358,6 +358,21 @@ details.panel ul{padding-left:1.2em;margin:6px 0;font-size:.78rem}
 .gcard .gface{padding:0;background:none;border:0;display:block}
 .gcard .gface .card.mini{width:100%;height:100%;box-sizing:border-box}
 .gcard.hit .gface{border-radius:9px}
+/* 対戦中のダイアログはゲームの見た目に */
+body.in-game .modal{background:rgb(4 5 10 / .72)}
+body.in-game .modal .box{background:radial-gradient(circle at 90% 0%,rgb(232 200 121 / .14),transparent 40%),linear-gradient(180deg,#171d33,#090b14);color:#eef1f8;border:1px solid rgb(232 200 121 / .5);border-radius:16px;box-shadow:0 0 30px rgb(232 200 121 / .18),0 20px 50px rgb(0 0 0 / .6)}
+body.in-game .modal h3{color:#f3d995;letter-spacing:.08em;text-shadow:0 0 12px rgb(232 200 121 / .35)}
+body.in-game .modal .note{color:#c2c8d8}
+body.in-game .modal .btn{background:rgb(255 255 255 / .07);color:#eef1f8;border:1px solid rgb(255 255 255 / .25);border-radius:999px;padding:7px 16px;font-weight:700}
+body.in-game .modal .btn.primary{color:#2a1a00;background:linear-gradient(180deg,#ffe7a6,#f5b941);border-color:transparent;box-shadow:0 0 14px rgb(255 200 90 / .4)}
+body.in-game .modal .btn:focus-visible{outline:2px solid #ffd27a;outline-offset:2px}
+.felt{display:grid;gap:8px;padding:12px;border-radius:14px;background:radial-gradient(120% 90% at 50% 30%,#1f6b47,#0d3b27 70%,#082619);border:2px solid #9a7a2c;box-shadow:inset 0 0 24px rgb(0 0 0 / .55),0 0 0 1px rgb(0 0 0 / .4)}
+.felt.velvet{background:radial-gradient(120% 90% at 50% 30%,#3a2457,#1c1030 70%,#120a20);border-color:#8a6a20}
+.felt .bjl{color:#f3e7c4;text-shadow:0 1px 2px #000}
+.felt .note{color:#d6dccf}
+.felt .bjmsg{color:#ffe7a6;text-shadow:0 0 10px rgb(232 200 121 / .5);text-align:center}
+.felt .bjrow{border-bottom:1px dashed rgb(243 231 196 / .25);padding-bottom:6px}
+.felt .bjrow:last-of-type{border-bottom:0}
 .blk{display:grid;gap:6px}
 .blk .btn{text-align:left;display:flex;justify-content:space-between;gap:8px;padding:8px 10px}
 .blk .btn small{color:var(--muted)}
@@ -2281,7 +2296,7 @@ function humanPeek(g, p, n) {
     const order = p.deck.slice(p.deck.length - k).reverse();
     const draw = () => {
       openModal(`<h3>山札の上${k}枚</h3><p class="note">左が一番上。▲で上に動かす。</p>
-        <div class="peekrow">${order.map((cid, i) => `<div class="peekc">${miniFace(cid)}${i ? `<button class="btn" type="button" data-up="${i}">▲</button>` : '<span class="note">いちばん上</span>'}</div>`).join('')}</div>
+        <div class="felt velvet"><div class="peekrow">${order.map((cid, i) => `<div class="peekc">${miniFace(cid)}${i ? `<button class="btn" type="button" data-up="${i}">▲</button>` : '<span class="note">いちばん上</span>'}</div>`).join('')}</div></div>
         <div class="row"><button class="btn primary" type="button" id="kOk">この順で戻す</button></div>`);
       $('#modalBox').querySelectorAll('[data-up]').forEach(b => b.onclick = () => { const i = +b.dataset.up; [order[i - 1], order[i]] = [order[i], order[i - 1]]; draw(); });
       $('#kOk').onclick = () => { closeModal(); resolve(order.slice()); };
@@ -2297,9 +2312,9 @@ function humanBJ(g, p) {
     const draw = (msg) => {
       const ms = sumCost(st.mine), hs = sumCost(st.house);
       openModal(`<h3>ブラックジャック</h3><p class="note">コストの合計を7に近づける。8以上はバースト。ディーラーは${dealerStand(p)}以上で止まる。</p>
-        <div class="bjrow"><span class="bjl">ディーラー ${done ? hs : '?'}</span>${st.house.map(miniFace).join('') || '<span class="note">—</span>'}</div>
+        <div class="felt"><div class="bjrow"><span class="bjl">ディーラー ${done ? hs : '?'}</span>${st.house.map(miniFace).join('') || '<span class="note">—</span>'}</div>
         <div class="bjrow"><span class="bjl">あなた ${ms}</span>${st.mine.map(miniFace).join('') || '<span class="note">—</span>'}</div>
-        ${msg ? `<p class="bjmsg">${esc(msg)}</p>` : ''}
+        ${msg ? `<p class="bjmsg">${esc(msg)}</p>` : ''}</div>
         <div class="row">${done ? '<button class="btn primary" type="button" id="bOk">決着</button>' : '<button class="btn primary" type="button" id="bHit">めくる</button><button class="btn" type="button" id="bStand">止める</button>'}</div>`);
       if (done) { $('#bOk').onclick = () => { const r = bjResult(st); r.mine = st.mine.slice(); bjFinish(st); closeModal(); resolve(r); }; return; }
       $('#bHit').onclick = () => {
