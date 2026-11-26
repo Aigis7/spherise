@@ -2071,7 +2071,7 @@ function phaseHTML(g) {
   }
   let hint = '手札を盤面へドラッグして出す。光っているユニットを相手へドラッグして攻撃。';
   if (g.ui.mode === 'attack') hint = '攻撃先を選ぶ：相手のライフか、スリープ中の相手ユニット';
-  if (g.ui.mode === 'art') hint = g.ui.place ? '出したカードの効果の対象をタップ（もう一度タップで手札に戻す）' : 'アーツの対象を選ぶ';
+  if (g.ui.mode === 'art') hint = g.ui.place ? '出したユニットの効果の対象をタップ（もう一度タップで手札に戻す）' : 'アーツの対象をタップ（手札のアーツをもう一度タップでやめる）';
   return `<div class="msg me">${turn}メイン<span class="hint">${hint}</span></div>
     ${g.ui.mode ? '<button class="sbtn" type="button" data-act="cancel">キャンセル</button>' : ''}
     <button class="sbtn end" type="button" data-act="endTurn">ターン終了</button>`;
@@ -2204,7 +2204,7 @@ function cardActions(g, inst) {
   if (g.phase === 'reserve' && me.hand.includes(inst)) acts.push({ label: 'リザーブに置く', run: () => doReserve(g, inst) });
   if (g.phase === 'main' && !g.ui.mode) {
     if (me.hand.includes(inst)) {
-      if (canPlay(g, me, inst)) acts.push({ label: c.type === 'art' ? (wantsTarget(g, me, c) ? '使う（対象を選ぶ）' : '使う') : '出す', run: () => { if (wantsTarget(g, me, c)) { g.ui = { mode: 'art', uid: inst.uid, place: true }; render(); } else humanPlay(g, inst, null); } });
+      if (canPlay(g, me, inst)) acts.push({ label: c.type === 'art' ? (wantsTarget(g, me, c) ? '使う（対象を選ぶ）' : '使う') : '出す', run: () => { if (wantsTarget(g, me, c)) { g.ui = { mode: 'art', uid: inst.uid, place: c.type !== 'art' }; render(); } else humanPlay(g, inst, null); } });
       else acts.push({ label: cost(g, me, c) > avail(me) ? 'リザーブが足りない' : '今は出せない', disabled: true });
     }
     if (me.board.includes(inst) && c.type === 'unit' && !inst.sleep && !inst.sick && getAtk(g, inst) > 0) acts.push({ label: '攻撃する（攻撃先を選ぶ）', run: () => { g.ui = { mode: 'attack', uid: inst.uid }; } });
@@ -2348,7 +2348,7 @@ document.addEventListener('click', async e => {
   }
   if (me.hand.includes(inst)) {
     if (!canPlay(g, me, inst)) return;
-    if (wantsTarget(g, me, c)) { g.ui = { mode: 'art', uid: inst.uid, place: true }; return render(); }
+    if (wantsTarget(g, me, c)) { g.ui = { mode: 'art', uid: inst.uid, place: c.type !== 'art' }; return render(); }
     return humanPlay(g, inst, null);
   }
   if (me.board.includes(inst) && c.type === 'unit' && !inst.sleep && !inst.sick && getAtk(g, inst) > 0) { g.ui = { mode: 'attack', uid: inst.uid }; render(); }
@@ -2471,7 +2471,7 @@ document.addEventListener('pointerup', async e => {
   g.ui = {};
   if (!t) { render(); return; }
   if (d.kind === 'reserve') { doReserve(g, d.inst); render(); }
-  else if (d.kind === 'play') { const dc = C[d.inst.cid]; if (t.inst) await humanPlay(g, d.inst, t.inst); else if (wantsTarget(g, me, dc)) { g.ui = { mode: 'art', uid: d.inst.uid, place: true }; sfx('play'); render(); } else await humanPlay(g, d.inst, null); }
+  else if (d.kind === 'play') { const dc = C[d.inst.cid]; if (t.inst) await humanPlay(g, d.inst, t.inst); else if (wantsTarget(g, me, dc)) { g.ui = { mode: 'art', uid: d.inst.uid, place: dc.type !== 'art' }; sfx('play'); render(); } else await humanPlay(g, d.inst, null); }
   else if (d.kind === 'art') await humanPlay(g, d.inst, t.inst);
   else if (d.kind === 'attack') await humanAttack(g, d.inst, t.target);
 });
