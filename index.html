@@ -366,6 +366,13 @@ body.in-game .modal .note{color:#c2c8d8}
 body.in-game .modal .btn{background:rgb(255 255 255 / .07);color:#eef1f8;border:1px solid rgb(255 255 255 / .25);border-radius:999px;padding:7px 16px;font-weight:700}
 body.in-game .modal .btn.primary{color:#2a1a00;background:linear-gradient(180deg,#ffe7a6,#f5b941);border-color:transparent;box-shadow:0 0 14px rgb(255 200 90 / .4)}
 body.in-game .modal .btn:focus-visible{outline:2px solid #ffd27a;outline-offset:2px}
+.peekc{touch-action:none;cursor:grab;transition:transform .15s ease;user-select:none;-webkit-user-select:none}
+.peekc.pk-drag{transition:none;z-index:2;cursor:grabbing;filter:drop-shadow(0 10px 14px rgb(0 0 0 / .6))}
+.pk-n{font-size:.62rem;color:#f3e7c4}
+.pk-arrows{display:flex;gap:4px}
+.pk-a{all:unset;cursor:pointer;width:26px;height:22px;display:grid;place-items:center;border-radius:6px;font-size:.7rem;color:#f3e7c4;background:rgb(0 0 0 / .3);border:1px solid rgb(243 231 196 / .3)}
+.pk-a:disabled{opacity:.25;cursor:default}
+.pk-a:focus-visible{outline:2px solid #ffd27a}
 .felt{display:grid;gap:8px;padding:12px;border-radius:14px;background:radial-gradient(120% 90% at 50% 30%,#1f6b47,#0d3b27 70%,#082619);border:2px solid #9a7a2c;box-shadow:inset 0 0 24px rgb(0 0 0 / .55),0 0 0 1px rgb(0 0 0 / .4)}
 .felt.velvet{background:radial-gradient(120% 90% at 50% 30%,#3a2457,#1c1030 70%,#120a20);border-color:#8a6a20}
 .felt .bjl{color:#f3e7c4;text-shadow:0 1px 2px #000}
@@ -2295,11 +2302,37 @@ function humanPeek(g, p, n) {
     const k = Math.min(n, p.deck.length);
     const order = p.deck.slice(p.deck.length - k).reverse();
     const draw = () => {
-      openModal(`<h3>山札の上${k}枚</h3><p class="note">左が一番上。▲で上に動かす。</p>
-        <div class="felt velvet"><div class="peekrow">${order.map((cid, i) => `<div class="peekc">${miniFace(cid)}${i ? `<button class="btn" type="button" data-up="${i}">▲</button>` : '<span class="note">いちばん上</span>'}</div>`).join('')}</div></div>
+      openModal(`<h3>山札の上${k}枚</h3><p class="note">カードを持って、左右に動かして並べ替える。左がいちばん上。</p>
+        <div class="felt velvet"><div class="peekrow">${order.map((cid, i) => `<div class="peekc" data-i="${i}">${miniFace(cid)}<span class="pk-n">${i ? i + 1 + '枚目' : 'いちばん上'}</span><span class="pk-arrows"><button class="pk-a" type="button" data-mv="${i}:-1" aria-label="上へ" ${i ? '' : 'disabled'}>◀</button><button class="pk-a" type="button" data-mv="${i}:1" aria-label="下へ" ${i < k - 1 ? '' : 'disabled'}>▶</button></span></div>`).join('')}</div></div>
         <div class="row"><button class="btn primary" type="button" id="kOk">この順で戻す</button></div>`);
-      $('#modalBox').querySelectorAll('[data-up]').forEach(b => b.onclick = () => { const i = +b.dataset.up; [order[i - 1], order[i]] = [order[i], order[i - 1]]; draw(); });
+      const box = $('#modalBox');
+      box.querySelectorAll('[data-mv]').forEach(b => b.onclick = () => { const [a, d] = b.dataset.mv.split(':').map(Number); const t = a + d; if (t < 0 || t >= k) return; [order[a], order[t]] = [order[t], order[a]]; sfx('play'); draw(); });
       $('#kOk').onclick = () => { closeModal(); resolve(order.slice()); };
+      /* 直接つかんで並べ替える */
+      const items = [...box.querySelectorAll('.peekc')];
+      items.forEach(el => el.addEventListener('pointerdown', ev => {
+        if (ev.target.closest('button') || ev.button > 0) return;
+        ev.preventDefault();
+        const from = +el.dataset.i, rects = items.map(x => x.getBoundingClientRect());
+        const step = rects.length > 1 ? rects[1].left - rects[0].left : rects[0].width + 8;
+        const x0 = ev.clientX, y0 = ev.clientY; let to = from, moved = false;
+        try { el.setPointerCapture(ev.pointerId); } catch (e) { }
+        el.classList.add('pk-drag');
+        const move = e => {
+          const dx = e.clientX - x0, dy = e.clientY - y0;
+          if (!moved && Math.hypot(dx, dy) < 4) return;
+          moved = true;
+          el.style.transform = `translate(${dx}px, ${dy * 0.25}px) scale(1.08) rotate(${Math.max(-8, Math.min(8, dx / 12))}deg)`;
+          to = Math.max(0, Math.min(k - 1, from + Math.round(dx / step)));
+          items.forEach((o, i) => { if (o === el) return; let s = 0; if (from < to && i > from && i <= to) s = -step; if (from > to && i >= to && i < from) s = step; o.style.transform = s ? `translateX(${s}px)` : ''; });
+        };
+        const up = () => {
+          el.removeEventListener('pointermove', move); el.removeEventListener('pointerup', up); el.removeEventListener('pointercancel', up);
+          if (moved && to !== from) { const [c] = order.splice(from, 1); order.splice(to, 0, c); sfx('play'); }
+          draw();
+        };
+        el.addEventListener('pointermove', move); el.addEventListener('pointerup', up); el.addEventListener('pointercancel', up);
+      }));
     };
     if (!k) return resolve([]);
     draw();
