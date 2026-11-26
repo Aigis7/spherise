@@ -246,6 +246,36 @@ textarea{width:100%;font-family:var(--f-mono);font-size:.72rem}
 @keyframes hitp{50%{transform:translateY(-6px)}}
 
 @keyframes fx{0%{opacity:0;transform:translate(-50%,-50%) scale(.6)}20%{opacity:1;transform:translate(-50%,-50%) scale(1.08)}70%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-62%) scale(1)}}
+.result{position:absolute;inset:0;z-index:60;display:grid;place-items:center;padding:16px;overflow:hidden;animation:rsIn .5s ease-out}
+.rs-bg{position:absolute;inset:-20px;background:#05060b center/cover no-repeat;filter:blur(14px) brightness(.35);transform:scale(1.1)}
+.result::before{content:"";position:absolute;inset:0;background:radial-gradient(60% 45% at 50% 40%,var(--rs-glow),transparent 70%);opacity:.55}
+.result.win{--rs-glow:#e8c879;--rs-ink:#ffe7a6}
+.result.lose{--rs-glow:#4a5a9a;--rs-ink:#b9c4e8}
+.result.draw{--rs-glow:#7a8aa0;--rs-ink:#dfe4ee}
+.rs-spark{position:absolute;inset:0;pointer-events:none;opacity:0}
+.result.win .rs-spark{opacity:1;background-image:radial-gradient(3px 3px at 12% 20%,#fff3c4,transparent 70%),radial-gradient(2px 2px at 80% 15%,#fff,transparent 70%),radial-gradient(3px 3px at 65% 70%,#ffe7a6,transparent 70%),radial-gradient(2px 2px at 30% 80%,#fff,transparent 70%),radial-gradient(2.5px 2.5px at 90% 55%,#fff3c4,transparent 70%),radial-gradient(2px 2px at 45% 12%,#fff,transparent 70%);animation:rsSpark 2.4s ease-in-out infinite alternate}
+.rs-box{position:relative;width:min(380px,100%);display:grid;gap:12px;justify-items:center;text-align:center;color:#eef1f8;padding:22px 18px 18px;border-radius:18px;background:linear-gradient(180deg,rgb(20 26 46 / .88),rgb(7 8 14 / .92));border:1px solid color-mix(in srgb,var(--rs-glow) 70%,transparent);box-shadow:0 0 40px color-mix(in srgb,var(--rs-glow) 35%,transparent),0 20px 50px rgb(0 0 0 / .5)}
+.rs-en{font-family:var(--f-logo);font-weight:900;letter-spacing:.4em;font-size:.85rem;color:var(--rs-ink);opacity:.85;margin-left:.4em}
+.rs-big{font-family:var(--f-display);font-size:clamp(2.6rem,12vw,3.6rem);line-height:1;letter-spacing:.12em;color:var(--rs-ink);text-shadow:0 0 22px var(--rs-glow),0 0 4px #000;animation:rsBig .7s cubic-bezier(.2,1.5,.4,1)}
+.rs-reason{font-size:.8rem;color:#c2c8d8;min-height:1em}
+.rs-grid{width:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.rs-grid>div{display:grid;gap:2px;padding:8px 6px;border-radius:10px;background:rgb(255 255 255 / .05);border:1px solid rgb(255 255 255 / .08)}
+.rs-grid .wide{grid-column:1/-1}
+.rs-grid small{font-size:.62rem;color:#aab2c8}
+.rs-grid b{font-family:var(--f-mono);font-size:1.15rem;font-weight:700}
+.rs-grid .wide b{font-family:var(--f-body);font-size:.95rem;display:flex;justify-content:center;align-items:baseline;gap:8px}
+.rs-lv{color:#e8c879;letter-spacing:.1em;font-size:.8rem}
+.rs-grid .gold{border-color:rgb(232 200 121 / .45);background:rgb(232 200 121 / .1)}
+.rs-grid .gold b{color:#ffe7a6;font-family:var(--f-mono);font-size:1.2rem}
+.rs-sub{font-size:.7rem;color:#c2c8d8;font-weight:400}
+.rs-btns{width:100%;display:grid;gap:8px;margin-top:4px}
+.rs-b{all:unset;box-sizing:border-box;cursor:pointer;text-align:center;padding:10px 14px;border-radius:999px;border:1px solid rgb(255 255 255 / .25);font-weight:700;color:#eef1f8;background:rgb(255 255 255 / .05)}
+.rs-b.gold{color:#2a1a00;background:linear-gradient(180deg,#ffe7a6,#f5b941);border-color:transparent;box-shadow:0 0 18px rgb(255 200 90 / .45)}
+.rs-b:focus-visible{outline:2px solid #ffd27a;outline-offset:2px}
+@keyframes rsIn{from{opacity:0}}
+@keyframes rsBig{from{transform:scale(1.6);opacity:0}}
+@keyframes rsSpark{from{opacity:.4}to{opacity:1}}
+@media (prefers-reduced-motion: reduce){.result,.rs-big,.rs-spark{animation:none}}
 .turnbanner{position:fixed;left:50%;top:42%;transform:translate(-50%,-50%);z-index:55;pointer-events:none;font-family:var(--f-display);font-size:2rem;letter-spacing:.08em;padding:14px 40px;color:#fff;background:linear-gradient(90deg,transparent,rgb(10 8 24 / .9) 15%,rgb(10 8 24 / .9) 85%,transparent);opacity:0;white-space:nowrap}
 .turnbanner.me{text-shadow:0 0 18px #6f9cff} .turnbanner.opp{text-shadow:0 0 18px #ff7a8a}
 .turnbanner.show{animation:tb 1.2s ease}
@@ -2183,7 +2213,7 @@ $('#gmBack').addEventListener('click', () => gmShow('main'));
 document.querySelectorAll('[data-gmclose]').forEach(b => b.addEventListener('click', () => setMenu(false)));
 $('#gmTitle').addEventListener('click', () => { $('#gmConfirm').hidden = false; $('#gmYes').focus(); });
 $('#gmNo').addEventListener('click', () => { $('#gmConfirm').hidden = true; });
-$('#gmYes').addEventListener('click', () => { setMenu(false); if (G) { G.over = true; if (G.turnResolve) G.turnResolve(); } G = null; paintTitle(); setTab('title'); });
+$('#gmYes').addEventListener('click', () => { setMenu(false); if (G) { G.over = true; G.abandoned = true; if (G.turnResolve) G.turnResolve(); } G = null; paintTitle(); setTab('title'); });
 
 $('#btnMenuClose').addEventListener('click', () => setMenu(false));
 $('#scrim').addEventListener('click', () => setMenu(false));
@@ -2500,6 +2530,7 @@ function deckOptions(sel, prefer, withMine) {
 }
 function refreshDeckSelects() { deckOptions($('#selMe'), 'noctiluca', true); deckOptions($('#selCpu'), 'soiree', false); deckOptions($('#simA'), 'noctiluca', true); deckOptions($('#simB'), 'soiree', true); }
 async function startGame() {
+  { const r = $('#result'); if (r) r.remove(); }
   if (G) { G.over = true; G.abandoned = true; if (G.turnResolve) G.turnResolve(); }
   closeModal(); closeSheet();
   const a = $('#selMe').value, b = $('#selCpu').value;
@@ -2517,14 +2548,55 @@ async function startGame() {
   await gameLoop(g);
   if (G !== g || g.abandoned) return;
   render();
+  let pt = 0;
   if (g.winner != null) {
     saveResult({ first: g.first === 0, won: g.winner === 0, me: a, cpu: b });
-    const pt = g.winner === 0 ? 100 : 30;
+    pt = g.winner === 0 ? 100 : 30;
     await awardPoints(pt);
     log(g, `${pt}ポイント手に入れた（合計${PLAYER.points}）`, 't'); render();
-    setTimeout(() => fxText(g.winner === 0 ? 'WIN' : 'LOSE', g.winner === 0 ? '#ffd27a' : '#9aa3c8'), 200);
   }
+  if (G === g) setTimeout(() => showResult(g, pt, a), 700);
   renderStats();
+}
+
+/* 勝敗の画面 */
+function showResult(g, pt, deckId) {
+  const st = $('#stage'); if (!st || G !== g) return;
+  const old = $('#result'); if (old) old.remove();
+  const me = g.players[0], op = g.players[1];
+  const kind = g.winner === 0 ? 'win' : g.winner === 1 ? 'lose' : 'draw';
+  const big = { win: '勝利', lose: '敗北', draw: '引き分け' }[kind], en = { win: 'VICTORY', lose: 'DEFEAT', draw: 'DRAW' }[kind];
+  const d = getDeck(deckId), cv = d ? coverCard(d) : null, img = cv ? imageUrl(cv) : null;
+  const stage = stageOf(me), lv = me.field.lv;
+  const el = document.createElement('div');
+  el.id = 'result'; el.className = 'result ' + kind; el.setAttribute('role', 'dialog'); el.setAttribute('aria-label', '対戦の結果');
+  el.innerHTML = `<div class="rs-bg"${img ? ` style="background-image:url(${img})"` : ''}></div><div class="rs-spark" aria-hidden="true"></div>
+    <div class="rs-box">
+      <div class="rs-en">${en}</div><div class="rs-big">${big}</div>
+      <div class="rs-reason">${esc(({ 'ライフ0': { win: '相手のライフを0にした', lose: 'ライフが0になった' }, '山札切れ': { win: '相手の山札が切れた', lose: '山札が切れた' } }[g.reason] || {})[kind] || g.reason || '')}</div>
+      <div class="rs-grid">
+        <div><small>ターン</small><b>${Math.ceil(g.turnNo / 2)}</b></div>
+        <div><small>あなたのライフ</small><b>${Math.max(0, me.life)}</b></div>
+        <div><small>相手のライフ</small><b>${Math.max(0, op.life)}</b></div>
+        <div class="wide"><small>たどり着いた領域</small><b>${esc(stage.name || '')}<span class="rs-lv">${'◆'.repeat(lv)}${'◇'.repeat(3 - lv)}</span></b></div>
+        ${pt ? `<div class="wide gold"><small>手に入れたポイント</small><b>+${pt}<span class="rs-sub">合計 ${PLAYER.points}</span></b></div>` : ''}
+      </div>
+      <div class="rs-btns">
+        <button class="rs-b gold" type="button" data-rs="again">もう一度</button>
+        <button class="rs-b" type="button" data-rs="deck">デッキを選び直す</button>
+        <button class="rs-b" type="button" data-rs="title">タイトルへ</button>
+      </div>
+    </div>`;
+  st.appendChild(el);
+  sfx(kind === 'win' ? 'lv' : 'hit');
+  el.addEventListener('click', e => {
+    const b = e.target.closest('[data-rs]'); if (!b) return;
+    el.remove();
+    if (b.dataset.rs === 'again') startGame();
+    if (b.dataset.rs === 'deck') { G = null; setTab('battle'); }
+    if (b.dataset.rs === 'title') { G = null; paintTitle(); setTab('title'); }
+  });
+  setTimeout(() => { const f = el.querySelector('[data-rs="again"]'); if (f) f.focus(); }, 50);
 }
 let pendingMulligan = null;
 $('#chkCpuHand').addEventListener('change', () => { if (G) render(); });
