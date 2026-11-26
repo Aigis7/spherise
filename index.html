@@ -611,6 +611,13 @@ body.drag-reserve [data-drop="reserve"] .stack{box-shadow:0 0 0 3px #ffd27a,0 0 
   .peek{display:none}
 
   /* 対戦画面を1画面に収める */
+  /* 遊ぶ人の画面は、スマホでは白いふちなしで全面に */
+  body.in-scene{background:#06070b}
+  body.in-scene .wrap{padding:0;gap:0}
+  body.in-scene:not(.in-game) header:not([hidden]){display:flex;flex-wrap:nowrap;align-items:center;gap:6px;height:40px;padding:0 12px;background:#06070b;border-bottom:1px solid rgb(255 255 255 / .08)}
+  body.in-scene:not(.in-game) header .brand{font-size:.85rem;margin-right:auto;color:#e8ebf5}
+  body.in-scene:not(.in-game) header .btn{padding:4px 10px;font-size:.72rem;background:rgb(255 255 255 / .08);color:#e8ebf5;border-color:rgb(255 255 255 / .2)}
+  body.in-scene .scene{border-radius:0;min-height:100dvh}
   html:has(body.in-game),body.in-game{height:100dvh;overflow:hidden;overscroll-behavior:none}
   body.in-game .stage{touch-action:none}
   body.in-game{background:#0b0a1a}
@@ -2528,6 +2535,7 @@ function setTab(t) {
   if (!VIEWS.includes(t)) t = 'home';
   activeTab = t;
   document.body.classList.toggle('in-game', t === 'game');
+  document.body.classList.toggle('in-scene', !TOOLS.includes(t));
   requestAnimationFrame(fitStage);
   VIEWS.forEach(v => { const el = $('#view-' + v); if (el) el.hidden = v !== t; });
   $('#hdr').hidden = t === 'title' || t === 'home';
@@ -3402,8 +3410,8 @@ $('#builder').addEventListener('input', e => { if (e.target.id === 'bName' && BU
 /* ================= 19. コレクション ================= */
 const CF = { set: '', type: '', rar: '', own: '' };
 function renderCollection() {
-  const all = sortCards(Object.entries(STORE.cards));
-  const list = all.filter(([id, c]) => (!CF.set || c.set === CF.set) && (!CF.type || c.type === CF.type) && (!CF.rar || (c.rarity || 'C') === CF.rar) && (!CF.own || (CF.own === 'yes' ? ownedCount(id) > 0 : ownedCount(id) === 0)));
+  const all = sortCards(Object.entries(STORE.cards)).filter(([id, c]) => !c.token);
+  const list = all.filter(([id, c]) => !c.token && (!CF.set || c.set === CF.set) && (!CF.type || c.type === CF.type) && (!CF.rar || (c.rarity || 'C') === CF.rar) && (!CF.own || (CF.own === 'yes' ? ownedCount(id) > 0 : ownedCount(id) === 0)));
   $('#collection').innerHTML = `<div class="hhead"><h2>コレクション</h2><div class="hstat"><span class="chip2">持っている <b>${kinds()}</b> / ${all.length}種類</span><span class="chip2">ポイント <b>${PLAYER.points}</b></span><span class="chip2">かけら <b>${PLAYER.shards}</b></span></div></div>
     <div class="bfilters" style="margin:12px 0">
       <select id="cfSet" aria-label="テーマ"><option value="">すべてのテーマ</option>${setNames().map(s => `<option${s === CF.set ? ' selected' : ''}>${esc(s)}</option>`).join('')}</select>
