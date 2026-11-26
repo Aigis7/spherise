@@ -2420,9 +2420,12 @@ document.addEventListener('pointermove', e => {
       else DRAG = null;
       return;
     }
-    if (d.hand && canScroll && !(dy < -10 || Math.abs(dy) > Math.abs(dx) * 0.6)) {
-      if (Math.abs(dx) > 14 && Math.abs(dy) < Math.abs(dx) * 0.25) { d.scrolling = true; try { document.body.setPointerCapture(d.id); } catch (err) { } }
-      return;
+    if (d.hand && canScroll) {
+      /* 手札：横向きの動きは必ずスクロール。上向きにはっきり動いた時だけカードを持ち上げる */
+      const adx = Math.abs(dx), ady = Math.abs(dy);
+      if (adx < 10 && ady < 12) return;
+      if (adx >= ady * 0.8) { d.scrolling = true; d.sl = d.hand.scrollLeft; d.x = e.clientX; try { document.body.setPointerCapture(d.id); } catch (err) { } return; }
+      if (dy > 0) { DRAG = null; return; }
     }
     if (!d.kind) { DRAG = null; return; }
     d.started = true;
