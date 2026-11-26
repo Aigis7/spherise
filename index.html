@@ -380,6 +380,39 @@ body.in-game .modal .btn:focus-visible{outline:2px solid #ffd27a;outline-offset:
 .felt .bjmsg{color:#ffe7a6;text-shadow:0 0 10px rgb(232 200 121 / .5);text-align:center}
 .felt .bjrow{border-bottom:1px dashed rgb(243 231 196 / .25);padding-bottom:6px}
 .felt .bjrow:last-of-type{border-bottom:0}
+/* リーダー */
+.lifebox.ldr{width:72px;height:72px;padding:0;overflow:visible;background:none;border:0;box-shadow:none;animation:ldrFloat 4.5s ease-in-out infinite}
+.lifebox.ldr .ldr-face{position:absolute;inset:0;border-radius:50%;overflow:hidden;border:2px solid color-mix(in srgb,var(--lc) 75%,#fff);box-shadow:0 0 14px color-mix(in srgb,var(--lc) 55%,transparent),inset 0 0 12px rgb(0 0 0 / .5);background:#05060b}
+.lifebox.ldr .ldr-svg{width:100%;height:100%;display:block}
+.lifebox.ldr .ldr-img{position:absolute;inset:0;background:center 18%/cover no-repeat}
+.lifebox.ldr .num{position:absolute;left:50%;bottom:-8px;transform:translateX(-50%);min-width:34px;padding:1px 7px;border-radius:999px;font-size:1.05rem;line-height:1.25;text-align:center;background:linear-gradient(180deg,#1b2240,#090b14);border:1.5px solid color-mix(in srgb,var(--lc) 70%,#fff);box-shadow:0 2px 6px rgb(0 0 0 / .6);z-index:2}
+.lifebox.ldr .pips{bottom:auto;top:-8px;z-index:2}
+.lifebox.ldr.active .ldr-face{animation:ldrTurn 1.8s ease-in-out infinite}
+.lifebox.ldr .ldr-aim{position:absolute;inset:-6px;border-radius:50%;pointer-events:none;opacity:0}
+.lifebox.ldr.tgt{box-shadow:none;cursor:crosshair}
+.lifebox.ldr.tgt .ldr-aim{opacity:1;border:2px dashed var(--s-red,#ff6b6b);animation:ldrAim 2.4s linear infinite;box-shadow:0 0 18px var(--s-red,#ff6b6b)}
+.lifebox.ldr.tgt .ldr-face{box-shadow:0 0 0 3px var(--s-red,#ff6b6b),0 0 24px var(--s-red,#ff6b6b)}
+.lifebox.ldr.hit{animation:hit .5s}
+.lifebox.ldr.hit .ldr-face::after{content:"";position:absolute;inset:0;background:radial-gradient(circle,rgb(255 60 60 / .65),rgb(255 0 0 / .15) 70%);animation:ldrHurt .6s ease-out forwards}
+.lifebox.ldr.down .ldr-face{filter:grayscale(.9) brightness(.55)}
+.lifebox.ldr.down .ldr-face::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(115deg,transparent 46%,rgb(255 255 255 / .8) 47%,transparent 49%),linear-gradient(60deg,transparent 55%,rgb(255 255 255 / .6) 56%,transparent 57.5%),linear-gradient(160deg,transparent 30%,rgb(255 255 255 / .5) 31%,transparent 32.5%)}
+@keyframes ldrFloat{50%{transform:translateY(-3px)}}
+@keyframes ldrTurn{50%{box-shadow:0 0 0 3px color-mix(in srgb,var(--lc) 60%,transparent),0 0 26px var(--lc),inset 0 0 12px rgb(0 0 0 / .5)}}
+@keyframes ldrAim{to{transform:rotate(360deg)}}
+@keyframes ldrHurt{from{opacity:1}to{opacity:0}}
+@media (max-width:600px){.lifebox.ldr{width:56px;height:56px}.lifebox.ldr .num{font-size:.85rem;min-width:28px;bottom:-7px}}
+@media (prefers-reduced-motion: reduce){.lifebox.ldr,.lifebox.ldr .ldr-face,.lifebox.ldr .ldr-aim{animation:none!important}}
+/* 色の印 */
+.card .plate{border-top:2px solid var(--cc,transparent)}
+.cdot{display:inline-block;width:.8em;height:.8em;border-radius:50%;background:var(--cc);vertical-align:-.05em;margin-right:4px;box-shadow:0 0 0 1px rgb(255 255 255 / .5)}
+.ldrpick{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+.ldrpick button{all:unset;cursor:pointer;display:grid;justify-items:center;gap:4px;font-size:.72rem;color:#c2c8d8}
+.ldrpick .lp{position:relative;width:64px;height:64px;border-radius:50%;overflow:hidden;border:2px solid color-mix(in srgb,var(--lc) 70%,#fff);background:#05060b}
+.ldrpick .lp .ldr-svg{width:100%;height:100%;display:block}
+.ldrpick .lp .ldr-img{position:absolute;inset:0;background:center 18%/cover no-repeat}
+.ldrpick button.sel .lp{box-shadow:0 0 0 3px #ffd27a,0 0 16px #ffd27a}
+.ldrpick button.sel{color:#ffe7a6;font-weight:700}
+.ldrpick button:focus-visible .lp{outline:2px solid #ffd27a;outline-offset:2px}
 .blk{display:grid;gap:6px}
 .blk .btn{text-align:left;display:flex;justify-content:space-between;gap:8px;padding:8px 10px}
 .blk .btn small{color:var(--muted)}
@@ -778,7 +811,7 @@ body.drag-reserve [data-drop="reserve"] .stack{box-shadow:0 0 0 3px #ffd27a,0 0 
     <h2>対戦する</h2>
     <p class="lead">自分のデッキと、相手（CPU）のデッキを選んでください。</p>
     <div class="btcols">
-      <div><h3>自分のデッキ</h3><div class="tiles" id="btMine"></div></div>
+      <div><h3>自分のデッキ</h3><div class="tiles" id="btMine"></div><div id="btLeader"></div></div>
       <div><h3>相手のデッキ</h3><div class="tiles" id="btCpu"></div></div>
     </div>
     <div class="btstart"><button class="sbtn end" type="button" id="btnNew">対戦開始</button></div>
@@ -940,7 +973,7 @@ body.drag-reserve [data-drop="reserve"] .stack{box-shadow:0 0 0 3px #ffd27a,0 0 
 <input type="file" id="imgFile" accept="image/*" hidden>
 
 <script type="application/json" id="starter">
-{"cards":{"b_strike":{"name":"境界を断つ刃","set":"ニュートラル","type":"art","cost":2,"target":"enemyObject","glyph":"cross","effects":[{"trigger":"play","steps":[{"action":"destroy","target":"chosen"},{"action":"draw","target":"me","n":1}]}],"artPrompt":"夜空に引かれた光の境界線を、銀の刃が一太刀で切り裂く瞬間。刃の軌跡が弧を描いて光る。刃を握る手だけが見える。","rarity":"R"},"b_amp":{"name":"共鳴の水晶","set":"ニュートラル","type":"object","cost":2,"aura":1,"glyph":"star","artPrompt":"星空の下、岩場に浮かぶ大きな水晶。淡く光り、まわりの空気が波紋のように震えて、光が共鳴している。人物なし。","rarity":"R"},"b_metro":{"name":"星読みの砂時計","set":"ニュートラル","type":"object","cost":1,"count":3,"glyph":"star","effects":[{"trigger":"countdownEnd","steps":[{"action":"draw","target":"me","n":2}]}],"artPrompt":"星図が広げられた古い木の机の上に、砂時計がひとつ。落ちる砂が星の光の粒になって流れている。星図に文字や数字は描かない。人物なし。","rarity":"C"},"c_exchange":{"name":"流れ星の便り","set":"ニュートラル","type":"art","cost":2,"glyph":"star","effects":[{"trigger":"play","steps":[{"action":"draw","target":"me","n":2}]}],"artPrompt":"夜空を横切る流れ星。その光の尾から、光る封筒の手紙がひらひらと舞い落ちてくる。手紙に文字は描かない。人物なし。","rarity":"C"},"s_lucielle1":{"name":"ルシエラ","epithet":"宵の支配人","set":"ソワレ","type":"object","cost":0,"fixed":true,"token":true,"diceBonus":1,"tags":["ディーラー"],"artPrompt":"夜会のカジノで、黒いドレスの金髪の女性ディーラーが、カードを扇に広げて微笑む。上品で落ち着いた空気。","rarity":"RR"},"s_lucielle2":{"name":"ルシエラ","epithet":"狂騒の女主人","set":"ソワレ","type":"object","cost":0,"fixed":true,"token":true,"diceBonus":1,"bustSave":true,"tags":["ディーラー"],"artPrompt":"熱狂するカジノの中心で、金髪の女性ディーラーがチップの雨の中で笑う。赤と金の照明。","rarity":"RR"},"s_lucielle3":{"name":"ルシエラ","epithet":"宿命の審判","set":"ソワレ","type":"object","cost":0,"fixed":true,"token":true,"diceBonus":1,"bustSave":true,"winDamage":2,"tags":["ディーラー"],"artPrompt":"静まり返った決戦の卓で、金髪の女性ディーラーが最後の1枚を伏せて置く。冷たい月光。","rarity":"RR"},"s_lolo":{"name":"ロロ","epithet":"百の袖","set":"ソワレ","type":"unit","cost":1,"atk":1,"hp":2,"cheat":true,"tags":["ギャンブラー"],"effects":[{"trigger":"play","steps":[{"action":"gamble","game":"dice","need":4,"on":{"win":{"steps":[{"action":"damage","target":"randomEnemy","n":2}]}}}]}],"rarity":"R"},"s_canaria":{"name":"カナリア","epithet":"命を鳴らす小鳥","set":"ソワレ","type":"unit","cost":2,"atk":2,"hp":2,"target":"enemyUnit","tags":["ギャンブラー"],"effects":[{"trigger":"play","steps":[{"action":"optPay","n":3,"on":{"yes":{"steps":[{"action":"damage","target":"chosen","n":4}]}}}]},{"trigger":"gambleLose","steps":[{"action":"damage","target":"opponent","n":2}]}],"rarity":"SR"},"s_sigma":{"name":"シグマ","epithet":"零度の計算機","set":"ソワレ","type":"unit","cost":2,"atk":1,"hp":3,"tags":["ギャンブラー"],"effects":[{"trigger":"play","steps":[{"action":"peek","n":3},{"action":"gamble","game":"dice","need":4,"on":{"win":{"steps":[{"action":"draw","target":"me","n":1}]}}}]}],"rarity":"R"},"s_vera":{"name":"ヴェラ","epithet":"裏切りのクルピエ","set":"ソワレ","type":"unit","cost":3,"atk":3,"hp":3,"dealerStand":4,"tags":["ギャンブラー"],"target":"enemyUnit","effects":[{"trigger":"play","steps":[{"action":"gamble","game":"blackjack","on":{"win":{"steps":[{"action":"destroy","target":"chosen"}]}}}]}],"rarity":"SR"},"s_letizia":{"name":"レティシア","epithet":"微笑む勝負師","set":"ソワレ","type":"unit","cost":5,"atk":4,"hp":4,"rarity":"L","tags":["ギャンブラー"],"effects":[{"trigger":"play","steps":[{"action":"gamble","game":"poker","on":{"pair":{"steps":[{"action":"draw","target":"me","n":2}]},"straight":{"steps":[{"action":"damage","target":"allEnemies","n":3}]},"three":{"steps":[{"action":"damage","target":"opponent","n":7}]}}}]},{"trigger":"gambleWin","steps":[{"action":"buff","target":"self","n":1}]}]},"s_dice":{"name":"ダイスロール","set":"ソワレ","type":"art","cost":1,"target":"enemyUnit","tags":["賭け"],"glyph":"dice","effects":[{"trigger":"play","steps":[{"action":"gamble","game":"dice","need":4,"on":{"win":{"steps":[{"action":"damage","target":"chosen","n":3}]}}}]}],"rarity":"C"},"s_invite":{"name":"招待状","set":"ソワレ","type":"art","cost":1,"glyph":"search","effects":[{"trigger":"play","steps":[{"action":"search","filter":{"type":"unit","tag":"ギャンブラー"}}]}],"rarity":"C"},"s_roulette":{"name":"ルーレット","set":"ソワレ","type":"art","cost":2,"tags":["賭け"],"glyph":"wheel","effects":[{"trigger":"play","steps":[{"action":"roulette","on":{"red":{"steps":[{"action":"damage","target":"opponent","n":2}]},"black":{"steps":[{"action":"draw","target":"me","n":2}]}}}]}],"rarity":"C"},"s_blackjack":{"name":"ブラックジャック","set":"ソワレ","type":"art","cost":3,"target":"enemyUnit","tags":["賭け"],"glyph":"coins","effects":[{"trigger":"play","steps":[{"action":"gamble","game":"blackjack","on":{"win":{"steps":[{"action":"destroy","target":"chosen"}]},"seven":{"steps":[{"action":"damage","target":"opponent","n":3}]},"lose":{"steps":[{"action":"destroy","target":"randomAlly"}]}}}]}],"rarity":"R"},"s_allin":{"name":"オールイン","set":"ソワレ","type":"art","cost":4,"tags":["賭け"],"glyph":"coin","effects":[{"trigger":"play","steps":[{"action":"payLife","n":5},{"action":"gamble","game":"poker","on":{"pair":{"steps":[{"action":"damage","target":"opponent","n":4}]},"straight":{"steps":[{"action":"damage","target":"opponent","n":8}]},"three":{"steps":[{"action":"damage","target":"opponent","n":12}]}}}]}],"rarity":"R"},"s_sweep":{"name":"総取り","set":"ソワレ","type":"art","cost":3,"tags":["賭け"],"glyph":"coins","effects":[{"trigger":"play","steps":[{"action":"gamble","game":"poker","on":{"pair":{"steps":[{"action":"damage","target":"allEnemies","n":2}]},"straight":{"steps":[{"action":"damage","target":"allEnemies","n":3}]},"three":{"steps":[{"action":"destroy","target":"randomEnemy"},{"action":"damage","target":"allEnemies","n":3}]},"lose":{"steps":[{"action":"damage","target":"randomEnemy","n":1}]}}}]}],"rarity":"C"},"s_chip":{"name":"チップの雨","set":"ソワレ","type":"art","cost":2,"target":"enemyUnit","tags":["賭け"],"glyph":"coin","effects":[{"trigger":"play","steps":[{"action":"roulette","on":{"red":{"steps":[{"action":"damage","target":"chosen","n":3}]},"black":{"steps":[{"action":"damage","target":"chosen","n":2},{"action":"draw","target":"me","n":1}]}}}]}],"rarity":"C"},"s_ring":{"name":"約束の指輪","set":"ソワレ","type":"art","cost":1,"needs":"s_letizia","rarity":"RR","glyph":"star","effects":[{"trigger":"play","steps":[{"action":"replay"}]}],"artPrompt":"テーブルの上、月の光を受けて輝く一つの指輪。そばに伏せたトランプが3枚。人物なし。"},"x_lamp":{"name":"ひとしずくの灯","set":"ニュートラル","type":"art","cost":1,"target":"allyUnit","glyph":"star","effects":[{"trigger":"play","steps":[{"action":"heal","target":"chosen","n":3}]}],"artPrompt":"夜の暗がりで、両手のひらに包まれた、しずくの形をした小さな灯火。やさしい光が手と指先を照らす。手だけが見える。","rarity":"C"},"x_wanderer":{"name":"さすらいの旅人","set":"ニュートラル","type":"unit","cost":2,"atk":2,"hp":2,"quick":true,"artPrompt":"フード付きのマントを着た旅人の後ろ姿。星空の下の丘に立ち、杖とランタンを持つ。遠くの地平線に、尖塔の街の光と、きらびやかな館の明かりが、それぞれ別の世界のように見える。","rarity":"C"},"x_warden":{"name":"境界の番人","set":"ニュートラル","type":"unit","cost":3,"atk":1,"hp":5,"effects":[{"trigger":"play","steps":[{"action":"draw","target":"me","n":1}]}],"artPrompt":"光でできた境界の門の前に立つ、大きな盾を持った鎧の番人。兜で顔は見えない。門の向こうに星空が広がる。","rarity":"C"}},"decks":{"soiree":{"name":"ソワレ","field":"soiree","list":[{"id":"s_lolo","n":3},{"id":"s_canaria","n":3},{"id":"s_sigma","n":3},{"id":"s_vera","n":3},{"id":"s_letizia","n":3},{"id":"s_dice","n":3},{"id":"s_invite","n":3},{"id":"s_roulette","n":3},{"id":"s_blackjack","n":3},{"id":"s_allin","n":3},{"id":"b_amp","n":2},{"id":"b_strike","n":2},{"id":"s_sweep","n":3},{"id":"s_chip","n":3}]}},"fields":{"soiree":{"name":"ソワレ","set":"ソワレ","scene":"city","stages":[{"name":"カジノ・ソワレ","dealer":"s_lucielle1","penalty":1,"effects":[]},{"name":"狂騒の遊技場","dealer":"s_lucielle2","penalty":1,"effects":[{"trigger":"gamble","steps":[{"action":"buff","target":"allAllies","n":1,"temp":true}]}]},{"name":"宿命の決戦場","dealer":"s_lucielle3","penalty":1,"drawWins":true,"effects":[],"grant":"s_ring"}],"conds":[{"type":"gambles","n":3},{"type":"wins","n":3}]}}}
+{"cards":{"b_strike":{"name":"境界を断つ刃","set":"ニュートラル","type":"art","cost":2,"target":"enemyObject","glyph":"cross","effects":[{"trigger":"play","steps":[{"action":"destroy","target":"chosen"},{"action":"draw","target":"me","n":1}]}],"artPrompt":"夜空に引かれた光の境界線を、銀の刃が一太刀で切り裂く瞬間。刃の軌跡が弧を描いて光る。刃を握る手だけが見える。","rarity":"R","color":"無"},"b_amp":{"name":"共鳴の水晶","set":"ニュートラル","type":"object","cost":2,"aura":1,"glyph":"star","artPrompt":"星空の下、岩場に浮かぶ大きな水晶。淡く光り、まわりの空気が波紋のように震えて、光が共鳴している。人物なし。","rarity":"R","color":"無"},"b_metro":{"name":"星読みの砂時計","set":"ニュートラル","type":"object","cost":1,"count":3,"glyph":"star","effects":[{"trigger":"countdownEnd","steps":[{"action":"draw","target":"me","n":2}]}],"artPrompt":"星図が広げられた古い木の机の上に、砂時計がひとつ。落ちる砂が星の光の粒になって流れている。星図に文字や数字は描かない。人物なし。","rarity":"C","color":"無"},"c_exchange":{"name":"流れ星の便り","set":"ニュートラル","type":"art","cost":2,"glyph":"star","effects":[{"trigger":"play","steps":[{"action":"draw","target":"me","n":2}]}],"artPrompt":"夜空を横切る流れ星。その光の尾から、光る封筒の手紙がひらひらと舞い落ちてくる。手紙に文字は描かない。人物なし。","rarity":"C","color":"無"},"s_lucielle1":{"name":"ルシエラ","epithet":"宵の支配人","set":"ソワレ","type":"object","cost":0,"fixed":true,"token":true,"diceBonus":1,"tags":["ディーラー"],"artPrompt":"夜会のカジノで、黒いドレスの金髪の女性ディーラーが、カードを扇に広げて微笑む。上品で落ち着いた空気。","rarity":"RR","color":"黄"},"s_lucielle2":{"name":"ルシエラ","epithet":"狂騒の女主人","set":"ソワレ","type":"object","cost":0,"fixed":true,"token":true,"diceBonus":1,"bustSave":true,"tags":["ディーラー"],"artPrompt":"熱狂するカジノの中心で、金髪の女性ディーラーがチップの雨の中で笑う。赤と金の照明。","rarity":"RR","color":"黄"},"s_lucielle3":{"name":"ルシエラ","epithet":"宿命の審判","set":"ソワレ","type":"object","cost":0,"fixed":true,"token":true,"diceBonus":1,"bustSave":true,"winDamage":2,"tags":["ディーラー"],"artPrompt":"静まり返った決戦の卓で、金髪の女性ディーラーが最後の1枚を伏せて置く。冷たい月光。","rarity":"RR","color":"黄"},"s_lolo":{"name":"ロロ","epithet":"百の袖","set":"ソワレ","type":"unit","cost":1,"atk":1,"hp":2,"cheat":true,"tags":["ギャンブラー"],"effects":[{"trigger":"play","steps":[{"action":"gamble","game":"dice","need":4,"on":{"win":{"steps":[{"action":"damage","target":"randomEnemy","n":2}]}}}]}],"rarity":"R","color":"黄"},"s_canaria":{"name":"カナリア","epithet":"命を鳴らす小鳥","set":"ソワレ","type":"unit","cost":2,"atk":2,"hp":2,"target":"enemyUnit","tags":["ギャンブラー"],"effects":[{"trigger":"play","steps":[{"action":"optPay","n":3,"on":{"yes":{"steps":[{"action":"damage","target":"chosen","n":4}]}}}]},{"trigger":"gambleLose","steps":[{"action":"damage","target":"opponent","n":2}]}],"rarity":"SR","color":"黄"},"s_sigma":{"name":"シグマ","epithet":"零度の計算機","set":"ソワレ","type":"unit","cost":2,"atk":1,"hp":3,"tags":["ギャンブラー"],"effects":[{"trigger":"play","steps":[{"action":"peek","n":3},{"action":"gamble","game":"dice","need":4,"on":{"win":{"steps":[{"action":"draw","target":"me","n":1}]}}}]}],"rarity":"R","color":"黄"},"s_vera":{"name":"ヴェラ","epithet":"裏切りのクルピエ","set":"ソワレ","type":"unit","cost":3,"atk":3,"hp":3,"dealerStand":4,"tags":["ギャンブラー"],"target":"enemyUnit","effects":[{"trigger":"play","steps":[{"action":"gamble","game":"blackjack","on":{"win":{"steps":[{"action":"destroy","target":"chosen"}]}}}]}],"rarity":"SR","color":"黄"},"s_letizia":{"name":"レティシア","epithet":"微笑む勝負師","set":"ソワレ","type":"unit","cost":5,"atk":4,"hp":4,"rarity":"L","tags":["ギャンブラー"],"effects":[{"trigger":"play","steps":[{"action":"gamble","game":"poker","on":{"pair":{"steps":[{"action":"draw","target":"me","n":2}]},"straight":{"steps":[{"action":"damage","target":"allEnemies","n":3}]},"three":{"steps":[{"action":"damage","target":"opponent","n":7}]}}}]},{"trigger":"gambleWin","steps":[{"action":"buff","target":"self","n":1}]}],"color":"黄"},"s_dice":{"name":"ダイスロール","set":"ソワレ","type":"art","cost":1,"target":"enemyUnit","tags":["賭け"],"glyph":"dice","effects":[{"trigger":"play","steps":[{"action":"gamble","game":"dice","need":4,"on":{"win":{"steps":[{"action":"damage","target":"chosen","n":3}]}}}]}],"rarity":"C","color":"黄"},"s_invite":{"name":"招待状","set":"ソワレ","type":"art","cost":1,"glyph":"search","effects":[{"trigger":"play","steps":[{"action":"search","filter":{"type":"unit","tag":"ギャンブラー"}}]}],"rarity":"C","color":"黄"},"s_roulette":{"name":"ルーレット","set":"ソワレ","type":"art","cost":2,"tags":["賭け"],"glyph":"wheel","effects":[{"trigger":"play","steps":[{"action":"roulette","on":{"red":{"steps":[{"action":"damage","target":"opponent","n":2}]},"black":{"steps":[{"action":"draw","target":"me","n":2}]}}}]}],"rarity":"C","color":"黄"},"s_blackjack":{"name":"ブラックジャック","set":"ソワレ","type":"art","cost":3,"target":"enemyUnit","tags":["賭け"],"glyph":"coins","effects":[{"trigger":"play","steps":[{"action":"gamble","game":"blackjack","on":{"win":{"steps":[{"action":"destroy","target":"chosen"}]},"seven":{"steps":[{"action":"damage","target":"opponent","n":3}]},"lose":{"steps":[{"action":"destroy","target":"randomAlly"}]}}}]}],"rarity":"R","color":"黄"},"s_allin":{"name":"オールイン","set":"ソワレ","type":"art","cost":4,"tags":["賭け"],"glyph":"coin","effects":[{"trigger":"play","steps":[{"action":"payLife","n":5},{"action":"gamble","game":"poker","on":{"pair":{"steps":[{"action":"damage","target":"opponent","n":4}]},"straight":{"steps":[{"action":"damage","target":"opponent","n":8}]},"three":{"steps":[{"action":"damage","target":"opponent","n":12}]}}}]}],"rarity":"R","color":"黄"},"s_sweep":{"name":"総取り","set":"ソワレ","type":"art","cost":3,"tags":["賭け"],"glyph":"coins","effects":[{"trigger":"play","steps":[{"action":"gamble","game":"poker","on":{"pair":{"steps":[{"action":"damage","target":"allEnemies","n":2}]},"straight":{"steps":[{"action":"damage","target":"allEnemies","n":3}]},"three":{"steps":[{"action":"destroy","target":"randomEnemy"},{"action":"damage","target":"allEnemies","n":3}]},"lose":{"steps":[{"action":"damage","target":"randomEnemy","n":1}]}}}]}],"rarity":"C","color":"黄"},"s_chip":{"name":"チップの雨","set":"ソワレ","type":"art","cost":2,"target":"enemyUnit","tags":["賭け"],"glyph":"coin","effects":[{"trigger":"play","steps":[{"action":"roulette","on":{"red":{"steps":[{"action":"damage","target":"chosen","n":3}]},"black":{"steps":[{"action":"damage","target":"chosen","n":2},{"action":"draw","target":"me","n":1}]}}}]}],"rarity":"C","color":"黄"},"s_ring":{"name":"約束の指輪","set":"ソワレ","type":"art","cost":1,"needs":"s_letizia","rarity":"RR","glyph":"star","effects":[{"trigger":"play","steps":[{"action":"replay"}]}],"artPrompt":"テーブルの上、月の光を受けて輝く一つの指輪。そばに伏せたトランプが3枚。人物なし。","color":"黄"},"x_lamp":{"name":"ひとしずくの灯","set":"ニュートラル","type":"art","cost":1,"target":"allyUnit","glyph":"star","effects":[{"trigger":"play","steps":[{"action":"heal","target":"chosen","n":3}]}],"artPrompt":"夜の暗がりで、両手のひらに包まれた、しずくの形をした小さな灯火。やさしい光が手と指先を照らす。手だけが見える。","rarity":"C","color":"無"},"x_wanderer":{"name":"さすらいの旅人","set":"ニュートラル","type":"unit","cost":2,"atk":2,"hp":2,"quick":true,"artPrompt":"フード付きのマントを着た旅人の後ろ姿。星空の下の丘に立ち、杖とランタンを持つ。遠くの地平線に、尖塔の街の光と、きらびやかな館の明かりが、それぞれ別の世界のように見える。","rarity":"C","color":"無"},"x_warden":{"name":"境界の番人","set":"ニュートラル","type":"unit","cost":3,"atk":1,"hp":5,"effects":[{"trigger":"play","steps":[{"action":"draw","target":"me","n":1}]}],"artPrompt":"光でできた境界の門の前に立つ、大きな盾を持った鎧の番人。兜で顔は見えない。門の向こうに星空が広がる。","rarity":"C","color":"無"}},"decks":{"soiree":{"name":"ソワレ","field":"soiree","list":[{"id":"s_lolo","n":3},{"id":"s_canaria","n":3},{"id":"s_sigma","n":3},{"id":"s_vera","n":3},{"id":"s_letizia","n":3},{"id":"s_dice","n":3},{"id":"s_invite","n":3},{"id":"s_roulette","n":3},{"id":"s_blackjack","n":3},{"id":"s_allin","n":3},{"id":"b_amp","n":2},{"id":"b_strike","n":2},{"id":"s_sweep","n":3},{"id":"s_chip","n":3}]}},"fields":{"soiree":{"name":"ソワレ","set":"ソワレ","scene":"city","stages":[{"name":"カジノ・ソワレ","dealer":"s_lucielle1","penalty":1,"effects":[]},{"name":"狂騒の遊技場","dealer":"s_lucielle2","penalty":1,"effects":[{"trigger":"gamble","steps":[{"action":"buff","target":"allAllies","n":1,"temp":true}]}]},{"name":"宿命の決戦場","dealer":"s_lucielle3","penalty":1,"drawWins":true,"effects":[],"grant":"s_ring"}],"conds":[{"type":"gambles","n":3},{"type":"wins","n":3}],"color":"黄"}}}
 </script>
 <script type="application/json" id="starterArt">
 {"settings":{"art":{"base":"オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。","themes":{"ニュートラル":"どの領域にも属さない、領域と領域のあいだの場所や道具。星空、境界、旅の雰囲気。","ソワレ":"テーマは夜会のカジノ。深い紺と金、ろうそくの光、緑のフェルト。上品だけど危うい空気。"}}},"prompts":{"b_strike":"夜空に引かれた光の境界線を、銀の刃が一太刀で切り裂く瞬間。刃の軌跡が弧を描いて光る。刃を握る手だけが見える。","b_amp":"星空の下、岩場に浮かぶ大きな水晶。淡く光り、まわりの空気が波紋のように震えて、光が共鳴している。人物なし。","b_metro":"星図が広げられた古い木の机の上に、砂時計がひとつ。落ちる砂が星の光の粒になって流れている。星図に文字や数字は描かない。人物なし。","c_exchange":"夜空を横切る流れ星。その光の尾から、光る封筒の手紙がひらひらと舞い落ちてくる。手紙に文字は描かない。人物なし。","s_lucielle1":"夜会のカジノで、黒いドレスの金髪の女性ディーラーが、カードを扇に広げて微笑む。上品で落ち着いた空気。","s_lucielle2":"熱狂するカジノの中心で、金髪の女性ディーラーがチップの雨の中で笑う。赤と金の照明。","s_lucielle3":"静まり返った決戦の卓で、金髪の女性ディーラーが最後の1枚を伏せて置く。冷たい月光。","x_lamp":"夜の暗がりで、両手のひらに包まれた、しずくの形をした小さな灯火。やさしい光が手と指先を照らす。手だけが見える。","x_wanderer":"フード付きのマントを着た旅人の後ろ姿。星空の下の丘に立ち、杖とランタンを持つ。遠くの地平線に、尖塔の街の光と、きらびやかな館の明かりが、それぞれ別の世界のように見える。","x_warden":"光でできた境界の門の前に立つ、大きな盾を持った鎧の番人。兜で顔は見えない。門の向こうに星空が広がる。"}}
@@ -1154,6 +1187,49 @@ function artStyle(c) {
   return `background-image:linear-gradient(135deg,hsl(${h} 52% 46%),hsl(${h + 30} 58% 26%))`;
 }
 function artInner(c) { return imageUrl(c) ? '' : `<svg viewBox="0 0 100 60" fill="#fff" aria-hidden="true">${GLYPH[glyphOf(c)]}</svg>`; }
+
+
+/* ================= 色とリーダー ================= */
+const COLORS = { '赤': '#ff5a5a', '青': '#4fa3ff', '黄': '#ffcf3f', '紫': '#b06cff', '緑': '#4fd88a', '白': '#e8ecf6', '無': '#9aa3b8' };
+const COLOR_LIST = ['赤', '青', '黄', '紫', '緑', '白'];
+function fieldColor(f) { return f && COLORS[f.color] ? f.color : '無'; }
+function cardColor(c) {
+  if (!c) return '無';
+  if (c.color && COLORS[c.color]) return c.color;
+  const f = Object.values(STORE.fields).find(x => x.set && x.set === c.set);
+  return f ? fieldColor(f) : '無';
+}
+function deckColor(d) { return d ? fieldColor(STORE.fields[d.field]) : '無'; }
+const EMBLEM = {
+  flame: '<path d="M50 18c4 12 18 18 18 36a18 18 0 0 1-36 0c0-8 4-13 8-17 0 6 3 10 7 11-3-10 0-21 3-30z" fill="url(#lgS)"/>',
+  wave: '<path d="M50 16c10 14 22 26 22 40a22 22 0 0 1-44 0c0-14 12-26 22-40z" fill="url(#lgS)"/><path d="M38 58q6-7 12 0t12 0" stroke="#0b1430" stroke-width="3.5" fill="none" stroke-linecap="round" opacity=".55"/>',
+  star: '<path d="M50 14l9 22 24 2-18 15 6 24-21-13-21 13 6-24-18-15 24-2z" fill="url(#lgS)"/>',
+  moon: '<path d="M60 16a34 34 0 1 0 22 54 28 28 0 1 1-22-54z" fill="url(#lgS)"/><circle cx="66" cy="34" r="3" fill="#fff" opacity=".8"/>',
+  leaf: '<path d="M24 74C24 40 46 22 78 20c0 34-20 56-50 56l-4 4z" fill="url(#lgS)"/><path d="M30 70L66 34" stroke="#0b2418" stroke-width="3.5" stroke-linecap="round" opacity=".5"/>',
+  wing: '<path d="M22 70c8-30 26-46 58-50-6 10-10 14-18 18 6 0 10-2 14-4-6 12-14 18-24 20 4 2 8 2 12 0-8 10-20 16-42 16z" fill="url(#lgS)"/>',
+};
+const LEADERS = {
+  em_red: { name: '紅の紋章', color: '赤', emblem: 'flame' },
+  em_blue: { name: '蒼の紋章', color: '青', emblem: 'wave' },
+  em_yellow: { name: '金の紋章', color: '黄', emblem: 'star' },
+  em_purple: { name: '紫の紋章', color: '紫', emblem: 'moon' },
+  em_green: { name: '翠の紋章', color: '緑', emblem: 'leaf' },
+  em_white: { name: '白の紋章', color: '白', emblem: 'wing' },
+  ld_letizia: { name: 'レティシア', color: '黄', card: 's_letizia', special: true },
+  ld_riora: { name: 'リオラ', color: '青', card: 'n_riora', special: true },
+};
+const DEFAULT_LEADER = { '赤': 'em_red', '青': 'em_blue', '黄': 'em_yellow', '紫': 'em_purple', '緑': 'em_green', '白': 'em_white', '無': 'em_white' };
+function leaderOwned(id) { const L = LEADERS[id]; if (!L) return false; if (!L.special) return true; return !!(PLAYER.testAll || (PLAYER.owned && PLAYER.owned['leader:' + id])); }
+function leadersFor(color) { return Object.keys(LEADERS).filter(id => LEADERS[id].color === color && leaderOwned(id)); }
+function leaderImage(L) { if (L.image) return L.image; const c = L.card && (STORE.cards[L.card] || C[L.card]); return c ? imageUrl(c) : null; }
+function chosenLeader(color) { let id = null; try { id = localStorage.getItem('sphere-leader-' + color); } catch (e) { } return id && LEADERS[id] && LEADERS[id].color === color && leaderOwned(id) ? id : DEFAULT_LEADER[color] || 'em_white'; }
+function setChosenLeader(color, id) { try { localStorage.setItem('sphere-leader-' + color, id); } catch (e) { } }
+function leaderArt(id) {
+  const L = LEADERS[id] || LEADERS.em_white, col = COLORS[L.color] || '#9aa3b8';
+  const img = L.emblem ? null : leaderImage(L);
+  if (img) return `<span class="ldr-img" style="background-image:url(${img})"></span>`;
+  return `<svg class="ldr-svg" viewBox="0 0 100 100" aria-hidden="true"><defs><radialGradient id="lgB${id}" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="${col}" stop-opacity=".9"/><stop offset=".55" stop-color="${col}" stop-opacity=".35"/><stop offset="1" stop-color="#05060b"/></radialGradient><linearGradient id="lgS" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fffbe8"/><stop offset=".6" stop-color="#f3d995"/><stop offset="1" stop-color="#b88a2a"/></linearGradient></defs><circle cx="50" cy="50" r="48" fill="url(#lgB${id})"/><circle cx="50" cy="50" r="44" fill="none" stroke="#f3d995" stroke-opacity=".55" stroke-width="1.5"/>${EMBLEM[L.emblem] || EMBLEM.star}</svg>`;
+}
 
 /* ================= 3. データ ================= */
 const STORE = { cards: {}, decks: {}, fields: {}, settings: {} };
@@ -1592,6 +1668,7 @@ function newGame({ decks, ai, sim }) {
       field: { id: deckField(decks[i]), lv: 1, pending: false, parts: new Set(), count: 0 }, tf: {}, bonus: false, noBlock: false, reserveLeft: 0,
     });
   }
+  g.players.forEach(p => { const col = deckColor(getDeck(p.deckId)); p.color = col; p.leader = p.isAI ? DEFAULT_LEADER[col] || 'em_white' : chosenLeader(col); });
   g.first = Math.random() < 0.5 ? 0 : 1; g.cur = g.first;
   g.players[1 - g.first].bonus = true;
   for (const p of g.players) placeDealer(g, p);
@@ -2020,6 +2097,7 @@ function kindLine(c) {
   return `<b>${TYPE[c.type]}</b>${bits.length ? '・' + esc(bits.join('・')) : ''}`;
 }
 function cardFace(c, opts = {}) {
+  if (typeof cardColor === 'function') opts.cc = COLORS[cardColor(c)];
   const shownCost = opts.cost ?? c.cost;
   let stats = '';
   if (c.type === 'unit') {
@@ -2027,7 +2105,7 @@ function cardFace(c, opts = {}) {
     stats = `<span class="pw"><span class="a ${a > c.atk ? 'up' : ''}">${a}</span><span class="h ${opts.hurt ? 'hurt' : (h > c.hp ? 'up' : '')}">${h}</span></span>`;
   } else if (c.type === 'object' && c.count) stats = `<span class="pw"><span></span><span class="c">${opts.counter ?? c.count}</span></span>`;
   return `<span class="art" style="${artStyle(c)}">${artInner(c)}<span class="cost ${shownCost < c.cost ? 'down' : ''}">${shownCost}</span>${opts.badge || ''}${stats}${opts.float || ''}</span>
-    <span class="plate"><span class="rar ${['C', 'R', 'SR', 'L', 'RR'].includes(c.rarity) ? c.rarity : 'C'}" title="${RARITY[c.rarity] || 'ブロンズ'}"></span>${c.epithet ? `<span class="epi">〈${esc(c.epithet)}〉</span>` : ''}<span class="name">${esc(c.name)}</span><span class="kind">${kindLine(c)}</span><span class="text">${esc(cardText(c))}</span></span>`;
+    <span class="plate"${opts.cc && cardColor(c) !== '無' ? ` style="--cc:${opts.cc}"` : ''}><span class="rar ${['C', 'R', 'SR', 'L', 'RR'].includes(c.rarity) ? c.rarity : 'C'}" title="${RARITY[c.rarity] || 'ブロンズ'}"></span>${c.epithet ? `<span class="epi">〈${esc(c.epithet)}〉</span>` : ''}<span class="name">${esc(c.name)}</span><span class="kind">${kindLine(c)}</span><span class="text">${esc(cardText(c))}</span></span>`;
 }
 function cardHTML(g, inst, ctx, cls = '') {
   const c = C[inst.cid], p = g.players[inst.owner];
@@ -2077,7 +2155,7 @@ function infoHTML(g, p, isOpp) {
   }
   LAST.life[p.idx] = p.life;
   const pips = TH.map((t, i) => `<i class="${i < p.lifeDraws ? 'used' : ''}"></i>`).join('');
-  const life = `<div class="pside"><button type="button" class="lifebox ${isOpp ? 'opp' : 'me'} ${tgt}${hit}" ${tgt ? 'data-act="life"' : 'tabindex="-1"'} aria-label="${esc(p.name)}のライフ ${Math.max(0, p.life)}"><span class="num">${Math.max(0, p.life)}</span><span class="pips" aria-hidden="true">${pips}</span>${float}</button><span class="pname">${esc(p.name)}</span></div>`;
+  const life = `<div class="pside"><button type="button" class="lifebox ldr ${isOpp ? 'opp' : 'me'} ${tgt}${hit}${g.cur === p.idx && !g.over ? ' active' : ''}${g.over && g.winner != null && g.winner !== p.idx ? ' down' : ''}" style="--lc:${COLORS[p.color] || '#9aa3b8'}" ${tgt ? 'data-act="life"' : 'tabindex="-1"'} aria-label="${esc(p.name)}のリーダー（${esc((LEADERS[p.leader] || {}).name || '')}）。ライフ ${Math.max(0, p.life)}"><span class="ldr-face">${leaderArt(p.leader)}</span><span class="ldr-aim" aria-hidden="true"></span><span class="num">${Math.max(0, p.life)}</span><span class="pips" aria-hidden="true">${pips}</span>${float}</button><span class="pname">${esc(p.name)}</span></div>`;
   const backs = isOpp && !$('#chkCpuHand').checked ? `<span class="backs" aria-label="手札${p.hand.length}枚">${'<i></i>'.repeat(Math.min(p.hand.length, 10))}</span>` : '';
   const center = `<div class="pcenter">${fieldHTML(g, p)}${backs}</div>`;
   const bonus = p.bonus ? '<span class="bonus">後攻+1</span>' : '<span>リザーブ</span>';
@@ -2914,6 +2992,7 @@ function renderCardEditor() {
       </div>` : ''}
       <div class="frow">
         <label class="fl">タグ（「、」区切り）<input type="text" data-list data-f="tags" value="${esc((c.tags || []).join('、'))}" list="dlTags"></label>
+        <label class="fl">色<select data-f="color">${opts(Object.fromEntries([...COLOR_LIST, '無'].map(k => [k, k === '無' ? '無色' : k])), c.color, '自動（領域の色）')}</select></label>
         <label class="fl">レア度<select data-f="rarity">${opts(RARITY, c.rarity, '未設定（ブロンズ）')}</select></label>
         <label class="fl">対象の選び方<select data-f="target">${opts(CHOSEN_LABEL, c.target, '選ばない')}</select></label>
         <label class="fl">使える条件（場にいるユニット）<select data-f="needs">${opts(Object.fromEntries(sortCards(Object.entries(STORE.cards)).filter(([id, x]) => x.type === 'unit').map(([id, x]) => [id, `${x.name}（${x.set || 'テーマなし'}）`])), c.needs, 'なし')}</select></label>
@@ -3074,6 +3153,7 @@ function deckIssues(d) {
   if (n !== 40) out.push(`デッキは40枚です（いま${n}枚）`);
   for (const x of d.list || []) { if (x.n > 3) out.push(`${(STORE.cards[x.id] || {}).name || x.id}が${x.n}枚（3枚まで）`); if (!STORE.cards[x.id]) out.push(`消されたカードが入っています（${x.id}）`); }
   if (!STORE.fields[d.field]) out.push('領域を選んでください');
+  { const col = deckColor(d); for (const x of d.list || []) { const c = STORE.cards[x.id]; const cc = cardColor(c); if (c && cc !== '無' && cc !== col) out.push(`${c.name}は${cc}のカード（このデッキは${col}）`); } }
   return out;
 }
 function renderDeckEditor() {
@@ -3170,7 +3250,7 @@ function renderFieldEditor() {
     <div class="edhead"><h2>${FEDIT.isNew ? '新しい領域' : '領域を編集'}${FEDIT.dirty ? ' <span class="note">（未保存）</span>' : ''}</h2>
       <div class="controls"><button class="btn primary" type="button" data-fe="save" ${ro ? 'disabled' : ''}>保存</button>${del}</div></div>
     <p class="status">${esc(FEDIT.msg || (ro ? '見るだけです。保存するには編集の権限が必要です。' : ''))}</p>
-    <div class="frow"><label class="fl">領域の名前<input type="text" data-f="name" value="${esc(f.name || '')}"></label>
+    <div class="frow"><label class="fl">領域の名前<input type="text" data-f="name" value="${esc(f.name || '')}"></label><label class="fl">色<select data-f="color">${opts(Object.fromEntries(COLOR_LIST.map(k => [k, k])), f.color, '無色')}</select></label>
       <label class="fl">テーマ（色）<input type="text" data-f="set" value="${esc(f.set || '')}" list="dlSets2"></label>
       <label class="fl">対戦の背景の景色<select data-f="scene">${opts(SCENE_NAME, f.scene, 'おまかせ')}</select></label></div>
     ${f.stages.slice(0, 3).map(stage).join('')}
@@ -3470,19 +3550,23 @@ function coverCard(d) {
 function deckTileHTML(id, d, kind, sel, attr) {
   const f = STORE.fields[d.field] || {}, cv = coverCard(d);
   const st = cv ? artStyle(cv) : artStyle({ set: f.set, name: d.name });
-  return `<button class="dtile${sel ? ' sel' : ''}" type="button" ${attr}="${esc(id)}" aria-pressed="${sel ? 'true' : 'false'}"><span class="dcover" style="${st}"></span><span class="dinfo"><b>${esc(d.name || '名前なし')}</b><small>${kind}・${esc(f.name || '領域なし')}・${deckTotal(d)}枚</small></span></button>`;
+  return `<button class="dtile${sel ? ' sel' : ''}" type="button" ${attr}="${esc(id)}" aria-pressed="${sel ? 'true' : 'false'}"><span class="dcover" style="${st}"></span><span class="dinfo"><b>${esc(d.name || '名前なし')}</b><small><span class="cdot" style="--cc:${COLORS[fieldColor(f)]}"></span>${kind}・${esc(f.name || '領域なし')}・${deckTotal(d)}枚</small></span></button>`;
 }
 function renderBattle() {
   const me = $('#selMe').value, cpu = $('#selCpu').value;
   const mine = Object.entries(PLAYER.decks).map(([id, d]) => deckTileHTML(id, d, 'マイデッキ', id === me, 'data-pick-me'));
   const st = Object.entries(STORE.decks).map(([id, d]) => deckTileHTML(id, d, 'スターター', id === me, 'data-pick-me'));
   $('#btMine').innerHTML = mine.concat(st).join('') || '<p class="note">デッキがありません。</p>';
+  { const md = getDeck(me), col = deckColor(md), cur = chosenLeader(col), ids = md ? leadersFor(col) : [];
+    $('#btLeader').innerHTML = md ? `<h3>リーダー<small style="font-weight:400;color:#c2c8d8;margin-left:8px">${col}の色</small></h3><div class="ldrpick">${ids.map(id => `<button type="button" data-pick-leader="${id}" class="${id === cur ? 'sel' : ''}" aria-pressed="${id === cur}"><span class="lp" style="--lc:${COLORS[col]}">${leaderArt(id)}</span>${esc(LEADERS[id].name)}</button>`).join('')}</div>` : ''; }
   $('#btCpu').innerHTML = Object.entries(STORE.decks).map(([id, d]) => deckTileHTML(id, d, 'スターター', id === cpu, 'data-pick-cpu')).join('');
 }
 $('#view-battle').addEventListener('click', e => {
   const a = e.target.closest('[data-pick-me]'), b = e.target.closest('[data-pick-cpu]');
   if (a) { $('#selMe').value = a.dataset.pickMe; renderBattle(); }
   if (b) { $('#selCpu').value = b.dataset.pickCpu; renderBattle(); }
+  const l = e.target.closest('[data-pick-leader]');
+  if (l) { setChosenLeader(deckColor(getDeck($('#selMe').value)), l.dataset.pickLeader); sfx('play'); renderBattle(); }
 });
 
 /* ================= 18. デッキを作る ================= */
@@ -3502,13 +3586,14 @@ function renderBuilder() {
   const d = BUILD.deck, n = deckTotal(d);
   const inDeck = id => ((d.list || []).find(x => x.id === id) || { n: 0 }).n;
   const sets = setNames();
-  const pool = sortCards(Object.entries(STORE.cards)).filter(([id, c]) => ownedCount(id) > 0 && (!BF.set || c.set === BF.set) && (!BF.type || c.type === BF.type) && (BF.cost === '' || (BF.cost === '6' ? c.cost >= 6 : c.cost === +BF.cost)));
+  const dcol = deckColor(d);
+  const pool = sortCards(Object.entries(STORE.cards)).filter(([id, c]) => ownedCount(id) > 0 && !c.token && (cardColor(c) === '無' || cardColor(c) === dcol) && (!BF.set || c.set === BF.set) && (!BF.type || c.type === BF.type) && (BF.cost === '' || (BF.cost === '6' ? c.cost >= 6 : c.cost === +BF.cost)));
   const issues = builderIssues(d);
   const curve = Array.from({ length: 7 }, () => 0);
   for (const x of d.list || []) { const c = STORE.cards[x.id]; if (c) curve[Math.min(6, c.cost)] += x.n; }
   const mx = Math.max(1, ...curve);
   const rows = (d.list || []).slice().sort((a, b) => ((STORE.cards[a.id] || {}).cost - (STORE.cards[b.id] || {}).cost) || String((STORE.cards[a.id] || {}).name).localeCompare(String((STORE.cards[b.id] || {}).name)));
-  const fields = Object.entries(STORE.fields).map(([fid, f]) => `<button class="fchip${d.field === fid ? ' sel' : ''}" type="button" data-bfield="${esc(fid)}" aria-pressed="${d.field === fid}">${esc(f.name)}<small>${esc((f.stages || []).map(s => s.name).join(' → '))}</small></button>`).join('');
+  const fields = Object.entries(STORE.fields).map(([fid, f]) => `<button class="fchip${d.field === fid ? ' sel' : ''}" type="button" data-bfield="${esc(fid)}" aria-pressed="${d.field === fid}"><span class="cdot" style="--cc:${COLORS[fieldColor(f)]}"></span>${esc(f.name)}（${fieldColor(f)}）<small>${esc((f.stages || []).map(s => s.name).join(' → '))}</small></button>`).join('');
   box.innerHTML = `<div class="bbar">
       <button class="btn" type="button" data-bback>← 一覧へ</button>
       <input type="text" id="bName" value="${esc(d.name || '')}" aria-label="デッキの名前" placeholder="デッキの名前">
@@ -3517,7 +3602,7 @@ function renderBuilder() {
       ${BUILD.isNew ? '' : (BUILD.confirmDel ? '<button class="btn danger" type="button" data-bdelyes>本当に消す</button><button class="btn" type="button" data-bdelno>やめる</button>' : '<button class="btn danger" type="button" data-bdel>削除</button>')}
     </div>
     <p class="note" id="bMsg" style="margin:6px 0 0">${esc(BUILD.msg || '')}</p>
-    <h3>領域</h3><div class="bfields">${fields}</div>
+    <h3>領域</h3><p class="note" style="margin:0 0 6px">デッキの色は領域で決まる。入れられるのは、同じ色のカードと無色のカードだけ。</p><div class="bfields">${fields}</div>
     <div class="bmain">
       <div>
         <div class="bfilters">
@@ -3538,6 +3623,7 @@ function builderIssues(d) {
   const out = [], n = deckTotal(d);
   if (n !== 40) out.push(`40枚にしてください（いま${n}枚）`);
   if (!STORE.fields[d.field]) out.push('領域を選んでください');
+  { const col = deckColor(d); for (const x of d.list || []) { const c = STORE.cards[x.id]; const cc = cardColor(c); if (c && cc !== '無' && cc !== col) out.push(`${c.name}は${cc}のカード（このデッキは${col}）`); } }
   for (const x of d.list || []) {
     const c = STORE.cards[x.id];
     if (!c) { out.push('消されたカードが入っています'); continue; }
