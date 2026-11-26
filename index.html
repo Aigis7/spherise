@@ -97,7 +97,11 @@ textarea{width:100%;font-family:var(--f-mono);font-size:.72rem}
 .mat>*{min-width:0}
 
 /* 上下の情報の列 */
-.prow{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center}
+.prow{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:12px;align-items:center}
+.prow>.piles{justify-self:end}
+#oppInfo,#meInfo{padding-top:8px}
+.prow>.pside{justify-self:center}
+.prow .pname{display:none}
 .pside{display:flex;align-items:center;gap:8px}
 .pname{font-weight:700;font-size:.72rem;letter-spacing:.12em;color:var(--s-muted)}
 .lifebox{position:relative;width:66px;height:66px;border-radius:50%;display:grid;place-items:center;font:inherit;color:#fff;border:2px solid rgb(255 255 255 / .5);box-shadow:0 0 18px var(--orb-glow),inset 0 -8px 16px rgb(0 0 0 / .35);background:radial-gradient(circle at 35% 30%,var(--orb1),var(--orb2) 70%)}
@@ -381,7 +385,7 @@ body.in-game .modal .btn:focus-visible{outline:2px solid #ffd27a;outline-offset:
 .felt .bjrow{border-bottom:1px dashed rgb(243 231 196 / .25);padding-bottom:6px}
 .felt .bjrow:last-of-type{border-bottom:0}
 /* リーダー */
-.lifebox.ldr{width:72px;height:72px;padding:0;overflow:visible;background:none;border:0;box-shadow:none;animation:ldrFloat 4.5s ease-in-out infinite}
+.lifebox.ldr{width:84px;height:84px;padding:0;overflow:visible;background:none;border:0;box-shadow:none;animation:ldrFloat 4.5s ease-in-out infinite}
 .lifebox.ldr .ldr-face{position:absolute;inset:0;border-radius:50%;overflow:hidden;border:2px solid color-mix(in srgb,var(--lc) 75%,#fff);box-shadow:0 0 14px color-mix(in srgb,var(--lc) 55%,transparent),inset 0 0 12px rgb(0 0 0 / .5);background:#05060b}
 .lifebox.ldr .ldr-svg{width:100%;height:100%;display:block}
 .lifebox.ldr .ldr-img{position:absolute;inset:0;background:center 30%/cover no-repeat}
@@ -400,7 +404,7 @@ body.in-game .modal .btn:focus-visible{outline:2px solid #ffd27a;outline-offset:
 @keyframes ldrTurn{50%{box-shadow:0 0 0 3px color-mix(in srgb,var(--lc) 60%,transparent),0 0 26px var(--lc),inset 0 0 12px rgb(0 0 0 / .5)}}
 @keyframes ldrAim{to{transform:rotate(360deg)}}
 @keyframes ldrHurt{from{opacity:1}to{opacity:0}}
-@media (max-width:600px){.lifebox.ldr{width:56px;height:56px}.lifebox.ldr .num{font-size:.85rem;min-width:28px;bottom:-7px}}
+@media (max-width:600px){.lifebox.ldr{width:62px;height:62px}.lifebox.ldr .num{font-size:.85rem;min-width:28px;bottom:-7px}}
 @media (prefers-reduced-motion: reduce){.lifebox.ldr,.lifebox.ldr .ldr-face,.lifebox.ldr .ldr-aim{animation:none!important}}
 /* 色の印 */
 .card .plate{border-top:2px solid var(--cc,transparent)}
@@ -2162,7 +2166,7 @@ function infoHTML(g, p, isOpp) {
   const piles = `<div class="piles"><div class="pile"><span class="stack">${p.deck.length}</span><span>山札</span></div>
     <div class="pile reserve"${isOpp ? '' : ' data-drop="reserve"'}><span class="stack">${avail(p)}/${p.reserve.length}</span>${bonus}</div>
     <div class="pile grave"><span class="stack">${p.grave.length}</span><span>墓地</span></div></div>`;
-  return life + center + piles;
+  return center + life + piles;
 }
 const isMyTurn = g => !g.over && g.cur === 0 && !g.players[0].isAI && !g.busy;
 const isMyMain = g => isMyTurn(g) && g.phase === 'main';
