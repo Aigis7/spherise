@@ -1,0 +1,323 @@
+<title>ソワレ設定資料</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Dela+Gothic+One&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<style>
+/* Layout: カジノの深い緑と金の1テーマ。上に題とカジノの説明、3段階の領域、ルシエラ、ギャンブラー5人、最後にコピー用の設定資料 */
+:root{
+  --bg:#0a1310; --surface:#10221b; --surface-2:#163126; --ink:#f3ecd8; --muted:#b9b094; --line:#2c4a3c;
+  --gold:#e3c27a; --red:#c8344b;
+  --f-logo:"Cinzel","Times New Roman",serif;
+  --f-display:"Dela Gothic One","Hiragino Sans","Yu Gothic",sans-serif;
+  --f-body:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",system-ui,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);line-height:1.75;
+  background-image:radial-gradient(70rem 30rem at 50% -10%,rgb(227 194 122 / .12),transparent 60%),radial-gradient(40rem 30rem at 100% 40%,rgb(200 52 75 / .08),transparent 60%)}
+.wrap{max-width:1040px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:32px 52px;display:grid;gap:30px}
+.hero{display:grid;gap:8px;text-align:center;justify-items:center}
+.eyebrow{font-size:.72rem;letter-spacing:.32em;color:var(--gold);font-weight:700}
+h1{font-family:var(--f-logo);font-weight:900;font-size:clamp(2.4rem,9vw,4rem);letter-spacing:.2em;margin:0 0 0 .2em;line-height:1.05;color:#fff;text-shadow:0 0 24px rgb(227 194 122 / .45)}
+.sub{font-family:var(--f-display);letter-spacing:.4em;color:var(--gold);font-size:.95rem}
+.rule{width:min(380px,70vw);height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.lead{color:var(--muted);max-width:60ch;margin:0}
+h2{font-size:.8rem;letter-spacing:.22em;color:var(--gold);margin:0 0 12px;font-weight:700}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;min-width:0}
+.box h3{margin:0 0 6px;font-size:.98rem}
+.box p,.box ul{margin:0;font-size:.86rem;color:var(--muted)}
+.box ul{padding-left:1.1em}
+.stages{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media (max-width:720px){.stages{grid-template-columns:1fr}}
+.stage{position:relative;border-radius:12px;padding:14px 16px;border:1px solid var(--line);background:linear-gradient(160deg,var(--s1),var(--s2));min-height:150px;display:grid;align-content:end;gap:4px;overflow:hidden}
+.stage .lv{position:absolute;top:12px;left:16px;font-size:.66rem;letter-spacing:.2em;color:rgb(255 255 255 / .75);font-weight:700}
+.stage b{font-family:var(--f-display);font-weight:400;font-size:1.2rem;color:#fff;text-shadow:0 2px 6px #000}
+.stage p{margin:0;font-size:.8rem;color:#efe6cc}
+.person{display:grid;grid-template-columns:260px minmax(0,1fr);gap:0;background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+@media (max-width:680px){.person{grid-template-columns:1fr}}
+.ph{position:relative;min-height:300px;display:grid;place-items:center;background:linear-gradient(160deg,var(--c1),var(--c2));color:rgb(255 255 255 / .9)}
+.ph span{font-family:var(--f-display);font-size:3.2rem;text-shadow:0 2px 10px #0008}
+.ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 12%}
+.ph small{position:absolute;bottom:10px;left:0;right:0;text-align:center;font-size:.68rem;letter-spacing:.14em;color:rgb(255 255 255 / .75)}
+.pbody{padding:16px 18px;display:grid;gap:8px;align-content:start;border-left:4px solid var(--c1)}
+@media (max-width:680px){.pbody{border-left:0;border-top:4px solid var(--c1)}}
+.epi{font-size:.8rem;color:var(--gold);font-weight:700;letter-spacing:.08em}
+.name{font-family:var(--f-display);font-weight:400;font-size:1.8rem;line-height:1.1;margin:0}
+.role{font-size:.8rem;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:.72rem;padding:2px 9px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line)}
+.sw{display:inline-block;width:.8em;height:.8em;border-radius:50%;vertical-align:-.05em;margin-right:4px;border:1px solid rgb(255 255 255 / .3)}
+dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;margin:0;font-size:.85rem}
+dt{color:var(--muted);font-weight:700;white-space:nowrap}
+dd{margin:0}
+table{border-collapse:collapse;width:100%;font-size:.84rem}
+th,td{border-bottom:1px solid var(--line);padding:7px 8px;text-align:left;vertical-align:top}
+th{color:var(--gold);font-size:.74rem;letter-spacing:.1em;white-space:nowrap}
+.tablewrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:4px 8px}
+.people{display:grid;gap:16px}
+.copy{display:grid;gap:10px}
+.copyhead{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
+.btn{font:inherit;font-size:.85rem;font-weight:700;padding:6px 14px;border-radius:8px;border:1px solid var(--gold);background:transparent;color:var(--gold);cursor:pointer}
+.btn:hover{background:rgb(227 194 122 / .12)}
+.btn:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+textarea{width:100%;font-family:var(--f-body);font-size:.8rem;line-height:1.65;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:12px}
+.msg{font-size:.8rem;color:var(--muted)}
+.tips{font-size:.84rem;color:var(--muted);margin:0;padding-left:1.2em}
+
+.imgbar{display:flex;gap:6px;flex-wrap:wrap;padding:8px 12px 0}
+.imgbar button{font:inherit;font-size:.78rem;font-weight:700;cursor:pointer;padding:5px 12px;border-radius:999px;border:1px solid rgb(255 255 255 / .3);background:rgb(255 255 255 / .08);color:inherit}
+.imgbar button:hover{border-color:#ffd27a}
+.imgbar button:focus-visible{outline:2px solid #ffd27a;outline-offset:2px}
+.imgbar .imsg{font-size:.72rem;opacity:.8;align-self:center}
+</style>
+
+<div class="wrap">
+  <header class="hero">
+    <span class="eyebrow">CHARACTER SHEET</span>
+    <h1 lang="fr">SOIRÉE</h1>
+    <div class="sub">カジノ・ソワレ</div>
+    <div class="rule" aria-hidden="true"></div>
+    <p class="lead">夜の街の高級カジノ「カジノ・ソワレ」。支配人のディーラー、ルシエラと、命も人生も賭けて勝負するギャンブラーたちの物語。宴は夜が更けるほど狂っていき、最後は宿命の決戦になる。</p>
+  </header>
+
+  <section>
+    <h2>集合の設定画</h2>
+    <img src="group.jpg" alt="6人の集合の設定画。左からルシエラ、レティシア、カナリア、シグマ、ロロ、ヴェラ。カジノの中に並んで立っている。" style="width:100%;border-radius:14px;border:1px solid var(--line);display:block">
+  </section>
+
+  <section>
+    <h2>世界観と画風</h2>
+    <div class="grid">
+      <div class="box"><h3>カジノ</h3><p>深い緑のフェルトの卓、金の装飾、深紅のじゅうたん、シャンデリアの光。上品だけれど、どこか危うい夜の社交場。</p></div>
+      <div class="box"><h3>対立</h3><p>卓を仕切るディーラーと、勝負に挑むギャンブラー。ギャンブラーは運と狂気で賭け、ディーラーはそれを受けて立ち、裁く。</p></div>
+      <div class="box"><h3>勝負</h3><p>サイコロ、ブラックジャック、ポーカー。山札をめくってカードのコストで勝ち負けが決まる。</p></div>
+      <div class="box"><h3>画風</h3><ul><li>線は細め、日本のアニメらしいやわらかいセル塗り</li><li>横長16:10、描くものは中央</li><li>白いふちどり・枠・文字は入れない</li><li>既存の作品やキャラクターに似せない</li></ul></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>領域：ソワレ</h2>
+    <div class="stages">
+      <div class="stage" style="--s1:#1c4a37;--s2:#0b1d16"><span class="lv">初期</span><b>カジノ・ソワレ</b><p>上品な夜会。シャンデリアの下で、静かに賭けが始まる。</p></div>
+      <div class="stage" style="--s1:#7a1f30;--s2:#1d0a10"><span class="lv">第二昇華</span><b>狂騒の遊技場</b><p>熱気と狂気。チップが舞い、命を賭ける声が飛び交う。</p></div>
+      <div class="stage" style="--s1:#8a6a2a;--s2:#1a140a"><span class="lv">第三昇華</span><b>宿命の決戦場</b><p>最後の大勝負。白と金の光の中で、宿命が決まる。</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>ディーラー</h2>
+    <article class="person" style="--c1:#d9a84a;--c2:#3a2a0e">
+      <div class="ph"><img src="lucielle.jpg" alt="ルシエラの設定画。カジノの中で、トランプを扇のように広げて持つ、蜂蜜色の金髪のディーラー。"></div>
+      <div class="pbody">
+        <span class="role">ディーラー／カジノ・ソワレの支配人</span>
+        <p class="name">ルシエラ</p>
+        <div class="chips"><span class="chip"><span class="sw" style="background:#d9a84a"></span>蜂蜜色の金</span><span class="chip"><span class="sw" style="background:#c98b2a"></span>琥珀</span><span class="chip"><span class="sw" style="background:#111"></span>黒</span></div>
+        <dl>
+          <dt>髪</dt><dd>深い蜂蜜色の金髪。腰まである大きなウェーブ</dd>
+          <dt>目</dt><dd>琥珀色。いつも少し細めて、余裕の笑み</dd>
+          <dt>体つき</dt><dd>背の高い大人の女性</dd>
+          <dt>くせ</dt><dd>黒い手袋で、トランプを扇のように広げて持つ</dd>
+          <dt>性格</dt><dd>余裕があって、自分が破滅するかもしれない勝負まで楽しむ</dd>
+          <dt>ヴェラと</dt><dd>同じ金髪と、同じ制服。ヴェラがなくした片方の手袋を、ルシエラが胸ポケットに入れている</dd>
+        </dl>
+      </div>
+    </article>
+    <div class="tablewrap" style="margin-top:12px">
+      <table>
+        <tr><th>段階</th><th>二つ名</th><th>見た目</th></tr>
+        <tr><td>カジノ・ソワレ</td><td>〈宵の支配人〉</td><td>白いシャツに体に合った黒いベスト、金の蝶ネクタイをきちんと結ぶ。両手に黒い手袋。髪は黒いリボンでゆるくまとめている。カウンターに肘をつき、退屈そうに笑う</td></tr>
+        <tr><td>狂騒の遊技場</td><td>〈狂騒の女主人〉</td><td>髪をほどいて大きく広がる。肩に深紅のコート、金のアクセサリーが増える。目を大きく開いて楽しそうに笑い、まわりにチップが舞う</td></tr>
+        <tr><td>宿命の決戦場</td><td>〈宿命の審判〉</td><td>白と金の女王のような装い、長いマント、髪に金の冠のような飾り。まわりをトランプが浮かんで回り、目が金色に光る。破滅を前に、いちばんきれいに笑う</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>ギャンブラー</h2>
+    <div class="people">
+      <article class="person" style="--c1:#b8a6d9;--c2:#2a2140">
+        <div class="ph"><img src="letizia.jpg" alt="レティシアの設定画。カジノの中に立つ、白いスーツにラベンダーの長い髪の女性。"></div>
+        <div class="pbody">
+          <span class="epi">〈微笑む勝負師〉</span><p class="name">レティシア</p><span class="role">主人公</span>
+          <div class="chips"><span class="chip"><span class="sw" style="background:#cfc3e6"></span>ラベンダー銀</span><span class="chip"><span class="sw" style="background:#fff"></span>白</span><span class="chip"><span class="sw" style="background:#d9b45a"></span>金</span></div>
+          <dl>
+            <dt>髪</dt><dd>銀に近いラベンダーのロングヘア</dd>
+            <dt>目</dt><dd>ふだんは淡い色。興奮すると金色に光る</dd>
+            <dt>服</dt><dd>白のスリーピーススーツ、黒いシャツ、金のネクタイピン</dd>
+            <dt>性格</dt><dd>品があって、賭けを心から楽しむ。負けそうなときほど楽しそうに笑う</dd>
+          </dl>
+        </div>
+      </article>
+      <article class="person" style="--c1:#f2cf3c;--c2:#3b3008">
+        <div class="ph"><img src="canaria.jpg" alt="カナリアの設定画。黄色のボブに黄色のケープとリボンの少女。"></div>
+        <div class="pbody">
+          <span class="epi">〈命を鳴らす小鳥〉</span><p class="name">カナリア</p><span class="role">命を賭けても平気な狂人</span>
+          <div class="chips"><span class="chip"><span class="sw" style="background:#f2cf3c"></span>黄色</span><span class="chip"><span class="sw" style="background:#fff"></span>白</span><span class="chip"><span class="sw" style="background:#111"></span>黒</span></div>
+          <dl>
+            <dt>髪</dt><dd>黄色のショートボブ。きれいに切りそろえている</dd>
+            <dt>服</dt><dd>白いフリルのブラウスに大きな黄色のリボン、レモン色の短いケープ、黒のショートパンツ、白いハイソックス</dd>
+            <dt>小物</dt><dd>首に小さな金の鳥かごのペンダント</dd>
+            <dt>性格</dt><dd>見た目はかわいくて清潔。自分の命をチップのように放り投げて、けらけら笑う</dd>
+          </dl>
+        </div>
+      </article>
+      <article class="person" style="--c1:#9fb3c8;--c2:#1a2330">
+        <div class="ph"><img src="sigma.jpg" alt="シグマの設定画。眼鏡にメモ帳を持つ黒髪の少年。"></div>
+        <div class="pbody">
+          <span class="epi">〈零度の計算機〉</span><p class="name">シグマ</p><span class="role">確率で考える冷静な天才</span>
+          <div class="chips"><span class="chip"><span class="sw" style="background:#111"></span>黒</span><span class="chip"><span class="sw" style="background:#fff"></span>白</span></div>
+          <dl>
+            <dt>見た目</dt><dd>黒髪の少年、細い眼鏡</dd>
+            <dt>服</dt><dd>白いベストとシャツ。手にメモ帳</dd>
+            <dt>性格</dt><dd>無表情。確率でしか物を言わない</dd>
+          </dl>
+        </div>
+      </article>
+      <article class="person" style="--c1:#7a4fb0;--c2:#1c1230">
+        <div class="ph"><img src="lolo.jpg" alt="ロロの設定画。狐の耳のフードがついた黒と紫のパーカーコートの少女。"></div>
+        <div class="pbody">
+          <span class="epi">〈百の袖〉</span><p class="name">ロロ</p><span class="role">ずるいイカサマ師の女の子</span>
+          <div class="chips"><span class="chip"><span class="sw" style="background:#222"></span>黒</span><span class="chip"><span class="sw" style="background:#7a4fb0"></span>紫</span></div>
+          <dl>
+            <dt>服</dt><dd>狐の耳の形のフードがついた、黒と紫のぶかぶかのパーカーコート。中は短いベストとショートパンツ</dd>
+            <dt>特徴</dt><dd>とても長い袖で手が隠れ、袖口からトランプの端がのぞく。フードの下から狐のような細い目でにやっと笑う</dd>
+            <dt>性格</dt><dd>勝つためなら何でもする。つかみどころがない</dd>
+          </dl>
+        </div>
+      </article>
+      <article class="person" style="--c1:#d9a84a;--c2:#2a1a08">
+        <div class="ph"><img src="vera.jpg" alt="ヴェラの設定画。金髪のボブで、着崩したディーラー服の女性。"></div>
+        <div class="pbody">
+          <span class="epi">〈裏切りのクルピエ〉</span><p class="name">ヴェラ</p><span class="role">ルシエラを裏切った元ディーラー</span>
+          <div class="chips"><span class="chip"><span class="sw" style="background:#d9a84a"></span>蜂蜜色の金</span><span class="chip"><span class="sw" style="background:#111"></span>黒</span><span class="chip"><span class="sw" style="background:#fff"></span>白</span></div>
+          <dl>
+            <dt>髪</dt><dd>ルシエラと同じ蜂蜜色の金髪。短めのボブで、片側だけ耳にかけている</dd>
+            <dt>服</dt><dd>ディーラーの制服（白いシャツ、黒いベスト）を着崩している。蝶ネクタイはほどけて首にかけたまま。手袋は片方だけ。腰にチップのホルダー</dd>
+            <dt>性格</dt><dd>クールで口が悪い。ルシエラに借りがある</dd>
+          </dl>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="copy">
+    <div class="copyhead"><h2 style="margin:0">設定資料（画像生成AIに貼る用）</h2><span><button class="btn" type="button" data-copy="sheet">コピー</button> <span class="msg" data-msg="sheet" aria-live="polite"></span></span></div>
+    <textarea id="sheet" rows="16" readonly aria-label="設定資料の本文">これから、オリジナルのカードゲームのイラストを何枚もお願いします。
+全部、下の設定と画風でそろえてください。既存の作品やキャラクターには似せないでください。
+
+【画風】
+線は細め、日本のアニメらしいやわらかいセル塗り。鮮やかな色。
+横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。
+白いふちどりや枠は付けず、背景を画面いっぱいに描く。
+絵の中に文字・ロゴ・数字を入れない。
+
+【世界観】
+夜の街にある高級カジノ「カジノ・ソワレ」。
+深い緑のフェルトの卓、金の装飾、深紅のじゅうたん、シャンデリアの光。上品だけれど、どこか危うい夜の社交場。
+卓を仕切るディーラーと、命や人生を賭けて勝負するギャンブラーが対立している。
+勝負にはサイコロ、トランプ（ブラックジャック、ポーカー）を使う。
+
+【ディーラー：ルシエラ】
+カジノ・ソワレの支配人。背の高い大人の女性。
+深い蜂蜜色の金髪で、腰まである大きなウェーブ。琥珀色の目を少し細めて、いつも余裕の笑みを浮かべている。
+黒い手袋で、トランプを扇のように広げて持つのがくせ。
+自分が破滅するかもしれない勝負まで楽しむ。
+ふだんは、白いシャツに体に合った黒いベスト、金の蝶ネクタイをきちんと結んだディーラーの制服。両手に黒い手袋。髪は黒いリボンでゆるくまとめている。胸ポケットから白い手袋が片方だけのぞいている。
+
+【ギャンブラー】
+レティシア〈微笑む勝負師〉（主人公）
+銀に近いラベンダーのロングヘア。ふだんは淡い色の目で、興奮すると金色に光る。
+白のスリーピーススーツ、黒いシャツ、金のネクタイピン。品があり、賭けを心から楽しむ。負けそうなときほど楽しそうに笑う。
+
+カナリア〈命を鳴らす小鳥〉
+きれいに切りそろえた黄色のショートボブ。白いフリルのブラウスに大きな黄色のリボン、レモン色の短いケープ、黒のショートパンツ、白いハイソックス。首に小さな金の鳥かごのペンダント。
+見た目はかわいくて清潔。自分の命をチップのように放り投げて、けらけら笑う。
+
+シグマ〈零度の計算機〉
+黒髪の少年、細い眼鏡。白いベストとシャツ、手にメモ帳。無表情で、確率でしか物を言わない。
+
+ロロ〈百の袖〉（女の子）
+狐の耳の形のフードがついた、黒と紫のぶかぶかのパーカーコート。中は短いベストとショートパンツ。
+とても長い袖で手が隠れ、袖口からトランプの端がのぞく。フードの下から狐のような細い目でにやっと笑う。
+
+ヴェラ〈裏切りのクルピエ〉
+ルシエラと同じ蜂蜜色の金髪で、短めのボブ。片側だけ耳にかけている。
+ディーラーの制服（白いシャツ、黒いベスト）を着崩し、蝶ネクタイはほどけて首にかけたまま。手袋は片方だけ。腰にチップのホルダー。クールで口が悪い。
+
+まず、6人それぞれの全身の設定画を1枚ずつお願いします。</textarea>
+  </section>
+
+  <section class="copy">
+    <div class="copyhead"><h2 style="margin:0">ルシエラの変化（あとで頼む用）</h2><span><button class="btn" type="button" data-copy="lucie">コピー</button> <span class="msg" data-msg="lucie" aria-live="polite"></span></span></div>
+    <textarea id="lucie" rows="8" readonly aria-label="ルシエラの3段階の依頼文">添付したルシエラの設定画をもとに、同じ人物の3つの姿を、それぞれ1枚ずつ描いてください。顔と髪は同じにしてください。
+
+1.〈宵の支配人〉：ディーラーの制服。カジノのカウンターに肘をつき、トランプを扇のように広げて、退屈そうに笑っている。背景は上品なカジノ、シャンデリアの光。
+2.〈狂騒の女主人〉：髪をほどいて大きく広がる。肩に深紅のコートをはおり、金のアクセサリーが増える。目を大きく開いて楽しそうに笑い、まわりにチップが舞っている。背景は熱気にあふれたカジノ。
+3.〈宿命の審判〉：白と金の女王のような装い、長いマント、髪に金の冠のような飾り。まわりをトランプが浮かんで回り、目が金色に光っている。破滅を前に、いちばんきれいに笑う。背景は白と金の光に包まれた、最後の勝負の場。</textarea>
+    <ul class="tips">
+      <li>まず上の設定資料を貼って、6人の設定画を作ってもらう。</li>
+      <li>気に入った設定画を保存して、カードの絵を頼むときに毎回添付する。</li>
+      <li>ルシエラの変化は、設定画ができてから頼む。</li>
+      <li>直してほしいときは、前の絵を直させるより、新しく描かせたほうが変わりやすい。</li>
+    </ul>
+  </section>
+
+  <section class="copy">
+    <div class="copyhead"><h2 style="margin:0">リーダー：レティシア（黄）</h2><span><button class="btn" type="button" data-copy="leader">コピー</button> <span class="msg" data-msg="leader" aria-live="polite"></span></span></div>
+    <textarea id="leader" rows="8" readonly aria-label="リーダー：レティシア（黄）の依頼文">添付した絵の女性「レティシア」の、リーダー用の肖像を描いてください。顔・髪・服は添付の絵に合わせる。
+オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。正方形（1:1）。白いふちどりや枠は付けない。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+・胸から上。顔が画面のちょうど真ん中に来るように。丸く切り抜いても顔と髪が欠けないよう、まわりに少し余白をとる。
+・正面よりわずかに斜めを向き、こちらをまっすぐ見て、品のある自信に満ちた微笑み。目は金色に光る。
+・指先にトランプを1枚はさんで、顔の横に添える。
+・背景は暗い紺から金へのグラデーションと、舞う金の光の粒。シンプルに。</textarea>
+    <ul class="tips"><li>新しい会話で、レティシアの設定画とカードの絵をいっしょに添付する。</li><li>丸く切り抜いて、対戦中のリーダーとして使う。顔が真ん中に大きいほど映える。</li></ul>
+  </section>
+</div>
+<script>
+document.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click', () => {
+  const id = b.dataset.copy, t = document.getElementById(id), m = document.querySelector(`[data-msg="${id}"]`);
+  navigator.clipboard.writeText(t.value).then(() => { m.textContent = 'コピーしました'; }).catch(() => { t.focus(); t.select(); m.textContent = '選択しました。手動でコピーしてください'; });
+}));
+
+/* 設定画をコピー・保存する */
+(function () {
+  function nameOf(img) { const a = img.closest('article'); const n = a && a.querySelector('.name'); return n ? n.textContent.trim() : 'image'; }
+  async function pngBlob(img) {
+    const res = await fetch(img.currentSrc || img.src); const b = await res.blob();
+    if (b.type === 'image/png') return b;
+    const bmp = await createImageBitmap(b);
+    const cv = document.createElement('canvas'); cv.width = bmp.width; cv.height = bmp.height;
+    cv.getContext('2d').drawImage(bmp, 0, 0);
+    return await new Promise(r => cv.toBlob(r, 'image/png'));
+  }
+  document.querySelectorAll('article img').forEach(img => {
+    const art = img.closest('article'); if (!art) return;
+    const bar = document.createElement('div'); bar.className = 'imgbar';
+    bar.innerHTML = '<button type="button" data-act="copy">画像をコピー</button><button type="button" data-act="save">画像を保存</button><span class="imsg" aria-live="polite"></span>';
+    const body = art.querySelector('.pbody, .mbody');
+    if (body) art.insertBefore(bar, body); else art.appendChild(bar);
+    const msg = bar.querySelector('.imsg');
+    bar.querySelector('[data-act="copy"]').addEventListener('click', async () => {
+      msg.textContent = 'コピー中…';
+      try {
+        if (!navigator.clipboard || !window.ClipboardItem) throw new Error('no');
+        await navigator.clipboard.write([new ClipboardItem({ 'image/png': pngBlob(img) })]);
+        msg.textContent = 'コピーしました。そのまま貼り付けられます';
+      } catch (e) { msg.textContent = 'コピーできませんでした。「画像を保存」か、画像を長押しして保存してください'; }
+    });
+    bar.querySelector('[data-act="save"]').addEventListener('click', async () => {
+      try {
+        const res = await fetch(img.currentSrc || img.src); const b = await res.blob();
+        const filename = nameOf(img) + (b.type === 'image/png' ? '.png' : '.jpg');
+        const dl = window.claude && window.claude.use ? await window.claude.use('downloads') : null;
+        if (dl) { await dl.save({ filename, data: b }); msg.textContent = '保存しました'; return; }
+        const url = URL.createObjectURL(b); const a = document.createElement('a');
+        a.href = url; a.download = filename;
+        document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 2000);
+        msg.textContent = '保存しました';
+      } catch (e) { msg.textContent = e && e.code === 'declined' ? '保存をやめました' : '保存できませんでした。画像を長押しして保存してください'; }
+    });
+  });
+})();
+</script>
