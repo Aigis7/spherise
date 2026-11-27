@@ -1760,6 +1760,293 @@
      "n": 3
     }
    ]
+  },
+  "col_blue": {
+   "name": "響き合いの領域",
+   "set": "",
+   "color": "青",
+   "scene": "sea",
+   "stages": [
+    {
+     "name": "さざなみの岸",
+     "effects": [
+      {
+       "trigger": "unit",
+       "steps": [
+        {
+         "action": "buff",
+         "target": "randomAlly",
+         "n": 1,
+         "temp": true
+        }
+       ]
+      }
+     ],
+     "artPrompt": "夜の静かな海辺。打ち寄せる波が青い光の帯になって、岸にさざなみの模様を描く。人物は描かない。"
+    },
+    {
+     "name": "響きの回廊",
+     "effects": [
+      {
+       "trigger": "use",
+       "steps": [
+        {
+         "action": "buff",
+         "target": "randomAlly",
+         "n": 1,
+         "temp": true
+        }
+       ]
+      }
+     ],
+     "artPrompt": "青い光の柱が並ぶ、長い回廊。床に響きの波紋が広がり、柱どうしが光の線でつながっている。人物は描かない。"
+    },
+    {
+     "name": "蒼穹の大聖歌",
+     "effects": [
+      {
+       "trigger": "use",
+       "steps": [
+        {
+         "action": "buff",
+         "target": "allAllies",
+         "n": 1,
+         "temp": true
+        }
+       ]
+      }
+     ],
+     "artPrompt": "空いっぱいに広がる青い光のオーロラと、天へ昇る音の光の柱。下に広い祈りの広場。人物は描かない。"
+    }
+   ],
+   "conds": [
+    {
+     "type": "units",
+     "n": 3
+    },
+    {
+     "type": "uses",
+     "n": 6
+    }
+   ]
+  },
+  "col_yellow": {
+   "name": "運命の領域",
+   "set": "",
+   "color": "黄",
+   "scene": "city",
+   "stages": [
+    {
+     "name": "星詠みの間",
+     "effects": [
+      {
+       "trigger": "start",
+       "steps": [
+        {
+         "action": "peek",
+         "n": 2
+        }
+       ]
+      }
+     ],
+     "artPrompt": "金の装飾の小さな部屋。天井に星図が描かれ、机の上に水晶玉と、伏せたカードが並ぶ。ろうそくの光。人物は描かない。星図に文字は描かない。"
+    },
+    {
+     "name": "運命の書庫",
+     "effects": [
+      {
+       "trigger": "start",
+       "steps": [
+        {
+         "action": "peek",
+         "n": 3
+        }
+       ]
+      }
+     ],
+     "artPrompt": "天井まで届く本棚が並ぶ、金色の光の書庫。宙に開いた本が浮かび、ページから光の糸がのびている。本に文字は描かない。人物は描かない。"
+    },
+    {
+     "name": "宿命の天文台",
+     "effects": [
+      {
+       "trigger": "start",
+       "steps": [
+        {
+         "action": "peek",
+         "n": 3
+        },
+        {
+         "action": "draw",
+         "target": "me",
+         "n": 1
+        }
+       ]
+      }
+     ],
+     "artPrompt": "夜空に向かって開いた、大きな金色の天文台。巨大な望遠鏡と、まわりを回る金の輪の天球儀。満天の星。人物は描かない。"
+    }
+   ],
+   "conds": [
+    {
+     "type": "arts",
+     "n": 3
+    },
+    {
+     "type": "units",
+     "n": 3
+    }
+   ]
+  },
+  "col_purple": {
+   "name": "残影の領域",
+   "set": "",
+   "color": "紫",
+   "scene": "spires",
+   "stages": [
+    {
+     "name": "まどろみの淵",
+     "effects": [
+      {
+       "trigger": "end",
+       "steps": [
+        {
+         "action": "damage",
+         "target": "randomEnemy",
+         "n": 1
+        }
+       ]
+      }
+     ],
+     "artPrompt": "紫の霧がたちこめる、夢と現実のあいだの淵。ゆっくり落ちていく枕や羽根、ぼやけた月。人物は描かない。"
+    },
+    {
+     "name": "残影の回廊",
+     "effects": [
+      {
+       "trigger": "end",
+       "steps": [
+        {
+         "action": "damage",
+         "target": "randomEnemy",
+         "n": 2
+        }
+       ]
+      }
+     ],
+     "artPrompt": "割れた鏡が並ぶ、紫の光の回廊。鏡の中に、消えた誰かの影がうっすら映る。人物ははっきり描かない。"
+    },
+    {
+     "name": "忘却の玉座",
+     "effects": [
+      {
+       "trigger": "end",
+       "steps": [
+        {
+         "action": "damage",
+         "target": "randomEnemy",
+         "n": 2
+        }
+       ]
+      },
+      {
+       "trigger": "start",
+       "steps": [
+        {
+         "action": "draw",
+         "target": "me",
+         "n": 1
+        }
+       ]
+      }
+     ],
+     "artPrompt": "紫の闇に浮かぶ、誰もいない玉座。まわりを、消えかけた思い出の光のかけらが漂う。人物は描かない。"
+    }
+   ],
+   "conds": [
+    {
+     "type": "arts",
+     "n": 3
+    },
+    {
+     "type": "units",
+     "n": 3
+    }
+   ]
+  },
+  "col_green": {
+   "name": "芽吹きの領域",
+   "set": "",
+   "color": "緑",
+   "scene": "forest",
+   "stages": [
+    {
+     "name": "芽吹きの庭",
+     "effects": [
+      {
+       "trigger": "start",
+       "steps": [
+        {
+         "action": "buff",
+         "target": "randomAlly",
+         "n": 0,
+         "hp": 1
+        }
+       ]
+      }
+     ],
+     "artPrompt": "夜明け前の小さな庭。土から若い芽が顔を出し、露が光る。人物は描かない。"
+    },
+    {
+     "name": "深緑の森",
+     "effects": [
+      {
+       "trigger": "start",
+       "steps": [
+        {
+         "action": "buff",
+         "target": "randomAlly",
+         "n": 1,
+         "hp": 1
+        }
+       ]
+      }
+     ],
+     "artPrompt": "大きな木々が茂る深い森。木漏れ日のような緑の光の粒が漂う。人物は描かない。"
+    },
+    {
+     "name": "世界樹の頂",
+     "effects": [
+      {
+       "trigger": "start",
+       "steps": [
+        {
+         "action": "buff",
+         "target": "allAllies",
+         "n": 0,
+         "hp": 1
+        },
+        {
+         "action": "buff",
+         "target": "randomAlly",
+         "n": 1
+        }
+       ]
+      }
+     ],
+     "artPrompt": "雲の上までのびた世界樹の頂上。枝に光る実がなり、まわりに天球がいくつも浮かぶ。人物は描かない。"
+    }
+   ],
+   "conds": [
+    {
+     "type": "units",
+     "n": 3
+    },
+    {
+     "type": "units",
+     "n": 3
+    }
+   ]
   }
  },
  "settings": {
