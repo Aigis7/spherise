@@ -21,7 +21,10 @@
    "rarity": "C",
    "set": "はじまりの灯",
    "type": "unit",
-   "color": "無"
+   "color": "無",
+   "tags": [
+    "旅"
+   ]
   },
   "s_sweep": {
    "artPrompt": "勝った人の腕が、テーブルの上のチップを両腕で一気にかき集める。散らばるトランプと、照明に光る金色のチップ。腕と手だけが見える。",
@@ -896,7 +899,10 @@
    "rarity": "C",
    "set": "はじまりの灯",
    "type": "unit",
-   "color": "無"
+   "color": "無",
+   "tags": [
+    "旅"
+   ]
   },
   "s_letizia": {
    "atk": 4,
@@ -1072,6 +1078,261 @@
    "type": "object",
    "winDamage": 2,
    "color": "黄"
+  },
+  "h_squire": {
+   "set": "はじまりの灯",
+   "color": "無",
+   "type": "unit",
+   "tags": [
+    "旅"
+   ],
+   "name": "見習いの灯守",
+   "cost": 1,
+   "atk": 1,
+   "hp": 2,
+   "rarity": "C",
+   "artPrompt": "大きなランタンを両手で抱えた、見習いの灯守の少年。少し不安そうだけど、まっすぐ前を見ている。狭間の夜空と星。"
+  },
+  "h_fox": {
+   "set": "はじまりの灯",
+   "color": "無",
+   "type": "unit",
+   "tags": [
+    "旅"
+   ],
+   "name": "灯をくわえた小狐",
+   "cost": 1,
+   "atk": 1,
+   "hp": 1,
+   "quick": true,
+   "rarity": "C",
+   "artPrompt": "小さな灯りを口にくわえて、星空の下の岩場を駆ける白い小狐。しっぽの先がほのかに光る。"
+  },
+  "h_bird": {
+   "set": "はじまりの灯",
+   "color": "無",
+   "type": "unit",
+   "tags": [
+    "旅"
+   ],
+   "name": "道案内の白い鳥",
+   "cost": 2,
+   "atk": 1,
+   "hp": 2,
+   "rarity": "C",
+   "effects": [
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "search",
+       "filter": {
+        "type": "art"
+       }
+      }
+     ]
+    }
+   ],
+   "artPrompt": "羽の先が光る白い鳥が、狭間の夜空を先導するように飛んでいる。うしろに続く光の道。"
+  },
+  "h_mapper": {
+   "set": "はじまりの灯",
+   "color": "無",
+   "type": "unit",
+   "tags": [
+    "旅"
+   ],
+   "name": "地図を描く少年",
+   "cost": 2,
+   "atk": 1,
+   "hp": 1,
+   "rarity": "C",
+   "effects": [
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "draw",
+       "target": "me",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "artPrompt": "岩に腰かけて、膝の上の大きな紙に星図のような地図を描く少年。地図の線がほのかに光る。地図に文字は描かない。"
+  },
+  "h_scholar": {
+   "set": "はじまりの灯",
+   "color": "無",
+   "type": "unit",
+   "tags": [
+    "旅"
+   ],
+   "name": "星を数える老学者",
+   "cost": 3,
+   "atk": 2,
+   "hp": 3,
+   "rarity": "C",
+   "effects": [
+    {
+     "trigger": "end",
+     "steps": [
+      {
+       "action": "heal",
+       "target": "randomAlly",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "artPrompt": "長いひげの老学者が、望遠鏡をのぞいて星を数えている。まわりに古い本と羊皮紙。本に文字は描かない。"
+  },
+  "h_tortoise": {
+   "set": "はじまりの灯",
+   "color": "無",
+   "type": "unit",
+   "tags": [
+    "旅"
+   ],
+   "name": "苔むした大亀",
+   "cost": 4,
+   "atk": 2,
+   "hp": 6,
+   "rarity": "C",
+   "artPrompt": "背中に苔と小さな木が生えた、とても大きな亀が、狭間をゆっくり歩いている。甲羅の上に小さなランタンが揺れる。"
+  },
+  "h_knight": {
+   "set": "はじまりの灯",
+   "color": "無",
+   "type": "unit",
+   "tags": [
+    "旅"
+   ],
+   "name": "狭間の流れ騎士",
+   "cost": 5,
+   "atk": 4,
+   "hp": 4,
+   "pierce": true,
+   "rarity": "R",
+   "artPrompt": "使いこんだ鎧とマントの騎士が、星空の下で剣を構える。どの天球にも仕えない、さすらいの騎士。兜で顔は見えない。"
+  },
+  "h_ember": {
+   "set": "はじまりの灯",
+   "color": "無",
+   "type": "art",
+   "name": "火の粉",
+   "cost": 1,
+   "target": "enemyUnit",
+   "rarity": "C",
+   "glyph": "burst",
+   "effects": [
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "damage",
+       "target": "chosen",
+       "n": 2
+      }
+     ]
+    }
+   ],
+   "artPrompt": "焚き火からはじけた火の粉が、夜空へ舞い上がる。人物なし。"
+  },
+  "h_signpost": {
+   "set": "はじまりの灯",
+   "color": "無",
+   "type": "art",
+   "name": "古い道しるべ",
+   "cost": 1,
+   "rarity": "C",
+   "glyph": "search",
+   "effects": [
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "search",
+       "filter": {
+        "type": "unit"
+       }
+      }
+     ]
+    }
+   ],
+   "artPrompt": "狭間の岩場に立つ、古い木の道しるべ。矢印の板がいくつもの方向を指し、それぞれの先に光る天球が見える。板に文字は描かない。人物なし。"
+  },
+  "h_campfire": {
+   "set": "はじまりの灯",
+   "color": "無",
+   "type": "art",
+   "name": "みんなの焚き火",
+   "cost": 3,
+   "rarity": "R",
+   "glyph": "star",
+   "effects": [
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "buff",
+       "target": "allAllies",
+       "n": 1,
+       "temp": true
+      },
+      {
+       "action": "heal",
+       "target": "allAllies",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "artPrompt": "焚き火を囲んで、旅人や鳥や小狐や大亀が、いっしょに休んでいる。あたたかいオレンジの光。顔ははっきり描かず、シルエット気味に。"
+  },
+  "h_starfall": {
+   "set": "はじまりの灯",
+   "color": "無",
+   "type": "art",
+   "name": "星くずの雨",
+   "cost": 3,
+   "rarity": "R",
+   "glyph": "star",
+   "effects": [
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "damage",
+       "target": "allEnemies",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "artPrompt": "狭間の夜空から、小さな星くずが雨のように降りそそぐ。人物なし。"
+  },
+  "h_lantern": {
+   "set": "はじまりの灯",
+   "color": "無",
+   "type": "object",
+   "name": "灯の精のランタン",
+   "cost": 2,
+   "rarity": "C",
+   "glyph": "star",
+   "effects": [
+    {
+     "trigger": "start",
+     "steps": [
+      {
+       "action": "heal",
+       "target": "randomAlly",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "artPrompt": "古いランタンの中に、小さな光の精が住んでいて、ガラス越しに手をふっている。人物なし。"
   }
  },
  "decks": {
@@ -1202,6 +1463,84 @@
     }
    ],
    "name": "ノクティルカ"
+  },
+  "hajimari": {
+   "name": "はじまりの灯",
+   "field": "hajimari",
+   "list": [
+    {
+     "id": "x_wanderer",
+     "n": 3
+    },
+    {
+     "id": "h_squire",
+     "n": 3
+    },
+    {
+     "id": "h_fox",
+     "n": 2
+    },
+    {
+     "id": "h_bird",
+     "n": 3
+    },
+    {
+     "id": "h_mapper",
+     "n": 3
+    },
+    {
+     "id": "x_warden",
+     "n": 3
+    },
+    {
+     "id": "h_scholar",
+     "n": 2
+    },
+    {
+     "id": "h_tortoise",
+     "n": 2
+    },
+    {
+     "id": "h_knight",
+     "n": 2
+    },
+    {
+     "id": "h_ember",
+     "n": 3
+    },
+    {
+     "id": "x_lamp",
+     "n": 2
+    },
+    {
+     "id": "c_exchange",
+     "n": 2
+    },
+    {
+     "id": "h_signpost",
+     "n": 2
+    },
+    {
+     "id": "h_campfire",
+     "n": 2
+    },
+    {
+     "id": "h_starfall",
+     "n": 1
+    },
+    {
+     "id": "b_strike",
+     "n": 1
+    },
+    {
+     "id": "b_amp",
+     "n": 2
+    },
+    {
+     "id": "b_metro",
+     "n": 2
+    }
+   ]
   }
  },
  "fields": {
