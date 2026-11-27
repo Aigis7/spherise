@@ -490,6 +490,13 @@ body.in-game .modal .btn:focus-visible{outline:2px solid #ffd27a;outline-offset:
 body.dragging,body.dragging *{cursor:grabbing!important}
 body.drag-play #meBoard{outline:2px dashed #ffd27a;outline-offset:4px;border-radius:12px}
 body.drag-reserve [data-drop="reserve"] .stack{box-shadow:0 0 0 3px #ffd27a,0 0 18px #ffd27a}
+/* リザーブの時間：手札は青緑に光り、リザーブの束も光る */
+.card.rsv{box-shadow:0 0 0 2px #4fe3d0,0 0 14px rgb(79 227 208 / .45);cursor:pointer}
+.card.rsel{box-shadow:0 0 0 3px #4fe3d0,0 0 22px #4fe3d0;transform:translateY(-14px)}
+.pile.reserve.hot .stack{animation:rsvHot 1.2s ease-in-out infinite}
+@keyframes rsvHot{50%{box-shadow:2px 2px 0 #0008,4px 4px 0 #0006,0 0 0 3px #4fe3d0,0 0 24px #4fe3d0}}
+.midline .msg.rsvmsg{color:#7ff0e0}
+@media (prefers-reduced-motion: reduce){.pile.reserve.hot .stack{animation:none;box-shadow:0 0 0 3px #4fe3d0}}
 .drop-hover{outline:3px solid #ff6b6b!important;outline-offset:3px}
 .only-m{display:none!important}
 
@@ -1919,6 +1926,7 @@ function fight(g, a, b, blocked) {
   cleanup(g);
 }
 async function doAttack(g, p, a, target) {
+  if (!p.isAI) g.undoRsv = null;
   const o = other(g, p);
   a.sleep = true;
   progress(g, p, { type: 'attack' });
@@ -2003,7 +2011,7 @@ async function runTurn(g) {
     await aiAttack(g, p); if (g.over) return;
     await aiMain(g, p); if (g.over) return;
   } else {
-    p.reserveLeft = 1;
+    p.reserveLeft = 1; g.undoRsv = null;
     g.phase = p.hand.length ? 'reserve' : 'main';
     rerender(g);
     await new Promise(r => g.turnResolve = r);
@@ -2476,7 +2484,7 @@ function infoHTML(g, p, isOpp) {
   const center = `<div class="pcenter">${fieldHTML(g, p)}${backs}</div>`;
   const bonus = p.bonus ? '<span class="bonus">後攻+1</span>' : '<span>リザーブ</span>';
   const piles = `<div class="piles"><div class="pile"><span class="stack">${p.deck.length}</span><span>山札</span></div>
-    <div class="pile reserve"${isOpp ? '' : ' data-drop="reserve"'}><span class="stack">${avail(p)}/${p.reserve.length}</span>${bonus}</div>
+    <div class="pile reserve${!isOpp && isMyTurn(g) && g.phase === 'reserve' ? ' hot' : ''}"${isOpp ? '' : ' data-drop="reserve"'}><span class="stack">${avail(p)}/${p.reserve.length}</span>${bonus}</div>
     <div class="pile grave"><span class="stack">${p.grave.length}</span><span>墓地</span></div></div>`;
   return center + life + piles;
 }
@@ -2508,7 +2516,7 @@ function handHTML(g, p, cpu) {
   return p.hand.filter(inst => !(hidePlaced && g.ui.uid === inst.uid)).map(inst => {
     let cls = '';
     if (!cpu && isMyTurn(g)) {
-      if (g.phase === 'reserve') cls = 'can';
+      if (g.phase === 'reserve') cls = g.ui.rsv === inst.uid ? 'rsv rsel' : 'rsv';
       else if (g.phase === 'main') { if (g.ui.mode === 'art' && g.ui.uid === inst.uid) cls = 'sel'; else if (!g.ui.mode && canPlay(g, p, inst)) cls = 'can'; }
     }
     return cardHTML(g, inst, 'hand', cls);
@@ -2523,7 +2531,9 @@ function phaseHTML(g) {
   if (g.busy) return `<div class="msg me">${turn}戦闘中</div>`;
   if (g.phase === 'reserve') {
     const left = me.reserveLeft;
-    return `<div class="msg me">${turn}リザーブ<span class="hint">手札をリザーブの束へドラッグするか、タップして置く（あと${left}枚）</span></div>
+    const sel = me.hand.find(i => i.uid === g.ui.rsv);
+    return `<div class="msg me rsvmsg">${turn}リザーブの時間<span class="hint">${sel ? `「${esc(C[sel.cid].name)}」をリザーブに置く？` : `リザーブに置くカードを選ぶ。光っている青緑の束へドラッグしてもいい（あと${left}枚）`}</span></div>
+      ${sel ? '<button class="sbtn end" type="button" data-act="doReserve">リザーブに置く</button>' : ''}
       ${me.bonus && left === 1 ? '<button class="sbtn" type="button" data-act="bonus">2枚置く（後攻1回）</button>' : ''}
       <button class="sbtn" type="button" data-act="skipReserve">${left === 1 ? '置かない' : 'これで終わり'}</button>`;
   }
@@ -2532,6 +2542,7 @@ function phaseHTML(g) {
   if (g.ui.mode === 'art') hint = g.ui.place ? '出したユニットの効果の対象をタップ（もう一度タップで手札に戻す）' : 'アーツの対象をタップ（手札のアーツをもう一度タップでやめる）';
   return `<div class="msg me">${turn}メイン<span class="hint">${hint}</span></div>
     ${g.ui.mode ? '<button class="sbtn" type="button" data-act="cancel">キャンセル</button>' : ''}
+    ${canUndoReserve(g) ? '<button class="sbtn" type="button" data-act="undoReserve">リザーブを手札に戻す</button>' : ''}
     <button class="sbtn end" type="button" data-act="endTurn">ターン終了</button>`;
 }
 function render() {
@@ -2665,7 +2676,10 @@ function openSheet(html, acts) {
   });
 }
 $('#sheet').addEventListener('click', e => { if (e.target.id === 'sheet') closeSheet(); });
-function doReserve(g, inst) { const me = g.players[0]; placeReserve(g, me, inst); me.reserveLeft--; if (me.reserveLeft <= 0 || !me.hand.length) g.phase = 'main'; }
+function doReserve(g, inst) { const me = g.players[0]; placeReserve(g, me, inst); me.reserveLeft--; g.undoRsv = { inst, n: me.reserve.length }; if (me.reserveLeft <= 0 || !me.hand.length) g.phase = 'main'; }
+/* 置いたすぐあと（まだ何もしていない間）なら、リザーブを手札に戻せる */
+function canUndoReserve(g) { const me = g.players[0], u = g.undoRsv; if (!u || !isMyTurn(g) || g.phase !== 'main' || g.ui.mode) return false; const r = me.reserve[me.reserve.length - 1]; return me.reserve.length === u.n && r && !r.tapped && r.cid === u.inst.cid; }
+function undoReserve(g) { if (!canUndoReserve(g)) return; const me = g.players[0]; me.reserve.pop(); me.hand.push(g.undoRsv.inst); me.reserveLeft++; g.undoRsv = null; g.phase = 'reserve'; g.ui = {}; log(g, 'あなたがリザーブのカードを手札に戻した'); }
 function cardActions(g, inst) {
   const me = g.players[0], c = C[inst.cid], acts = [];
   if (!isMyTurn(g)) return acts;
@@ -2774,6 +2788,7 @@ function humanBJ(g, p) {
   });
 }
 async function humanPlay(g, inst, t) {
+  g.undoRsv = null;
   const me = g.players[0], c = C[inst.cid];
   const opt = {};
   const rex = playSteps(c).some(s => s.action === 'revive' && s.excludeSelf) ? c.id : null;
@@ -2833,7 +2848,9 @@ document.addEventListener('click', async e => {
     if (act === 'skipReserve') { g.phase = 'main'; render(); }
     else if (act === 'bonus') { me.bonus = false; me.reserveLeft = 2; log(g, 'あなたが後攻ボーナスを使った（2枚置ける）'); render(); }
     else if (act === 'cancel') { g.ui = {}; render(); }
-    else if (act === 'endTurn') { g.ui = {}; g.phase = 'cpu'; if (g.turnResolve) g.turnResolve(); }
+    else if (act === 'doReserve') { const inst = me.hand.find(i => i.uid === g.ui.rsv); g.ui = {}; if (inst && g.phase === 'reserve') doReserve(g, inst); render(); }
+    else if (act === 'undoReserve') { undoReserve(g); render(); }
+    else if (act === 'endTurn') { g.ui = {}; g.undoRsv = null; g.phase = 'cpu'; if (g.turnResolve) g.turnResolve(); }
     else if (act === 'life' && g.ui.mode === 'attack') { const a = me.board.find(u => u && u.uid === g.ui.uid); if (a) await humanAttack(g, a, { kind: 'life' }); }
     return;
   }
@@ -2844,7 +2861,7 @@ document.addEventListener('click', async e => {
   const c = C[inst.cid];
   if (isMobile() && !(isMyMain(g) && g.ui.mode)) { openSheet(detailHTML(inst), cardActions(g, inst)); return; }
   if (!isMyTurn(g)) return;
-  if (g.phase === 'reserve' && me.hand.includes(inst)) { doReserve(g, inst); return render(); }
+  if (g.phase === 'reserve' && me.hand.includes(inst)) { g.ui = g.ui.rsv === inst.uid ? {} : { rsv: inst.uid }; return render(); }
   if (g.phase !== 'main') return;
   if (g.ui.mode === 'art') {
     const art = me.hand.find(h => h.uid === g.ui.uid);
@@ -2904,7 +2921,7 @@ function dropTarget(g, d, x, y) {
   const me = g.players[0], op = g.players[1];
   const cardEl = el.closest('.card[data-uid]');
   const inst = cardEl ? findInst(+cardEl.dataset.uid) : null;
-  if (d.kind === 'reserve') { const z = el.closest('[data-drop="reserve"]') || el.closest('#meBoard') || el.closest('#meInfo'); return z ? { el: z } : null; }
+  if (d.kind === 'reserve') { const z = el.closest('[data-drop="reserve"]'); return z ? { el: z } : null; }
   if (d.kind === 'play') {
     const dc = C[d.inst.cid];
     if (inst && wantsTarget(g, me, dc) && targets(g, me, dc.target).includes(inst)) return { el: cardEl, inst };
@@ -2981,7 +2998,7 @@ document.addEventListener('pointerup', async e => {
   const t = dropTarget(g, d, e.clientX, e.clientY);
   endDrag();
   g.ui = {};
-  if (!t) { render(); return; }
+  if (!t) { if (d.kind === 'reserve' && !g.sim) fxText('リザーブは青緑の束へ', '#7ff0e0', true); render(); return; }
   if (d.kind === 'reserve') { doReserve(g, d.inst); render(); }
   else if (d.kind === 'play') { const dc = C[d.inst.cid]; if (t.inst) await humanPlay(g, d.inst, t.inst); else if (wantsTarget(g, me, dc)) { g.ui = { mode: 'art', uid: d.inst.uid, place: dc.type !== 'art' }; sfx('play'); render(); } else await humanPlay(g, d.inst, null); }
   else if (d.kind === 'art') await humanPlay(g, d.inst, t.inst);
