@@ -290,6 +290,25 @@ textarea{width:100%;font-family:var(--f-mono);font-size:.72rem}
 @keyframes rsBig{from{transform:scale(1.6);opacity:0}}
 @keyframes rsSpark{from{opacity:.4}to{opacity:1}}
 @media (prefers-reduced-motion: reduce){.result,.rs-big,.rs-spark{animation:none}}
+/* L（スフィア）の登場演出 */
+.ent{position:absolute;inset:0;z-index:60;overflow:hidden;cursor:pointer;--ci:#ffd27a}
+.ent.out{opacity:0;transition:opacity .3s}
+.ent-dim{position:absolute;inset:0;background:rgb(4 4 12 / .5);animation:ciDim .25s ease-out both}
+.ent-p{position:absolute;left:0;top:0;pointer-events:none;will-change:transform,opacity}
+.ent-p.staff{width:210px;height:34px;display:grid;align-content:space-between;filter:drop-shadow(0 0 6px var(--ci))}
+.ent-p.staff i{display:block;height:2px;background:#c8fff4;box-shadow:0 0 6px var(--ci)}
+.ent-p.staff b{position:absolute;top:-10px;left:28%;color:#fff;font-size:28px;text-shadow:0 0 8px var(--ci)}
+.ent-p.staff b+b{left:68%;top:4px}
+.ent-p.pcard{width:44px;height:62px;border-radius:6px;background:#fffaf0;border:2px solid #e8c879;display:grid;place-items:center;font-size:26px;color:#161320;box-shadow:0 0 10px rgb(255 210 122 / .7)}
+.ent-p.pcard.red{color:#d2283c}
+.ent-p.bubble{width:var(--s);height:var(--s);border-radius:50%;background:radial-gradient(circle at 32% 28%,rgb(255 255 255 / .85),transparent 30%),radial-gradient(circle,transparent 55%,rgb(210 180 255 / .55) 72%,rgb(160 225 255 / .65));border:1px solid rgb(255 255 255 / .55)}
+.ent-p.glyph{font-size:34px;line-height:1;text-shadow:0 0 8px currentColor}
+.ent-p.star{color:#fff6c8}
+.ent-p.pillar{width:60px;height:70%;background:linear-gradient(0deg,var(--ci),transparent);filter:blur(4px)}
+.ent-p.ring{width:34px;height:34px;border-radius:50%;border:3px solid var(--ci);box-shadow:0 0 18px var(--ci)}
+.ent-p.core{width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,rgb(255 255 255 / .9),var(--ci) 25%,transparent 65%);mix-blend-mode:screen}
+.ent-p.circle{width:170px;height:170px;border-radius:50%;border:2px solid var(--ci);box-shadow:0 0 20px var(--ci),inset 0 0 20px var(--ci);background:repeating-conic-gradient(from 0deg,transparent 0 8deg,color-mix(in srgb,var(--ci) 35%,transparent) 8deg 10deg)}
+.ent-p.burst{width:26px;height:26px;border-radius:50%;background:radial-gradient(circle,#fff,var(--ci) 40%,transparent 70%)}
 /* レアカードの演出 */
 .cutin{position:absolute;inset:0;z-index:70;display:grid;place-items:center;overflow:hidden;cursor:pointer;--ci:#ffd27a}
 .cutin.out{opacity:0;transition:opacity .25s}
@@ -1968,10 +1987,12 @@ function canPlay(g, p, inst) {
   if (c.type === 'art' && playSteps(c).some(s => s.action === 'reviveAll') && !graveUnits(p).length) return false;
   return true;
 }
-const isCutin = c => !!c && ((c.rarity === 'L' && c.type === 'unit') || (c.rarity === 'RR' && c.type !== 'object' && !c.token));
+const isCutin = c => !!c && c.rarity === 'RR' && c.type !== 'object' && !c.token;
+const isEntrance = c => !!c && c.rarity === 'L' && c.type === 'unit';
 function play(g, p, inst, t, opt) {
   const c = C[inst.cid];
   if (isCutin(c) && !(opt && opt.cutDone)) gq(g, { kind: 'cutin', cid: c.id, opp: p.idx !== 0 });
+  if (isEntrance(c)) gq(g, { kind: 'entrance', cid: c.id, uid: inst.uid });
   if (!(opt && opt.prepaid)) { pay(p, cost(g, p, c)); p.hand.splice(p.hand.indexOf(inst), 1); }
   if (c.type === 'art') log(g, `${p.name}が「${c.name}」を使った${t ? '（対象：' + C[t.cid].name + '）' : ''}`);
   else { const s = emptySlot(p); p.board[s] = inst; inst.sick = !c.quick; inst.sleep = false; seasonSync(g, p); log(g, `${p.name}が「${c.name}」を出した`); }
@@ -2577,6 +2598,7 @@ function gfxBox(title) {
 function gfxResult(el, text, kind) { const r = el.querySelector('.gres'); r.className = 'gres show ' + kind; r.textContent = text; }
 async function playGfx(ev) {
   if (ev.kind === 'cutin') return playCutin(ev);
+  if (ev.kind === 'entrance') return playEntrance(ev);
   const t = (ms) => GFX.fast || reduceMotion.matches ? gsleep(Math.min(ms, 120)) : gsleep(ms);
   const el = gfxBox(`${ev.who}の${ev.title}`); if (!el) return;
   const body = el.querySelector('.gbody');
@@ -2628,7 +2650,86 @@ async function playGfx(ev) {
   } finally { el.classList.add('out'); setTimeout(() => el.remove(), 250); }
 }
 function sfxSafe(k) { try { sfx(k); } catch (e) { } }
-/* L（スフィア）のユニットとRR（ライズレア）を出した時の演出。タップで飛ばせる */
+
+/* L（スフィア）のユニットの登場演出：置かれる場所に、キャラらしいものが集まって、光がはじけてカードが現れる */
+const ENTRANCE = { n_riora: 'staff', s_letizia: 'cards', y_luluna: 'dream', k_tamaki: 'seasons' };
+async function playEntrance(ev) {
+  if (activeTab !== 'game' || !G) return;
+  render();
+  const st = $('#stage'), cardEl = document.querySelector(`.mat .card[data-uid="${ev.uid}"]`);
+  if (!st || !cardEl || !cardEl.animate) return;
+  const sr = st.getBoundingClientRect(), r = cardEl.getBoundingClientRect();
+  const cx = r.left + r.width / 2 - sr.left, cy = r.top + r.height / 2 - sr.top;
+  const c = C[ev.cid], col = COLORS[cardColor(c)] || '#ffd27a';
+  const wrap = document.createElement('div'); wrap.className = 'ent'; wrap.style.setProperty('--ci', col);
+  wrap.innerHTML = '<div class="ent-dim"></div>';
+  st.appendChild(wrap);
+  cardEl.style.opacity = '0';
+  const fast = GFX.fast || reduceMotion.matches, D = fast ? 150 : 1150;
+  const R = Math.max(sr.width, sr.height) * 0.55;
+  const anims = [];
+  const part = (html, cls) => { const d = document.createElement('div'); d.className = 'ent-p ' + cls; d.innerHTML = html; d.style.left = cx + 'px'; d.style.top = cy + 'px'; wrap.appendChild(d); return d; };
+  const rnd = (a, b) => a + Math.random() * (b - a);
+  const kind = ENTRANCE[ev.cid] || 'light';
+  { const circ = part('', 'circle'), core = part('', 'core');
+    circ.animate([{ transform: 'translate(-50%,-50%) scale(.2) rotate(0deg)', opacity: 0 }, { transform: 'translate(-50%,-50%) scale(1) rotate(120deg)', opacity: 1, offset: .6 }, { transform: 'translate(-50%,-50%) scale(.8) rotate(200deg)', opacity: 1 }], { duration: D * 1.15, easing: 'ease-out', fill: 'both' });
+    core.animate([{ transform: 'translate(-50%,-50%) scale(.1)', opacity: 0 }, { transform: 'translate(-50%,-50%) scale(1.1)', opacity: 1 }], { duration: D * 1.15, easing: 'ease-in', fill: 'both' }); }
+  if (kind === 'staff') {
+    for (let i = 0; i < 10; i++) {
+      const a = i / 10 * Math.PI * 2 + rnd(-.25, .25), x = Math.cos(a) * R, y = Math.sin(a) * R, rot = a * 180 / Math.PI;
+      const d = part('<i></i><i></i><i></i><i></i><i></i><b>♪</b><b>♫</b>', 'staff');
+      anims.push(d.animate([
+        { transform: `translate(-50%,-50%) translate(${x}px,${y}px) rotate(${rot}deg) scaleX(1.6)`, opacity: 0 },
+        { opacity: 1, offset: .2 },
+        { transform: `translate(-50%,-50%) translate(${x * .35}px,${y * .35}px) rotate(${rot + 25}deg) scaleX(1)`, opacity: 1, offset: .65 },
+        { transform: `translate(-50%,-50%) rotate(${rot + 60}deg) scaleX(.15)`, opacity: 0 }], { duration: D, delay: i * 40, easing: 'cubic-bezier(.45,0,.3,1)', fill: 'both' }));
+    }
+  } else if (kind === 'cards') {
+    const suits = ['♠', '♥', '♦', '♣'];
+    for (let i = 0; i < 14; i++) {
+      const a0 = i / 14 * Math.PI * 2, rr = R * rnd(.7, 1);
+      const pts = [0, .5, 1].map(t => { const a = a0 + t * 2.4, k = 1 - t; return [Math.cos(a) * rr * k, Math.sin(a) * rr * k, t * 540]; });
+      const s = suits[i % 4], d = part(s, 'pcard' + (s === '♥' || s === '♦' ? ' red' : ''));
+      anims.push(d.animate(pts.map(([x, y, rot], k) => ({ transform: `translate(-50%,-50%) translate(${x}px,${y}px) rotate(${rot}deg) scale(${1 - k * .35})`, opacity: k === 0 ? 0 : k === 2 ? 0 : 1 })), { duration: D, delay: i * 35, easing: 'cubic-bezier(.4,0,.3,1)', fill: 'both' }));
+    }
+  } else if (kind === 'dream') {
+    for (let i = 0; i < 22; i++) {
+      const a = rnd(0, Math.PI * 2), rr = R * rnd(.4, .9), x = Math.cos(a) * rr, y = Math.sin(a) * rr, s = rnd(22, 52);
+      const d = part(i % 4 === 3 ? '✦' : '', i % 4 === 3 ? 'glyph star' : 'bubble'); d.style.setProperty('--s', s + 'px');
+      anims.push(d.animate([
+        { transform: `translate(-50%,-50%) translate(${x}px,${y}px) scale(.4)`, opacity: 0 },
+        { transform: `translate(-50%,-50%) translate(${x * .6}px,${y * .6 - 18}px) scale(1)`, opacity: 1, offset: .4 },
+        { transform: `translate(-50%,-50%) translate(${x * .1}px,${y * .1}px) scale(.8)`, opacity: 1, offset: .85 },
+        { transform: 'translate(-50%,-50%) scale(1.6)', opacity: 0 }], { duration: D * 1.1, delay: rnd(0, 200), easing: 'ease-in-out', fill: 'both' }));
+    }
+  } else if (kind === 'seasons') {
+    const g4 = [['✿', '#ffb8d2'], ['❦', '#7ee0a0'], ['✸', '#ff9a4a'], ['❄', '#e6f3ff']];
+    for (let i = 0; i < 32; i++) {
+      const [t, cc] = g4[i % 4], a0 = i / 32 * Math.PI * 2, rr = R * rnd(.7, 1);
+      const d = part(t, 'glyph'); d.style.color = cc;
+      const ks = [0, .33, .66, 1].map(k => { const a = a0 + k * 3.2, m = 1 - k; return { transform: `translate(-50%,-50%) translate(${Math.cos(a) * rr * m}px,${Math.sin(a) * rr * m}px) rotate(${k * 360}deg) scale(${1.2 - k * .6})`, opacity: k === 0 ? 0 : k === 1 ? 0 : 1 }; });
+      anims.push(d.animate(ks, { duration: D, delay: (i % 4) * 60, easing: 'cubic-bezier(.4,0,.3,1)', fill: 'both' }));
+    }
+  } else {
+    const d = part('', 'pillar');
+    anims.push(d.animate([{ transform: 'translate(-50%,-100%) scaleX(0)', opacity: 0 }, { transform: 'translate(-50%,-100%) scaleX(1)', opacity: 1, offset: .5 }, { transform: 'translate(-50%,-100%) scaleX(.2)', opacity: 0 }], { duration: D, fill: 'both' }));
+  }
+  wrap.addEventListener('pointerdown', () => anims.forEach(a => { try { a.finish(); } catch (e) { } }));
+  sfxSafe('play');
+  await Promise.all(anims.map(a => a.finished.catch(() => { })));
+  const ring = part('', 'ring'), burst = part('', 'burst');
+  const t2 = fast ? 120 : 520;
+  ring.animate([{ transform: 'translate(-50%,-50%) scale(.3)', opacity: 1 }, { transform: 'translate(-50%,-50%) scale(5)', opacity: 0 }], { duration: t2, easing: 'ease-out', fill: 'both' });
+  burst.animate([{ transform: 'translate(-50%,-50%) scale(.5)', opacity: 1 }, { transform: 'translate(-50%,-50%) scale(7)', opacity: 0 }], { duration: t2, easing: 'ease-out', fill: 'both' });
+  cardEl.style.opacity = '';
+  cardEl.animate([{ transform: 'scale(1.35)', filter: 'brightness(2.4)' }, { transform: 'none', filter: 'none' }], { duration: t2, easing: 'cubic-bezier(.2,1.4,.4,1)' });
+  sfxSafe('lv');
+  await new Promise(res => setTimeout(res, t2));
+  wrap.classList.add('out');
+  setTimeout(() => wrap.remove(), 300);
+}
+
+/* RR（ライズレア）を使った時の演出。タップで飛ばせる */
 async function playCutin(ev) {
   const st = $('#stage'), c = C[ev.cid]; if (!st || !c || activeTab !== 'game') return;
   const rr = c.rarity === 'RR', col = COLORS[cardColor(c)] || '#ffd27a';
