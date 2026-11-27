@@ -458,6 +458,11 @@ body.in-game .modal .btn:focus-visible{outline:2px solid #ffd27a;outline-offset:
 @keyframes lcZoom{from{transform:scale(.6);opacity:0}}
 @keyframes lvSpin{from{transform:rotate(-6deg) scale(1)}to{transform:rotate(6deg) scale(1.06)}}
 @media (prefers-reduced-motion: reduce){.lv-img,.lv-rays,.lv-parts i,.lv-emb,.lc-side,.lc-mark,.lc-rise{animation:none!important}.lv-parts{display:none}}
+.ldr-vslot{position:absolute;inset:0}
+.ldr-vid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.lv-art .ldr-vid{z-index:0}
+.lifebox.ldr .ldr-face:has(.ldr-vid) .ldr-img,.lv-art:has(.ldr-vid) .lv-img{animation:none}
+.lifebox.ldr .ldr-face:has(.ldr-vid) .lv-rays,.lv-art:has(.ldr-vid) .lv-rays{opacity:.25}
 .blk{display:grid;gap:6px}
 .blk .btn{text-align:left;display:flex;justify-content:space-between;gap:8px;padding:8px 10px}
 .blk .btn small{color:var(--muted)}
@@ -1261,7 +1266,7 @@ const LEADERS = {
   em_green: { name: '翠の紋章', color: '緑', emblem: 'leaf' },
   em_white: { name: '白の紋章', color: '白', emblem: 'wing' },
   ld_letizia: { name: 'レティシア', color: '黄', card: 's_letizia', special: true },
-  ld_riora: { name: 'リオラ', color: '青', card: 'n_riora', image: 'img/ld_riora.jpg', special: true },
+  ld_riora: { name: 'リオラ', color: '青', card: 'n_riora', image: 'img/ld_riora.jpg', video: ['img/ld_riora.mp4', 'img/ld_riora.webm'], special: true },
 };
 const DEFAULT_LEADER = { '赤': 'em_red', '青': 'em_blue', '黄': 'em_yellow', '紫': 'em_purple', '緑': 'em_green', '白': 'em_white', '無': 'em_white' };
 function leaderOwned(id) { const L = LEADERS[id]; if (!L) return false; if (!L.special) return true; return !!(PLAYER.testAll || (PLAYER.owned && PLAYER.owned['leader:' + id])); }
@@ -1269,9 +1274,26 @@ function leadersFor(color) { return Object.keys(LEADERS).filter(id => LEADERS[id
 function leaderImage(L) { if (L.image) return L.image; const c = L.card && (STORE.cards[L.card] || C[L.card]); return c ? imageUrl(c) : null; }
 function chosenLeader(color) { let id = null; try { id = localStorage.getItem('sphere-leader-' + color); } catch (e) { } return id && LEADERS[id] && LEADERS[id].color === color && leaderOwned(id) ? id : DEFAULT_LEADER[color] || 'em_white'; }
 function setChosenLeader(color, id) { try { localStorage.setItem('sphere-leader-' + color, id); } catch (e) { } }
-function leaderArt(id) {
+function leaderVideoHTML(L) {
+  const srcs = (L.video || []).map(s => `<source src="${s}" type="video/${s.endsWith('.webm') ? 'webm' : 'mp4'}">`).join('');
+  return `<video class="ldr-vid" autoplay muted loop playsinline preload="auto" poster="${L.image || ''}" aria-hidden="true">${srcs}</video>`;
+}
+/* 対戦中の小さい丸：描き直しても止まらないように、同じ動画をつけかえる */
+const LVID = {};
+function mountLeaderVideos() {
+  document.querySelectorAll('.ldr-vslot').forEach(slot => {
+    const key = slot.dataset.key, L = LEADERS[slot.dataset.vid];
+    if (!L || !L.video) return;
+    let v = LVID[key];
+    if (!v) { const t = document.createElement('div'); t.innerHTML = leaderVideoHTML(L); v = t.firstChild; LVID[key] = v; }
+    slot.appendChild(v);
+    if (v.paused) { const pr = v.play(); if (pr && pr.catch) pr.catch(() => { }); }
+  });
+}
+function leaderArt(id, key) {
   const L = LEADERS[id] || LEADERS.em_white, col = COLORS[L.color] || '#9aa3b8';
   const img = L.emblem ? null : leaderImage(L);
+  if (img && L.video && key) return `<span class="ldr-img" style="background-image:url(${img})"></span><span class="ldr-vslot" data-vid="${id}" data-key="${key}"></span>`;
   if (img) return `<span class="ldr-img" style="background-image:url(${img})"></span>`;
   return `<svg class="ldr-svg" viewBox="0 0 100 100" aria-hidden="true"><defs><radialGradient id="lgB${id}" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="${col}" stop-opacity=".9"/><stop offset=".55" stop-color="${col}" stop-opacity=".35"/><stop offset="1" stop-color="#05060b"/></radialGradient><linearGradient id="lgS" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fffbe8"/><stop offset=".6" stop-color="#f3d995"/><stop offset="1" stop-color="#b88a2a"/></linearGradient></defs><circle cx="50" cy="50" r="48" fill="url(#lgB${id})"/><circle cx="50" cy="50" r="44" fill="none" stroke="#f3d995" stroke-opacity=".55" stroke-width="1.5"/>${EMBLEM[L.emblem] || EMBLEM.star}</svg>`;
 }
@@ -1291,7 +1313,7 @@ function leaderFx(color, n) {
 function leaderBig(id) {
   const L = LEADERS[id] || LEADERS.em_white, col = COLORS[L.color] || '#9aa3b8';
   const img = L.emblem ? null : leaderImage(L);
-  const inner = img ? `<span class="lv-img" style="background-image:url(${img})"></span>` : `<span class="lv-emb">${leaderArt(id)}</span>`;
+  const inner = img ? `<span class="lv-img" style="background-image:url(${img})"></span>${L.video ? leaderVideoHTML(L) : ''}` : `<span class="lv-emb">${leaderArt(id)}</span>`;
   return `<span class="lv-art" style="--lc:${col}">${inner}${leaderFx(L.color, 14)}</span>`;
 }
 function leaderCut(html, ms) {
@@ -2242,7 +2264,7 @@ function infoHTML(g, p, isOpp) {
   }
   LAST.life[p.idx] = p.life;
   const pips = TH.map((t, i) => `<i class="${i < p.lifeDraws ? 'used' : ''}"></i>`).join('');
-  const life = `<div class="pside"><button type="button" class="lifebox ldr ${isOpp ? 'opp' : 'me'} ${tgt}${hit}${g.cur === p.idx && !g.over ? ' active' : ''}${g.over && g.winner != null && g.winner !== p.idx ? ' down' : ''}" style="--lc:${COLORS[p.color] || '#9aa3b8'}" ${tgt ? 'data-act="life"' : 'tabindex="-1"'} aria-label="${esc(p.name)}のリーダー（${esc((LEADERS[p.leader] || {}).name || '')}）。ライフ ${Math.max(0, p.life)}"><span class="ldr-face">${leaderArt(p.leader)}${leaderFx(p.color, 6)}</span><span class="ldr-aim" aria-hidden="true"></span><span class="num">${Math.max(0, p.life)}</span><span class="pips" aria-hidden="true">${pips}</span>${float}</button><span class="pname">${esc(p.name)}</span></div>`;
+  const life = `<div class="pside"><button type="button" class="lifebox ldr ${isOpp ? 'opp' : 'me'} ${tgt}${hit}${g.cur === p.idx && !g.over ? ' active' : ''}${g.over && g.winner != null && g.winner !== p.idx ? ' down' : ''}" style="--lc:${COLORS[p.color] || '#9aa3b8'}" ${tgt ? 'data-act="life"' : 'tabindex="-1"'} aria-label="${esc(p.name)}のリーダー（${esc((LEADERS[p.leader] || {}).name || '')}）。ライフ ${Math.max(0, p.life)}"><span class="ldr-face">${leaderArt(p.leader, 'p' + p.idx + p.leader)}${leaderFx(p.color, 6)}</span><span class="ldr-aim" aria-hidden="true"></span><span class="num">${Math.max(0, p.life)}</span><span class="pips" aria-hidden="true">${pips}</span>${float}</button><span class="pname">${esc(p.name)}</span></div>`;
   const backs = isOpp && !$('#chkCpuHand').checked ? `<span class="backs" aria-label="手札${p.hand.length}枚">${'<i></i>'.repeat(Math.min(p.hand.length, 10))}</span>` : '';
   const center = `<div class="pcenter">${fieldHTML(g, p)}${backs}</div>`;
   const bonus = p.bonus ? '<span class="bonus">後攻+1</span>' : '<span>リザーブ</span>';
@@ -2327,6 +2349,7 @@ function render() {
   LAST.seen = new Set([...me.board, ...op.board].filter(Boolean).map(u => u.uid));
   if (g.phase !== 'mulligan') LAST.ready = true;
   if (LAST.hurt) sfx('hit'); else if (LAST.played) sfx('play');
+  mountLeaderVideos();
 }
 function showTurnBanner(p) {
   const b = $('#turnBanner');
