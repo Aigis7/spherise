@@ -1109,8 +1109,9 @@ const has = (c, t) => (c.tags || []).includes(t);
 function newId(prefix) { return prefix + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
 
 /* ================= 1. 文章の自動生成 ================= */
-const TRIG_LABEL = { play: '場に出た時', death: '破壊された時', start: '自分のターン開始時', end: '自分のターン終了時', countdownEnd: 'カウントが0になった時', use: 'カードを使った時', gambleWin: '自分が勝負に勝った時', gambleLose: '自分が勝負に負けた時', gamble: '自分が勝負をするたび', unit: '自分がユニットを出した時' };
-const ACT_LABEL = { draw: 'カードを引く', damage: 'ダメージ', heal: '回復', buff: '強化', destroy: '破壊', search: '山札から探す', revive: '墓地から場に出す', reserveBlast: 'リザーブを全部使ってダメージ', gamble: '勝負する', roulette: 'ルーレット', optPay: 'ライフを払ってもいい', payLife: 'ライフを払う', peek: '山札の上を見て並べ替え', replay: '場のユニットの「場に出た時」をもう一度（勝負は全部の結果）', fixNext: '次の勝負をいちばん強い結果にする' };
+const TRIG_LABEL = { play: '場に出た時', death: '破壊された時', start: '自分のターン開始時', end: '自分のターン終了時', countdownEnd: 'カウントが0になった時', use: 'カードを使った時', gambleWin: '自分が勝負に勝った時', gambleLose: '自分が勝負に負けた時', gamble: '自分が勝負をするたび', unit: '自分がユニットを出した時', allyDeath: '自分のほかのユニットが破壊された時' };
+const FIELD_TRIG_LABEL = { allyDeath: '自分のユニットが破壊された時' };
+const ACT_LABEL = { summon: 'カードを場に出す', draw: 'カードを引く', damage: 'ダメージ', heal: '回復', buff: '強化', destroy: '破壊', search: '山札から探す', revive: '墓地から場に出す', reserveBlast: 'リザーブを全部使ってダメージ', gamble: '勝負する', roulette: 'ルーレット', optPay: 'ライフを払ってもいい', payLife: 'ライフを払う', peek: '山札の上を見て並べ替え', replay: '場のユニットの「場に出た時」をもう一度（勝負は全部の結果）', fixNext: '次の勝負をいちばん強い結果にする' };
 const GAME_LABEL = { dice: 'サイコロ', blackjack: 'ブラックジャック', poker: 'ポーカー' };
 const BRANCH_LABEL = { win: '勝ち', lose: '負け', seven: 'ちょうど7で勝ち', three: '3枚そろい', straight: '階段', pair: '2枚そろい', red: '赤（奇数）', black: '黒（偶数）', yes: '払ったら' };
 const RANK_NAME = { three: '3枚そろい', straight: '階段', pair: '2枚そろい', none: 'ばらばら' };
@@ -1127,8 +1128,9 @@ const ACT_TARGETS = {
   search: [],
   revive: [],
   reserveBlast: [],
+  summon: [],
 };
-const COND_LABEL = { parts: '異なるパートのユニットを出す', tag: 'タグのカードを使う', units: 'ユニットを出す', arts: 'アーツを使う', heads: 'コイントスで表を出す', dealt: '相手にダメージを与える', taken: 'ダメージを受ける', gambles: '勝負をする', wins: '勝負に勝つ', uses: 'カードを使う' };
+const COND_LABEL = { lost: '自分のユニットが破壊される', kills: '相手のユニットを破壊する', parts: '異なるパートのユニットを出す', tag: 'タグのカードを使う', units: 'ユニットを出す', arts: 'アーツを使う', heads: 'コイントスで表を出す', dealt: '相手にダメージを与える', taken: 'ダメージを受ける', gambles: '勝負をする', wins: '勝負に勝つ', uses: 'カードを使う' };
 function tgtText(s, card, again) {
   if (s.target !== 'chosen') return TGT_LABEL[s.target] || '';
   const k = card && card.target;
@@ -1171,6 +1173,7 @@ function stepText(s, card, again) {
       for (const b of branchesOf(s)) { const t = subText(s, b, card); if (t) parts.push(`${b === 'lose' && g === 'poker' ? 'ばらばら（負け）' : BRANCH_LABEL[b]}：${t}`); }
       return head + (parts.length ? '。' + parts.join('／') : '');
     }
+    case 'summon': return `「${cardName(s.id)}」を${n > 1 ? n + '体' : ''}場に出す`;
     case 'reserveBlast': return `リザーブをすべて墓地に送る。送った枚数${n > 1 ? `×${n}` : ''}ぶん、相手にダメージ`;
   }
   return '';
@@ -1182,7 +1185,7 @@ function effectText(e, card) {
   if (e.lv) pre += `昇華${e.lv}：`;
   const isArtPlay = card && card.type === 'art' && e.trigger === 'play';
   if (e.trigger === 'use') pre += `${e.tag ? `「${e.tag}」の` : ''}カードを使った時、`;
-  else if (!isArtPlay) pre += (TRIG_LABEL[e.trigger] || '') + (e.lv ? '、' : '：');
+  else if (!isArtPlay) pre += (((!card || card.type === 'object') && FIELD_TRIG_LABEL[e.trigger]) || TRIG_LABEL[e.trigger] || '') + (e.lv ? '、' : '：');
   const steps = e.steps || [], flips = e.flips || 0;
   let named = false;
   const join = arr => arr.map(s => { const t = stepText(s, card, named && s.target === 'chosen'); if (s.target === 'chosen') named = true; return t; }).join('、');
@@ -1231,6 +1234,8 @@ function condText(c) {
     case 'taken': return `合計${c.n}ダメージを受ける`;
     case 'gambles': return `勝負を${c.n}回する`;
     case 'wins': return `勝負に${c.n}回勝つ`;
+    case 'lost': return `自分のユニットが合計${c.n}体破壊される`;
+    case 'kills': return `相手のユニットを合計${c.n}体破壊する`;
   }
   return '';
 }
@@ -1496,13 +1501,14 @@ function dmgUnit(g, u, n) { u.damage += n; log(g, `${C[u.cid].name}に${n}ダメ
 function removeFromBoard(g, inst) {
   const p = g.players[inst.owner]; const i = p.board.indexOf(inst);
   if (i < 0) return false;
-  p.board[i] = null; p.grave.push(inst.cid); return true;
+  p.board[i] = null; if (!C[inst.cid].token) p.grave.push(inst.cid); return true;
 }
 function destroy(g, inst) {
   if (C[inst.cid].fixed) { log(g, `${C[inst.cid].name}は場を離れない`); return; }
   if (!removeFromBoard(g, inst)) return;
   log(g, `${C[inst.cid].name}が破壊された`);
   runTrigger(g, g.players[inst.owner], inst, 'death');
+  afterDeath(g, inst);
   cleanup(g);
 }
 function cleanup(g) {
@@ -1511,7 +1517,23 @@ function cleanup(g) {
     for (const p of g.players) p.board.forEach(u => { if (u && C[u.cid].type === 'unit' && u.damage >= getHp(u)) dead.push(u); });
     if (!dead.length) return;
     for (const u of dead) { removeFromBoard(g, u); log(g, `${C[u.cid].name}が破壊された`); }
-    for (const u of dead) runTrigger(g, g.players[u.owner], u, 'death');
+    for (const u of dead) { if (g.over) return; runTrigger(g, g.players[u.owner], u, 'death'); afterDeath(g, u); }
+  }
+}
+/* ユニットが破壊されたあと：昇華の条件を進め、「ほかのユニットが破壊された時」を起こす */
+function afterDeath(g, u) {
+  if (g.over || C[u.cid].type !== 'unit') return;
+  const p = g.players[u.owner];
+  progress(g, p, { type: 'lost' }); progress(g, other(g, p), { type: 'kill' });
+  for (const x of [...p.board]) { if (g.over) return; if (x && p.board.includes(x)) runTrigger(g, p, x, 'allyDeath'); }
+  if (!g.over) fieldTrigger(g, p, 'allyDeath', C[u.cid]);
+}
+function summon(g, p, cid, n) {
+  if (!C[cid]) return;
+  for (let i = 0; i < n; i++) {
+    const s = emptySlot(p); if (s < 0) { log(g, '盤面に空きがない'); return; }
+    const u = mk(cid, p.idx); u.sick = !C[cid].quick; p.board[s] = u;
+    log(g, `${p.name}の場に「${C[cid].name}」が出た`);
   }
 }
 function flip(g, p) {
@@ -1662,6 +1684,7 @@ function doStep(g, p, src, s, chosen, opt) {
   const n = s.n ?? 1;
   if (s.action === 'draw') { draw(g, s.target === 'opponent' ? other(g, p) : p, n); return; }
   if (s.action === 'search') { search(g, p, s.filter); return; }
+  if (s.action === 'summon') { summon(g, p, s.id, n); return; }
   if (s.action === 'gamble') { resolveGamble(g, p, src, s, chosen, opt); return; }
   if (s.action === 'roulette') {
     const roll = 1 + Math.floor(Math.random() * 6) + boardSum(p, 'diceBonus'), red = roll % 2 === 1;
@@ -1749,6 +1772,7 @@ function progress(g, p, ev) {
   if (c.type === 'heads' && ev.type === 'heads') f.count++;
   if (c.type === 'uses' && ev.type === 'use') f.count++;
   if ((c.type === 'gambles' && ev.type === 'gamble') || (c.type === 'wins' && ev.type === 'win')) f.count++;
+  if ((c.type === 'lost' && ev.type === 'lost') || (c.type === 'kills' && ev.type === 'kill')) f.count++;
   if ((c.type === 'dealt' && ev.type === 'dealt') || (c.type === 'taken' && ev.type === 'taken')) f.count += ev.n;
   if (condValue(p) >= c.n) { f.pending = true; log(g, `${p.name}の領域が昇華の条件を満たした（次の自分のターン開始時に昇華）`, 't'); }
 }
@@ -1945,8 +1969,11 @@ function stepValue(g, p, s, t, card) {
       return cnt * n * per;
     }
     case 'destroy':
+      if (s.target === 'chosen' && t && !enemy && C[t.cid].type === 'unit') return deathValue(g, p, t) - (C[t.cid].cost * 1.5 + getAtk(g, t) + rem(t) * 0.5);
       if (s.target === 'chosen') return t ? (C[t.cid].type === 'unit' ? 6 + getAtk(g, t) * 2 + C[t.cid].cost : 6) * (enemy ? 1 : -1) : 0;
+      if (s.target === 'allEnemies') { const us = units(o); return us.length >= 2 ? us.reduce((a, u) => a + 6 + getAtk(g, u) * 2 + C[u.cid].cost, 0) : us.length * 4; }
       return units(o).length ? 7 : 0;
+    case 'summon': { const free = p.board.filter(x => !x).length, k = Math.min(n, free), c = C[s.id]; return c ? k * (2 + c.atk + c.hp * 0.8) : 0; }
     case 'revive': { const b = bestGrave(p); return b && emptySlot(p) >= 0 ? 8 + C[b].cost * 2 : 0; }
     case 'payLife': return -n * (p.life <= 10 ? 3 : 1.2);
     case 'peek': return 1.5;
@@ -1989,6 +2016,14 @@ function stepValue(g, p, s, t, card) {
     }
   }
   return 0;
+}
+/* 自分のユニットが破壊された時に起きることの、おおよその得 */
+function deathValue(g, p, u) {
+  let v = effectsValue(g, p, C[u.cid], 'death');
+  for (const x of p.board) if (x && x !== u) v += effectsValue(g, p, C[x.cid], 'allyDeath');
+  for (const e of stageOf(p).effects || []) if (e.trigger === 'allyDeath') v += (e.steps || []).reduce((a, s) => a + stepValue(g, p, s, null, null), 0);
+  const c = condOf(p); if (c && c.type === 'lost' && !p.field.pending) v += 2;
+  return v;
 }
 function branchValue(g, p, s, b, t, card) { return (((s.on || {})[b] || {}).steps || []).reduce((a, x) => a + stepValue(g, p, x, t, card), 0); }
 function effectsValue(g, p, card, trig, t) {
@@ -2535,6 +2570,7 @@ function cardActions(g, inst) {
   }
   return acts;
 }
+const p_free = (p, c) => p.board.filter(x => !x).length > (c.type === 'art' ? 0 : 1);
 function humanPickGrave(g, p) {
   return new Promise(resolve => {
     const ids = graveUnits(p);
@@ -2631,7 +2667,7 @@ function humanBJ(g, p) {
 async function humanPlay(g, inst, t) {
   const me = g.players[0], c = C[inst.cid];
   const opt = {};
-  if (needsRevive(c)) { const cid = await humanPickGrave(g, me); if (!cid) { render(); return; } opt.grave = cid; }
+  if (needsRevive(c) && graveUnits(me).length && p_free(me, c)) { const cid = await humanPickGrave(g, me); if (!cid) { render(); return; } opt.grave = cid; }
   if (!me.hand.includes(inst) || !canPlay(g, me, inst)) { render(); return; }
   /* 先に決める選択（場に出た時の、いちばん外側の手順だけ） */
   const top = (c.effects || []).filter(e => e.trigger === 'play' && !(e.lv && me.field.lv < e.lv)).flatMap(e => e.steps || []);
@@ -3050,9 +3086,9 @@ function opts(map, cur, blank) { return (blank != null ? `<option value="">${esc
 function triggerOptions(mode) {
   if (mode === 'art') return { play: '使った時' };
   const gm = { gambleWin: TRIG_LABEL.gambleWin, gambleLose: TRIG_LABEL.gambleLose };
-  if (mode === 'unit') return { play: TRIG_LABEL.play, death: TRIG_LABEL.death, start: TRIG_LABEL.start, end: TRIG_LABEL.end, ...gm };
-  if (mode === 'object') return { play: TRIG_LABEL.play, start: TRIG_LABEL.start, end: TRIG_LABEL.end, countdownEnd: TRIG_LABEL.countdownEnd, death: TRIG_LABEL.death, ...gm };
-  return { use: 'カードを使った時', unit: TRIG_LABEL.unit, start: TRIG_LABEL.start, end: TRIG_LABEL.end, gamble: TRIG_LABEL.gamble };
+  if (mode === 'unit') return { play: TRIG_LABEL.play, death: TRIG_LABEL.death, allyDeath: TRIG_LABEL.allyDeath, start: TRIG_LABEL.start, end: TRIG_LABEL.end, ...gm };
+  if (mode === 'object') return { play: TRIG_LABEL.play, start: TRIG_LABEL.start, end: TRIG_LABEL.end, countdownEnd: TRIG_LABEL.countdownEnd, death: TRIG_LABEL.death, allyDeath: '自分のユニットが破壊された時', ...gm };
+  return { use: 'カードを使った時', unit: TRIG_LABEL.unit, start: TRIG_LABEL.start, end: TRIG_LABEL.end, gamble: TRIG_LABEL.gamble, allyDeath: FIELD_TRIG_LABEL.allyDeath };
 }
 function targetOptions(action, mode) {
   let list = ACT_TARGETS[action] || [];
@@ -3067,6 +3103,7 @@ function stepsEditor(list, p, mode, flips, depth) {
       const tmap = targetOptions(s.action, mode);
       const tsel = Object.keys(tmap).length ? `<label class="fl">だれに<select data-f="${sp}.target">${opts(tmap, s.target)}</select></label>` : '';
       let extra = '';
+      if (s.action === 'summon') extra += `<label class="fl">出すカード<select data-f="${sp}.id">${opts(Object.fromEntries(Object.entries(STORE.cards).filter(([, c]) => c.token && c.type === 'unit').map(([id, c]) => [id, c.name || id])), s.id, '選ぶ')}</select></label><label class="fl">数<input type="number" data-num data-f="${sp}.n" value="${s.n ?? 1}" min="1" max="5"></label>`;
       if (['draw', 'damage', 'heal', 'buff', 'reserveBlast', 'payLife', 'optPay', 'peek'].includes(s.action)) extra += `<label class="fl">${s.action === 'buff' ? '攻撃力' : s.action === 'reserveBlast' ? '1枚あたりのダメージ' : s.action === 'peek' ? '枚数' : s.action === 'draw' ? '枚数' : (s.action === 'payLife' || s.action === 'optPay') ? '払うライフ' : '数'}<input type="number" data-num data-f="${sp}.n" value="${s.n ?? 1}" min="-20" max="99"></label>`;
       if (s.action === 'buff') extra += `<label class="fl">体力<input type="number" data-num data-f="${sp}.hp" value="${s.hp ?? ''}" min="-20" max="20"></label><label class="chk"><input type="checkbox" data-f="${sp}.temp" ${s.temp ? 'checked' : ''}>このターンだけ</label>`;
       if (s.action === 'search') extra += `<label class="fl">種類<select data-f="${sp}.filter.type">${opts(TYPE, (s.filter || {}).type, 'なんでも')}</select></label><label class="fl">タグ<input type="text" data-f="${sp}.filter.tag" value="${esc((s.filter || {}).tag || '')}" size="6"></label><label class="fl">パート<input type="text" data-f="${sp}.filter.part" value="${esc((s.filter || {}).part || '')}" size="6"></label>`;
@@ -3107,6 +3144,7 @@ function fixStep(model, path) {
   if (tl.length && !tl.includes(s.target)) s.target = tl[0];
   if (!tl.length) delete s.target;
   if (s.action !== 'search') delete s.filter;
+  if (s.action !== 'summon') delete s.id;
   if (s.action !== 'buff') { delete s.hp; delete s.temp; }
   if (s.action !== 'gamble') { delete s.game; delete s.need; }
   else if (!s.game) s.game = 'dice';

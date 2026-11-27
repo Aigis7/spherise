@@ -1333,6 +1333,400 @@
     }
    ],
    "artPrompt": "古いランタンの中に、小さな光の精が住んでいて、ガラス越しに手をふっている。人物なし。"
+  },
+  "y_nemu": {
+   "name": "ネム",
+   "set": "夢枕",
+   "color": "紫",
+   "type": "unit",
+   "cost": 5,
+   "atk": 3,
+   "hp": 4,
+   "rarity": "L",
+   "tags": [
+    "夢枕"
+   ],
+   "artPrompt": "大きな枕を抱いた少女が、紫の夜空に浮かんで眠っている。まわりに、楽しい夢（おもちゃ、お菓子、星）と悪夢（黒い影、割れた鏡）のかけらが、シャボン玉のように浮かんでいる。",
+   "epithet": "夢見る少女",
+   "effects": [
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "revive"
+      }
+     ]
+    }
+   ]
+  },
+  "y_muu": {
+   "name": "ムウ",
+   "set": "夢枕",
+   "color": "紫",
+   "type": "unit",
+   "cost": 2,
+   "atk": 1,
+   "hp": 2,
+   "rarity": "SR",
+   "tags": [
+    "夢枕",
+    "良夢"
+   ],
+   "artPrompt": "白と紫のふわふわした小さな獏。鼻で、黒いもやのような悪夢を吸いこんでいる。吸いこんだ悪夢が、体の中で星のように光る。",
+   "epithet": "夢喰いの獏",
+   "effects": [
+    {
+     "trigger": "allyDeath",
+     "steps": [
+      {
+       "action": "buff",
+       "target": "self",
+       "n": 1
+      }
+     ]
+    }
+   ]
+  },
+  "y_blanc": {
+   "name": "ブラン",
+   "set": "夢枕",
+   "color": "紫",
+   "type": "unit",
+   "cost": 1,
+   "atk": 1,
+   "hp": 1,
+   "rarity": "R",
+   "tags": [
+    "夢枕",
+    "良夢"
+   ],
+   "artPrompt": "つぎはぎのくまのぬいぐるみが、ボタンの盾と、ふでばこの剣で騎士のかっこうをしている。夢の中の子ども部屋。",
+   "epithet": "綿の騎士",
+   "effects": [
+    {
+     "trigger": "death",
+     "steps": [
+      {
+       "action": "draw",
+       "target": "me",
+       "n": 1
+      }
+     ]
+    }
+   ]
+  },
+  "y_jig": {
+   "name": "ジグ",
+   "set": "夢枕",
+   "color": "紫",
+   "type": "unit",
+   "cost": 3,
+   "atk": 3,
+   "hp": 2,
+   "rarity": "SR",
+   "tags": [
+    "夢枕",
+    "悪夢"
+   ],
+   "artPrompt": "割れた笑顔の仮面をつけた、細長い道化師。手からトランプではなく黒い風船が何個ものびている。こわれたメリーゴーランドの前。",
+   "epithet": "悪夢の道化師",
+   "effects": [
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "damage",
+       "target": "allEnemies",
+       "n": 1
+      },
+      {
+       "action": "damage",
+       "target": "otherAllies",
+       "n": 1
+      }
+     ]
+    }
+   ]
+  },
+  "y_grim": {
+   "name": "グリム",
+   "set": "夢枕",
+   "color": "紫",
+   "type": "unit",
+   "cost": 4,
+   "atk": 3,
+   "hp": 4,
+   "rarity": "SR",
+   "tags": [
+    "夢枕",
+    "悪夢"
+   ],
+   "artPrompt": "夢の底からはい出てきた、大きな影のけもの。体は夜空のように黒く、目だけが紫に光る。足元から影のかけらがこぼれている。",
+   "epithet": "夢底の影獣",
+   "effects": [
+    {
+     "trigger": "death",
+     "steps": [
+      {
+       "action": "summon",
+       "id": "y_shade",
+       "n": 1
+      }
+     ]
+    }
+   ]
+  },
+  "y_sheep": {
+   "name": "数えひつじ",
+   "set": "夢枕",
+   "color": "紫",
+   "type": "unit",
+   "cost": 2,
+   "atk": 1,
+   "hp": 2,
+   "rarity": "C",
+   "tags": [
+    "夢枕",
+    "良夢"
+   ],
+   "artPrompt": "夜空の柵を、もこもこのひつじが一匹ずつ跳び越えていく。跳んだひつじの後ろに、紫のうすい影が残る。",
+   "effects": [
+    {
+     "trigger": "death",
+     "steps": [
+      {
+       "action": "summon",
+       "id": "y_shade",
+       "n": 1
+      }
+     ]
+    }
+   ]
+  },
+  "y_shade": {
+   "name": "残影",
+   "set": "夢枕",
+   "color": "紫",
+   "type": "unit",
+   "cost": 0,
+   "atk": 1,
+   "hp": 1,
+   "rarity": "RR",
+   "tags": [
+    "夢枕",
+    "残影"
+   ],
+   "artPrompt": "紫の霧でできた、ぼんやりした人のかたちの影。顔は見えない。消えかけた夢の名残り。",
+   "token": true
+  },
+  "y_count": {
+   "name": "ひつじを数えて",
+   "set": "夢枕",
+   "color": "紫",
+   "type": "art",
+   "cost": 1,
+   "rarity": "C",
+   "tags": [
+    "良夢"
+   ],
+   "glyph": "search",
+   "artPrompt": "眠れない夜。ベッドの上の天井に、光るひつじが一匹ずつ浮かんでいく。人物は描かない。",
+   "effects": [
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "search",
+       "filter": {
+        "tag": "夢枕",
+        "type": "unit"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  "y_wake": {
+   "name": "目覚めの鐘",
+   "set": "夢枕",
+   "color": "紫",
+   "type": "art",
+   "cost": 1,
+   "rarity": "C",
+   "tags": [
+    "悪夢"
+   ],
+   "glyph": "cross",
+   "artPrompt": "夢の世界の空に、大きな古い鐘が鳴りひびく。音の輪が広がって、夢の景色がガラスのように割れていく。人物は描かない。",
+   "effects": [
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "destroy",
+       "target": "chosen"
+      },
+      {
+       "action": "draw",
+       "target": "me",
+       "n": 2
+      }
+     ]
+    }
+   ],
+   "target": "allyUnit"
+  },
+  "y_shard": {
+   "name": "夢のかけら",
+   "set": "夢枕",
+   "color": "紫",
+   "type": "art",
+   "cost": 2,
+   "rarity": "C",
+   "tags": [
+    "悪夢"
+   ],
+   "glyph": "burst",
+   "artPrompt": "割れた夢のかけらが、紫のガラスの刃になって飛んでいく。かけらの中に、いろんな夢の景色が映っている。人物は描かない。",
+   "effects": [
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "damage",
+       "target": "randomEnemy",
+       "n": 2
+      }
+     ]
+    }
+   ]
+  },
+  "y_whisper": {
+   "name": "悪夢のささやき",
+   "set": "夢枕",
+   "color": "紫",
+   "type": "art",
+   "cost": 3,
+   "rarity": "R",
+   "tags": [
+    "悪夢"
+   ],
+   "glyph": "cross",
+   "artPrompt": "眠る人の枕元に、黒い影の手がしのびより、耳元でささやいている。影の手と枕だけが見える。",
+   "effects": [
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "destroy",
+       "target": "chosen"
+      },
+      {
+       "action": "destroy",
+       "target": "randomAlly"
+      }
+     ]
+    }
+   ],
+   "target": "enemyUnit"
+  },
+  "y_again": {
+   "name": "もう一度、あの夢を",
+   "set": "夢枕",
+   "color": "紫",
+   "type": "art",
+   "cost": 3,
+   "rarity": "R",
+   "tags": [
+    "良夢"
+   ],
+   "glyph": "star",
+   "artPrompt": "閉じたまぶたの裏に、なつかしい夢の景色がもう一度ひろがっていく。紫と金の光。人物は描かない。",
+   "effects": [
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "revive"
+      }
+     ]
+    }
+   ]
+  },
+  "y_catcher": {
+   "name": "ドリームキャッチャー",
+   "set": "夢枕",
+   "color": "紫",
+   "type": "object",
+   "cost": 2,
+   "rarity": "R",
+   "tags": [],
+   "glyph": "star",
+   "artPrompt": "窓辺につるされた、紫の羽根のドリームキャッチャー。網に悪夢の黒いもやがからまり、羽根の先から光のしずくが落ちる。人物は描かない。",
+   "effects": [
+    {
+     "trigger": "allyDeath",
+     "steps": [
+      {
+       "action": "draw",
+       "target": "me",
+       "n": 1
+      }
+     ]
+    }
+   ]
+  },
+  "y_lullaby": {
+   "name": "おやすみの子守唄",
+   "set": "夢枕",
+   "color": "紫",
+   "type": "art",
+   "cost": 3,
+   "rarity": "RR",
+   "tags": [
+    "良夢"
+   ],
+   "glyph": "note",
+   "artPrompt": "月明かりの部屋で、だれかが子守唄を歌っている。音符が紫の光の蝶になって、眠る少女のまわりを舞う。顔は見せない。",
+   "effects": [
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "revive"
+      },
+      {
+       "action": "draw",
+       "target": "me",
+       "n": 1
+      }
+     ]
+    }
+   ]
+  },
+  "y_end": {
+   "name": "夢の終わり",
+   "set": "夢枕",
+   "color": "紫",
+   "type": "art",
+   "cost": 6,
+   "rarity": "RR",
+   "tags": [
+    "悪夢"
+   ],
+   "glyph": "burst",
+   "artPrompt": "夢の世界の空が、端から白い光にほどけていく。お城も遊園地も、光の粒になって消えていく。夜明け。人物は描かない。",
+   "effects": [
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "destroy",
+       "target": "allEnemies"
+      }
+     ]
+    }
+   ]
   }
  },
  "decks": {
@@ -1539,6 +1933,76 @@
     {
      "id": "b_metro",
      "n": 2
+    }
+   ]
+  },
+  "yumemakura": {
+   "name": "夢枕",
+   "field": "yumemakura",
+   "list": [
+    {
+     "id": "y_nemu",
+     "n": 3
+    },
+    {
+     "id": "y_muu",
+     "n": 3
+    },
+    {
+     "id": "y_blanc",
+     "n": 3
+    },
+    {
+     "id": "y_jig",
+     "n": 3
+    },
+    {
+     "id": "y_grim",
+     "n": 3
+    },
+    {
+     "id": "y_sheep",
+     "n": 3
+    },
+    {
+     "id": "y_count",
+     "n": 3
+    },
+    {
+     "id": "y_wake",
+     "n": 3
+    },
+    {
+     "id": "y_shard",
+     "n": 3
+    },
+    {
+     "id": "y_whisper",
+     "n": 2
+    },
+    {
+     "id": "y_again",
+     "n": 2
+    },
+    {
+     "id": "y_catcher",
+     "n": 2
+    },
+    {
+     "id": "b_amp",
+     "n": 2
+    },
+    {
+     "id": "c_exchange",
+     "n": 2
+    },
+    {
+     "id": "x_warden",
+     "n": 2
+    },
+    {
+     "id": "b_strike",
+     "n": 1
     }
    ]
   }
@@ -2047,6 +2511,74 @@
      "n": 3
     }
    ]
+  },
+  "yumemakura": {
+   "name": "夢枕",
+   "set": "夢枕",
+   "color": "紫",
+   "scene": "city",
+   "conds": [
+    {
+     "type": "lost",
+     "n": 4
+    },
+    {
+     "type": "kills",
+     "n": 3
+    }
+   ],
+   "stages": [
+    {
+     "name": "まくらもとの小部屋",
+     "effects": [
+      {
+       "trigger": "allyDeath",
+       "steps": [
+        {
+         "action": "damage",
+         "target": "randomEnemy",
+         "n": 1
+        }
+       ]
+      }
+     ],
+     "artPrompt": "夜の小さな子ども部屋。窓から月明かり。ベッドの上に大きな枕と、ぬいぐるみ。枕から紫の光のもやが立ちのぼり、天井が少しずつ夢の夜空に変わっていく。人物は描かない。"
+    },
+    {
+     "name": "ゆめうつつの遊園地",
+     "grant": "y_lullaby",
+     "effects": [
+      {
+       "trigger": "allyDeath",
+       "steps": [
+        {
+         "action": "damage",
+         "target": "randomEnemy",
+         "n": 1
+        }
+       ]
+      }
+     ],
+     "artPrompt": "夢の中の夜の遊園地。半分はお菓子と光でできた楽しいメリーゴーランドと観覧車、もう半分はゆがんで黒く溶けた悪夢の乗り物。紫の空に月が二つ。人物は描かない。"
+    },
+    {
+     "name": "夢の底の月",
+     "grant": "y_end",
+     "effects": [
+      {
+       "trigger": "allyDeath",
+       "steps": [
+        {
+         "action": "damage",
+         "target": "opponent",
+         "n": 1
+        }
+       ]
+      }
+     ],
+     "artPrompt": "夢のいちばん底。静かな紫の水面に、大きな月が映っている。水面に、これまでの夢のかけら（おもちゃ、鏡、羽根）が浮かぶ。神秘的で、少しさみしい。人物は描かない。"
+    }
+   ]
   }
  },
  "settings": {
@@ -2055,7 +2587,8 @@
    "themes": {
     "ソワレ": "テーマは夜会のカジノ。深い紺と金、ろうそくの光、緑のフェルト。上品だけど危うい空気。",
     "ノクティルカ": "ゴシックな尖塔がそびえる夜の現代の街。人ではない特徴を少しだけ持つ亜人の少女5人のガールズバンド「ノクティルカ」（リオラ、ウルカ、ノクス、ガルナ、フィーネ）。色は夜の青紫、ネオンのピンク、赤い光。演奏すると音が光や影になってあふれ出す。全員、ほのかに光る青緑のしずく型のピンを付けている。メンバーの見た目は、添付した設定画に合わせる。",
-    "はじまりの灯": "どの領域にも属さない、領域と領域のあいだの場所や道具、そこにいる人や生き物。星空、境界、旅、はじまりの小さな灯りの雰囲気。"
+    "はじまりの灯": "どの領域にも属さない、領域と領域のあいだの場所や道具、そこにいる人や生き物。星空、境界、旅、はじまりの小さな灯りの雰囲気。",
+    "夢枕": "眠り続ける少女ネムの夢の中。紫の夜空に、楽しい夢（おもちゃ、お菓子、ぬいぐるみ、星、遊園地）と悪夢（黒い影、割れた鏡、ゆがんだ道化）がまざりあって浮かんでいる。色は深い紫、月の白、ところどころにパステルの光。やさしくて、少しこわい。"
    }
   }
  }
