@@ -1351,6 +1351,76 @@
     }
    ],
    "color": "青"
+  },
+  "hajimari": {
+   "name": "はじまりの灯",
+   "set": "はじまりの灯",
+   "color": "無",
+   "scene": "forest",
+   "stages": [
+    {
+     "name": "狭間の野営地",
+     "effects": [
+      {
+       "trigger": "start",
+       "steps": [
+        {
+         "action": "buff",
+         "target": "randomAlly",
+         "n": 1,
+         "temp": true
+        }
+       ]
+      }
+     ],
+     "artPrompt": "何もない夜の海のような狭間に浮かぶ、小さな岩場の野営地。焚き火がぱちぱちと燃え、そばに旅の荷物とランタン。頭上には満天の星。遠くに、光る天球がいくつも浮かんでいる。人物は描かない。"
+    },
+    {
+     "name": "星見の峠",
+     "grant": "x_wanderer",
+     "effects": [
+      {
+       "trigger": "start",
+       "steps": [
+        {
+         "action": "buff",
+         "target": "randomAlly",
+         "n": 1,
+         "temp": true
+        }
+       ]
+      }
+     ],
+     "artPrompt": "狭間に浮かぶ高い峠の頂上。古い石の道しるべと、星を見るための小さな観測台。空いっぱいの星と、流れ星。足元の雲海の下に、いくつもの天球が光っている。人物は描かない。"
+    },
+    {
+     "name": "夜明けの境界門",
+     "effects": [
+      {
+       "trigger": "unit",
+       "steps": [
+        {
+         "action": "buff",
+         "target": "self",
+         "n": 1,
+         "hp": 1
+        }
+       ]
+      }
+     ],
+     "artPrompt": "狭間の果てに立つ、光でできた大きな門。門の向こうから夜明けの光があふれ、まわりの夜空が金とばら色に染まっていく。門へ続く石の道。人物は描かない。"
+    }
+   ],
+   "conds": [
+    {
+     "type": "units",
+     "n": 3
+    },
+    {
+     "type": "arts",
+     "n": 3
+    }
+   ]
   }
  },
  "settings": {
