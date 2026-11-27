@@ -1117,7 +1117,7 @@ function newId(prefix) { return prefix + Date.now().toString(36) + Math.random()
 /* ================= 1. 文章の自動生成 ================= */
 const TRIG_LABEL = { play: '場に出た時', death: '破壊された時', start: '自分のターン開始時', end: '自分のターン終了時', countdownEnd: 'カウントが0になった時', use: 'カードを使った時', gambleWin: '自分が勝負に勝った時', gambleLose: '自分が勝負に負けた時', gamble: '自分が勝負をするたび', unit: '自分がユニットを出した時', allyDeath: '自分のほかのユニットが破壊された時', seasonChange: '自分の季節が変わった時' };
 const FIELD_TRIG_LABEL = { allyDeath: '自分のユニットが破壊された時' };
-const ACT_LABEL = { advanceSeason: '季節を1つ進める', seasonStrike: '季節が変わった回数ぶん相手にダメージ', freeze: '眠らせる（次の相手のターンも起きない）', summon: 'カードを場に出す', draw: 'カードを引く', damage: 'ダメージ', heal: '回復', buff: '強化', destroy: '破壊', search: '山札から探す', revive: '墓地から場に出す', reserveBlast: 'リザーブを全部使ってダメージ', gamble: '勝負する', roulette: 'ルーレット', optPay: 'ライフを払ってもいい', payLife: 'ライフを払う', peek: '山札の上を見て並べ替え', replay: '場のユニットの「場に出た時」をもう一度（勝負は全部の結果）', fixNext: '次の勝負をいちばん強い結果にする' };
+const ACT_LABEL = { reviveAll: '墓地のユニットを場が埋まるまで出す', advanceSeason: '季節を1つ進める', seasonStrike: '季節が変わった回数ぶん相手にダメージ', freeze: '眠らせる（次の相手のターンも起きない）', summon: 'カードを場に出す', draw: 'カードを引く', damage: 'ダメージ', heal: '回復', buff: '強化', destroy: '破壊', search: '山札から探す', revive: '墓地から場に出す', reserveBlast: 'リザーブを全部使ってダメージ', gamble: '勝負する', roulette: 'ルーレット', optPay: 'ライフを払ってもいい', payLife: 'ライフを払う', peek: '山札の上を見て並べ替え', replay: '場のユニットの「場に出た時」をもう一度（勝負は全部の結果）', fixNext: '次の勝負をいちばん強い結果にする' };
 const GAME_LABEL = { dice: 'サイコロ', blackjack: 'ブラックジャック', poker: 'ポーカー' };
 const BRANCH_LABEL = { win: '勝ち', lose: '負け', seven: 'ちょうど7で勝ち', three: '3枚そろい', straight: '階段', pair: '2枚そろい', red: '赤（奇数）', black: '黒（偶数）', yes: '払ったら' };
 const RANK_NAME = { three: '3枚そろい', straight: '階段', pair: '2枚そろい', none: 'ばらばら' };
@@ -1134,7 +1134,7 @@ const ACT_TARGETS = {
   search: [],
   revive: [],
   reserveBlast: [],
-  summon: [], advanceSeason: [], seasonStrike: [],
+  summon: [], advanceSeason: [], seasonStrike: [], reviveAll: [],
   freeze: ['chosen', 'randomEnemy'],
 };
 const COND_LABEL = { attacks: '攻撃する', lost: '自分のユニットが破壊される', kills: '相手のユニットを破壊する', parts: '異なるパートのユニットを出す', tag: 'タグのカードを使う', units: 'ユニットを出す', arts: 'アーツを使う', heads: 'コイントスで表を出す', dealt: '相手にダメージを与える', taken: 'ダメージを受ける', gambles: '勝負をする', wins: '勝負に勝つ', uses: 'カードを使う' };
@@ -1181,6 +1181,12 @@ function stepText(s, card, again) {
       return head + (parts.length ? '。' + parts.join('／') : '');
     }
     case 'advanceSeason': return '季節を1つ進める';
+    case 'reviveAll': {
+      let t = (s.clearObjects ? '自分の場のオブジェクトを全部破壊し、' : '') + '自分の墓地のユニットを、場が埋まるまでコストの高い順に場に出す';
+      if (s.per) t += `。出したユニットは、自分の墓地${s.per}枚ごとに攻撃力+1、体力+1`;
+      if (s.grantOn && s.grantOn.id) t += `。出した「${cardName(s.grantOn.id)}」は「破壊された時、『${cardName(s.grantOn.grant)}』を手札に加える」を得る`;
+      return t;
+    }
     case 'seasonStrike': return `相手に、季節が変わった回数${n > 1 ? '×' + n : ''}ぶんダメージ`;
     case 'freeze': return `${T}を眠らせる（次の相手のターンも起きない）`;
     case 'summon': return `「${cardName(s.id)}」を${n > 1 ? n + '体' : ''}場に出す`;
@@ -1563,6 +1569,7 @@ function cleanup(g) {
 function afterDeath(g, u) {
   if (g.over || C[u.cid].type !== 'unit') return;
   const p = g.players[u.owner];
+  if (u.deathGrant && C[u.deathGrant]) { p.hand.push(mk(u.deathGrant, p.idx)); log(g, `${p.name}の手札に「${C[u.deathGrant].name}」が加わった`); }
   progress(g, p, { type: 'lost' }); progress(g, other(g, p), { type: 'kill' });
   for (const x of [...p.board]) { if (g.over) return; if (x && p.board.includes(x)) runTrigger(g, p, x, 'allyDeath'); }
   if (!g.over) fieldTrigger(g, p, 'allyDeath', C[u.cid]);
@@ -1724,6 +1731,23 @@ function doStep(g, p, src, s, chosen, opt) {
   if (s.action === 'draw') { draw(g, s.target === 'opponent' ? other(g, p) : p, n); return; }
   if (s.action === 'search') { search(g, p, s.filter); return; }
   if (s.action === 'summon') { summon(g, p, s.id, n); return; }
+  if (s.action === 'reviveAll') {
+    if (s.clearObjects) for (const o of objects(p)) { if (g.over) return; if (!C[o.cid].fixed) destroy(g, o); }
+    const k = s.per ? Math.floor(p.grave.length / s.per) : 0;
+    if (k) log(g, `墓地${p.grave.length}枚：戻すユニットは攻撃力+${k}、体力+${k}`);
+    for (let guard = 0; guard < 5 && !g.over; guard++) {
+      const slot = emptySlot(p); if (slot < 0) break;
+      const cid = bestGrave(p); if (!cid) break;
+      p.grave.splice(p.grave.lastIndexOf(cid), 1);
+      const u = mk(cid, p.idx); p.board[slot] = u; u.sick = !C[cid].quick; u.atkMod += k; u.hpMod += k;
+      if (s.grantOn && s.grantOn.id === cid) u.deathGrant = s.grantOn.grant;
+      seasonSync(g, p);
+      log(g, `${p.name}の「${C[cid].name}」が墓地から戻ってきた`);
+      runTrigger(g, p, u, 'play');
+      cleanup(g);
+    }
+    return;
+  }
   if (s.action === 'advanceSeason') { advanceSeason(g, p, true); return; }
   if (s.action === 'seasonStrike') { const k = (p.field.changes || 0) * n; log(g, `季節が変わった回数：${p.field.changes || 0}`); dmgPlayer(g, other(g, p), k); return; }
   if (s.action === 'gamble') { resolveGamble(g, p, src, s, chosen, opt); return; }
@@ -1858,6 +1882,7 @@ function canPlay(g, p, inst) {
   if (c.needs && !p.board.some(u => u && u.cid === c.needs)) return false;
   if (playSteps(c).some(s => s.action === 'fixNext') && p.tf && p.tf.fix) return false;
   if (c.type === 'art' && needsRevive(c) && (!graveUnits(p).length || emptySlot(p) < 0)) return false;
+  if (c.type === 'art' && playSteps(c).some(s => s.action === 'reviveAll') && !graveUnits(p).length) return false;
   return true;
 }
 function play(g, p, inst, t, opt) {
@@ -2025,6 +2050,13 @@ function stepValue(g, p, s, t, card) {
       if (s.target === 'allEnemies') { const us = units(o); return us.length >= 2 ? us.reduce((a, u) => a + 6 + getAtk(g, u) * 2 + C[u.cid].cost, 0) : us.length * 4; }
       return units(o).length ? 7 : 0;
     case 'advanceSeason': return isCycle(p) ? 2 : 0;
+    case 'reviveAll': {
+      const objs = s.clearObjects ? objects(p).filter(x => !C[x.cid].fixed) : [];
+      const free = p.board.filter(x => !x).length + objs.length;
+      const gs = p.grave.filter(cid => C[cid] && C[cid].type === 'unit').sort((a, b) => C[b].cost - C[a].cost).slice(0, free);
+      const k = s.per ? Math.floor(p.grave.length / s.per) : 0;
+      return gs.reduce((a, cid) => a + 8 + C[cid].cost * 2 + k * 3, 0) - objs.length * 4 - (gs.length < 2 ? 10 : 0);
+    }
     case 'seasonStrike': { const k = (p.field.changes || 0) * n; return k * 1.6 + (o.life <= k ? 100 : 0); }
     case 'freeze': { if (s.target === 'chosen') return t && enemy && !t.frozen ? 2 + getAtk(g, t) * 1.5 : 0; const us = units(o); return us.length ? 2 + us.reduce((a, u) => a + getAtk(g, u), 0) / us.length : 0; }
     case 'summon': { const free = p.board.filter(x => !x).length, k = Math.min(n, free), c = C[s.id]; return c ? k * (2 + c.atk + c.hp * 0.8) : 0; }

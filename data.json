@@ -2179,6 +2179,33 @@
      ]
     }
    ]
+  },
+  "y_still": {
+   "name": "まだ、終わらない",
+   "set": "夢枕",
+   "color": "紫",
+   "type": "art",
+   "cost": 6,
+   "rarity": "RR",
+   "tags": [],
+   "glyph": "star",
+   "effects": [
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "reviveAll",
+       "clearObjects": true,
+       "per": 10,
+       "grantOn": {
+        "id": "y_luluna",
+        "grant": "y_end"
+       }
+      }
+     ]
+    }
+   ],
+   "artPrompt": "真っ暗な夢の底で、ルルナ（銀白で毛先だけ薄いラベンダー色の長い髪、額の上に閉じた目の刺しゅうのアイマスク、白い寝巻き、星の刺しゅうの紺紫の丸い枕）が顔を上げる。そのまわりに、紫と金の光の粒が集まって、ムウ、ブラン、ジグ、グリムの姿にもどっていく。下から光が立ちのぼる。腕は2本だけ。両腕で枕を抱えている。"
   }
  },
  "decks": {
@@ -3081,7 +3108,7 @@
     },
     {
      "name": "夢の底の月",
-     "grant": "y_end",
+     "grant": "y_still",
      "effects": [
       {
        "trigger": "allyDeath",
