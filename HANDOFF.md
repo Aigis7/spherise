@@ -18,6 +18,7 @@
 | 公開用のデータ | `data.json`（カード・デッキ・領域・絵の設定）、`img/`（カードと背景と動画） |
 | 設定資料のページ | `src/setting/soiree/`（`https://claude.ai/artifact/Vp5X6ozWuvezhyVMc3rWfS`）、`src/setting/noctiluca/`（`https://claude.ai/artifact/Ccm9dowTa4nESSpK4spAmn`） |
 | 夢枕の設定画（ルルナ、ムウ、ブラン、ジグ、グリム）と設定資料のページ | `src/setting/yumemakura/`（`https://claude.ai/artifact/VfcxHaniiB9cvFJC4ru4gm`） |
+| 四季ノ環の設定画（環、霞、青嵐、稲穂、六花）と設定資料のページ | `src/setting/shiki/`（`https://claude.ai/artifact/JrfF1Xu23WeqicJdnhKseo`） |
 | リーダーの動画用の横長の絵（レティシア） | `src/letizia_16x9.png` |
 
 ## 作業の流れ（方式B）
