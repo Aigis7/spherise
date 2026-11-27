@@ -1,0 +1,285 @@
+<title>夢枕設定資料</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Zen+Maru+Gothic:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<style>
+/* Layout: 夜の紫と月の白の1テーマ。上に題と物語、3段階の領域、主人公ルルナ、良い夢の2体・悪夢の2体、残影、最後にコピー用の設定資料 */
+:root{
+  --bg:#0f0b1e; --surface:#1a1430; --surface-2:#241c40; --ink:#f1ecfb; --muted:#b7acd6; --line:#3a2f5e;
+  --moon:#f4efe0; --lilac:#c9b6ff; --dream:#ffd6ea; --night:#6b4fd8; --sheet:#ffffff;
+  --f-logo:"Cinzel","Times New Roman",serif;
+  --f-display:"Zen Maru Gothic","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;
+  --f-body:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",system-ui,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);line-height:1.75;
+  background-image:radial-gradient(60rem 28rem at 50% -8%,rgb(201 182 255 / .16),transparent 60%),radial-gradient(36rem 26rem at 0% 45%,rgb(255 214 234 / .06),transparent 60%),radial-gradient(1.5px 1.5px at 12% 8%,#fff,transparent 60%),radial-gradient(1px 1px at 78% 5%,#fff,transparent 60%),radial-gradient(1.5px 1.5px at 90% 18%,#fff,transparent 60%),radial-gradient(1px 1px at 30% 15%,#fff,transparent 60%)}
+.wrap{max-width:1040px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:36px 56px;display:grid;gap:34px}
+.hero{display:grid;gap:8px;text-align:center;justify-items:center}
+.moon{width:54px;height:54px;border-radius:50%;background:radial-gradient(circle at 38% 38%,#fffdf4,var(--moon) 55%,#d8cfb4);box-shadow:0 0 34px 8px rgb(244 239 224 / .28)}
+.eyebrow{font-size:.72rem;letter-spacing:.32em;color:var(--lilac);font-weight:700}
+h1{font-family:var(--f-display);font-weight:900;font-size:clamp(2.6rem,10vw,4.2rem);letter-spacing:.24em;margin:0 0 0 .24em;line-height:1.1;color:#fff;text-shadow:0 0 26px rgb(201 182 255 / .55)}
+.sub{font-family:var(--f-logo);letter-spacing:.42em;color:var(--lilac);font-size:.9rem;margin-left:.42em}
+.rule{width:min(380px,70vw);height:1px;background:linear-gradient(90deg,transparent,var(--lilac),transparent)}
+.lead{color:var(--muted);max-width:60ch;margin:0;text-wrap:pretty}
+h2{font-size:.8rem;letter-spacing:.22em;color:var(--lilac);margin:0 0 12px;font-weight:700}
+h2 small{font-weight:500;letter-spacing:.06em;color:var(--muted);margin-left:8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;min-width:0}
+.box h3{margin:0 0 6px;font-size:.98rem;font-family:var(--f-display)}
+.box p,.box ul{margin:0;font-size:.86rem;color:var(--muted)}
+.box ul{padding-left:1.1em}
+.stages{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media (max-width:720px){.stages{grid-template-columns:1fr}}
+.stage{position:relative;border-radius:12px;padding:14px 16px;border:1px solid var(--line);background:linear-gradient(165deg,var(--s1),var(--s2));min-height:150px;display:grid;align-content:end;gap:4px;overflow:hidden}
+.stage .lv{position:absolute;top:12px;left:16px;font-size:.66rem;letter-spacing:.2em;color:rgb(255 255 255 / .78);font-weight:700}
+.stage b{font-family:var(--f-display);font-weight:700;font-size:1.15rem;color:#fff;text-shadow:0 2px 6px #000}
+.stage p{margin:0;font-size:.8rem;color:#ece4ff}
+.stage .cond{font-size:.72rem;color:var(--dream)}
+.person{display:grid;background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;min-width:0}
+.person.main{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)}
+@media (max-width:760px){.person.main{grid-template-columns:1fr}}
+.ph{position:relative;background:var(--sheet);aspect-ratio:16/9;max-width:100%}
+.person.main .ph{aspect-ratio:auto;min-height:300px}
+.ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block}
+.pbody{padding:16px 18px;display:grid;gap:8px;align-content:start;border-top:4px solid var(--c1)}
+.person.main .pbody{border-top:0;border-left:4px solid var(--c1)}
+@media (max-width:760px){.person.main .pbody{border-left:0;border-top:4px solid var(--c1)}}
+.epi{font-size:.8rem;color:var(--lilac);font-weight:700;letter-spacing:.08em}
+.name{font-family:var(--f-display);font-weight:900;font-size:1.8rem;line-height:1.1;margin:0}
+.role{font-size:.8rem;color:var(--muted)}
+.tag{display:inline-block;font-size:.68rem;font-weight:700;letter-spacing:.1em;padding:1px 9px;border-radius:999px;margin-right:6px;vertical-align:.15em}
+.tag.good{background:rgb(255 214 234 / .16);color:var(--dream);border:1px solid rgb(255 214 234 / .4)}
+.tag.bad{background:rgb(107 79 216 / .22);color:var(--lilac);border:1px solid rgb(201 182 255 / .4)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:.72rem;padding:2px 9px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line)}
+.sw{display:inline-block;width:.8em;height:.8em;border-radius:50%;vertical-align:-.05em;margin-right:4px;border:1px solid rgb(255 255 255 / .35)}
+dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;margin:0;font-size:.85rem}
+dt{color:var(--muted);font-weight:700;white-space:nowrap}
+dd{margin:0}
+.pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+@media (max-width:760px){.pair{grid-template-columns:1fr}}
+.copy{display:grid;gap:10px}
+.copyhead{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
+.btn{font:inherit;font-size:.85rem;font-weight:700;padding:6px 14px;border-radius:8px;border:1px solid var(--lilac);background:transparent;color:var(--lilac);cursor:pointer}
+.btn:hover{background:rgb(201 182 255 / .12)}
+.btn:focus-visible{outline:2px solid var(--lilac);outline-offset:2px}
+textarea{width:100%;font-family:var(--f-body);font-size:.8rem;line-height:1.65;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:12px}
+.msg{font-size:.8rem;color:var(--muted)}
+.tips{font-size:.84rem;color:var(--muted);margin:0;padding-left:1.2em}
+.imgbar{display:flex;gap:6px;flex-wrap:wrap;padding:8px 12px;background:var(--surface-2)}
+.imgbar button{font:inherit;font-size:.78rem;font-weight:700;cursor:pointer;padding:5px 12px;border-radius:999px;border:1px solid rgb(255 255 255 / .3);background:rgb(255 255 255 / .08);color:inherit}
+.imgbar button:hover{border-color:var(--lilac)}
+.imgbar button:focus-visible{outline:2px solid var(--lilac);outline-offset:2px}
+.imgbar .imsg{font-size:.72rem;opacity:.8;align-self:center}
+</style>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="moon" aria-hidden="true"></div>
+    <span class="eyebrow">CHARACTER SHEET</span>
+    <h1>夢枕</h1>
+    <div class="sub">YUMEMAKURA</div>
+    <div class="rule" aria-hidden="true"></div>
+    <p class="lead">眠り続ける少女ルルナの、夢の中の物語。紫の夜空に、楽しい夢と悪夢がまざりあって浮かんでいる。夢は壊れても、その名残りが影になって残る。夢は少しずつ深くなり、いちばん底には大きな月がある。</p>
+  </header>
+
+  <section>
+    <h2>世界観と画風</h2>
+    <div class="grid">
+      <div class="box"><h3>夢の中</h3><p>紫の夜空に、おもちゃ、お菓子、ぬいぐるみ、星、遊園地が浮かぶ。その間に、黒い影、割れた鏡、ゆがんだ道化がまじる。やさしくて、少しこわい。</p></div>
+      <div class="box"><h3>良い夢と悪夢</h3><p>カードには「良夢」と「悪夢」がある。良夢は回復や、墓地から戻す力。悪夢は破壊と、自分のユニットを壊す力。</p></div>
+      <div class="box"><h3>残影</h3><p>壊れた夢の名残り。紫の霧でできた、顔の見えない人のかたちの影。壊れたユニットから生まれる。</p></div>
+      <div class="box"><h3>画風</h3><ul><li>線は細め、日本のアニメらしいやわらかいセル塗り</li><li>色は深い紫、月の白、ところどころにパステル</li><li>横長16:10、描くものは中央</li><li>文字・枠は入れない。既存の作品やキャラクターに似せない</li></ul></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>領域：夢枕<small>色は紫</small></h2>
+    <div class="stages">
+      <div class="stage" style="--s1:#3b2d5c;--s2:#120d22"><span class="lv">初期</span><b>まくらもとの小部屋</b><p>月明かりの子ども部屋。枕から紫のもやが立ちのぼり、天井が夢の夜空に変わっていく。</p><span class="cond">次へ：自分のユニットが4体破壊される</span></div>
+      <div class="stage" style="--s1:#6a2f6e;--s2:#170a1f"><span class="lv">第二昇華</span><b>ゆめうつつの遊園地</b><p>半分はお菓子と光の乗り物、半分は黒く溶けた悪夢の乗り物。空に月が二つ。</p><span class="cond">次へ：相手のユニットを3体破壊する</span></div>
+      <div class="stage" style="--s1:#2c3a6e;--s2:#0b0f22"><span class="lv">第三昇華</span><b>夢の底の月</b><p>静かな紫の水面に、大きな月が映る。これまでの夢のかけらが浮かぶ。</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>主人公</h2>
+    <article class="person main" style="--c1:#c9b6ff">
+      <div class="ph"><img src="luluna.jpg" alt="ルルナの設定画。銀白で毛先がラベンダー色の長い髪の少女。額にアイマスクを上げ、白い寝巻きで、星の刺しゅうの紺紫の枕を抱えている。"></div>
+      <div class="pbody">
+        <span class="epi">〈夢見る少女〉</span>
+        <p class="name">ルルナ</p>
+        <span class="role">眠り続ける少女。この夢の持ち主</span>
+        <div class="chips"><span class="chip"><span class="sw" style="background:#eeeaf4"></span>銀白</span><span class="chip"><span class="sw" style="background:#c9b6ff"></span>ラベンダー</span><span class="chip"><span class="sw" style="background:#3a3470"></span>紺紫</span><span class="chip"><span class="sw" style="background:#fff"></span>白</span></div>
+        <dl>
+          <dt>年</dt><dd>14歳くらい</dd>
+          <dt>髪</dt><dd>銀白で、毛先だけ薄いラベンダー色。腰まで長く、水の中のようにふわりと広がる</dd>
+          <dt>目</dt><dd>紫。いつも眠そうな半目</dd>
+          <dt>頭</dt><dd>額の上に、閉じた目の刺しゅうがあるアイマスクを上げている</dd>
+          <dt>服</dt><dd>白い大きめの寝巻きのワンピースに、紺紫のリボン。袖が長い。はだし</dd>
+          <dt>持ち物</dt><dd>星の刺しゅうがある、紺紫のまん丸の枕。いつも両腕で抱えている</dd>
+          <dt>カード</dt><dd>場に出た時、墓地のユニットを1体場に戻す。なくした夢を、もう一度見る</dd>
+        </dl>
+      </div>
+    </article>
+  </section>
+
+  <section>
+    <h2>良い夢</h2>
+    <div class="pair">
+      <article class="person" style="--c1:#ffd6ea">
+        <div class="ph"><img src="muu.jpg" alt="ムウの設定画。前半分が白、後ろ半分が薄紫の、まるくてふわふわの獏。鼻が少し垂れ、おなかに星が光っている。"></div>
+        <div class="pbody">
+          <span class="epi"><span class="tag good">良夢</span>〈夢喰いの獏〉</span>
+          <p class="name">ムウ</p>
+          <span class="role">悪夢を食べる獏。ルルナのそばにいる</span>
+          <dl>
+            <dt>大きさ</dt><dd>ねこくらい。いつも少し浮いている</dd>
+            <dt>体</dt><dd>まるくてふわふわ。前半分が白、後ろ半分が薄紫。丸いしっぽ</dd>
+            <dt>顔</dt><dd>少し長くて先が下に垂れた鼻、大きな紺色の目</dd>
+            <dt>特徴</dt><dd>悪夢を食べると、おなかの中に星が光る</dd>
+            <dt>カード</dt><dd>ほかの味方が壊れるたび、攻撃力+1</dd>
+          </dl>
+        </div>
+      </article>
+      <article class="person" style="--c1:#ffd6ea">
+        <div class="ph"><img src="blanc.jpg" alt="ブランの設定画。紫のチェックでつぎはぎされたクリーム色のくまのぬいぐるみ。青いマント、色鉛筆の剣、ボタンの盾。"></div>
+        <div class="pbody">
+          <span class="epi"><span class="tag good">良夢</span>〈綿の騎士〉</span>
+          <p class="name">ブラン</p>
+          <span class="role">ルルナを守る、くまのぬいぐるみの騎士</span>
+          <dl>
+            <dt>体</dt><dd>クリーム色のくまのぬいぐるみ。紫のチェックの布でつぎはぎ</dd>
+            <dt>目</dt><dd>ボタン。右が黒、左が紫</dd>
+            <dt>装備</dt><dd>ハンカチの青いマント、右手に色鉛筆の剣、左手に大きなボタンの盾</dd>
+            <dt>カード</dt><dd>壊れた時、カードを1枚引く</dd>
+          </dl>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <h2>悪夢</h2>
+    <div class="pair">
+      <article class="person" style="--c1:#6b4fd8">
+        <div class="ph"><img src="jig.jpg" alt="ジグの設定画。ひびの入った笑顔の白い仮面、黒と紫のひし形もようの道化服、鈴つきの帽子。黒い風船の束を持っている。"></div>
+        <div class="pbody">
+          <span class="epi"><span class="tag bad">悪夢</span>〈悪夢の道化師〉</span>
+          <p class="name">ジグ</p>
+          <span class="role">夢の遊園地にあらわれる道化</span>
+          <dl>
+            <dt>体</dt><dd>背が高く、手足が細長い</dd>
+            <dt>顔</dt><dd>ひびの入った笑顔の白い仮面。素顔は見えない</dd>
+            <dt>服</dt><dd>黒と紫のひし形もよう、先が垂れた鈴つきの帽子</dd>
+            <dt>持ち物</dt><dd>黒い風船の束</dd>
+            <dt>カード</dt><dd>場に出た時、相手全員と、自分のほかのユニットに1ダメージ</dd>
+          </dl>
+        </div>
+      </article>
+      <article class="person" style="--c1:#6b4fd8">
+        <div class="ph"><img src="grim.jpg" alt="グリムの設定画。夜空のように黒い体に星が光る、獅子のような顔の大きなけもの。煙のようなたてがみとしっぽ、紫に光る目。"></div>
+        <div class="pbody">
+          <span class="epi"><span class="tag bad">悪夢</span>〈夢底の影獣〉</span>
+          <p class="name">グリム</p>
+          <span class="role">夢の底からはい出てくる影のけもの</span>
+          <dl>
+            <dt>体</dt><dd>大きな四本足。夜空のように黒く、体の中に小さな星が光る</dd>
+            <dt>顔</dt><dd>獅子のようなねこ科の顔。丸い耳、短い鼻先、紫に光る目</dd>
+            <dt>特徴</dt><dd>たてがみとしっぽは煙のようにゆらめく。足元から影のかけらがこぼれる</dd>
+            <dt>カード</dt><dd>壊れた時、〈残影〉を出す</dd>
+          </dl>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="copy">
+    <div class="copyhead"><h2 style="margin:0">設定資料（画像生成AIに貼る用）</h2><span><button class="btn" type="button" data-copy="sheet">コピー</button> <span class="msg" data-msg="sheet" aria-live="polite"></span></span></div>
+    <textarea id="sheet" rows="16" readonly aria-label="設定資料の本文">これから、オリジナルのカードゲームのイラストを何枚もお願いします。
+全部、下の設定と画風でそろえてください。既存の作品やキャラクターには似せないでください。
+
+【画風】
+線は細め、日本のアニメらしいやわらかいセル塗り。鮮やかな色。
+横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。
+白いふちどりや枠は付けず、背景を画面いっぱいに描く。
+絵の中に文字・ロゴ・数字を入れない。
+
+【世界観】
+眠り続ける少女ルルナの夢の中。
+紫の夜空に、楽しい夢（おもちゃ、お菓子、ぬいぐるみ、星、遊園地）と悪夢（黒い影、割れた鏡、ゆがんだ道化）がまざりあって浮かんでいる。
+色は深い紫、月の白、ところどころにパステルの光。やさしくて、少しこわい。
+
+【主人公：ルルナ〈夢見る少女〉】
+14歳くらいの少女。銀白で毛先だけ薄いラベンダー色の長い髪が、水の中のようにふわりと広がる。
+紫の目で、いつも眠そうな半目。額の上に、閉じた目の刺しゅうがあるアイマスクを上げている。
+白い大きめの寝巻きのワンピースに紺紫のリボン。袖が長い。はだし。
+星の刺しゅうがある紺紫のまん丸の枕を、いつも両腕で抱えている。
+
+【良い夢】
+ムウ〈夢喰いの獏〉：ねこくらいの大きさの、まるくてふわふわの獏。体の前半分が白、後ろ半分が薄紫。少し長くて先が下に垂れた鼻、大きな紺色の目、丸いしっぽ。いつも少し浮いている。悪夢を食べると、おなかの中に星が光る。
+ブラン〈綿の騎士〉：クリーム色のくまのぬいぐるみ。紫のチェックの布でつぎはぎ。目は右が黒、左が紫のボタン。ハンカチの青いマント、右手に色鉛筆の剣、左手に大きなボタンの盾。
+
+【悪夢】
+ジグ〈悪夢の道化師〉：背が高く、手足が細長い道化師。顔はひびの入った笑顔の白い仮面で見えない。黒と紫のひし形もようの服、先が垂れた鈴つきの帽子。黒い風船の束を持っている。
+グリム〈夢底の影獣〉：大きな四本足の影のけもの。獅子のようなねこ科の顔で、耳は丸く鼻先は短い。体は夜空のように黒く、中に小さな星が光る。たてがみとしっぽは煙のようにゆらめき、目は紫に光る。足元から影のかけらがこぼれる。
+
+【残影】
+壊れた夢の名残り。紫の霧でできた、顔の見えない人のかたちの影。
+
+キャラクターの見た目は、添付した設定画に合わせてください。</textarea>
+    <ul class="tips">
+      <li>カードの絵は、制作用ページのカードの画面にある「完成プロンプト」を使う。見た目はもう入っている。</li>
+      <li>キャラが出るカードは、そのキャラの設定画を毎回添付する。上の「画像をコピー」で貼れる。</li>
+      <li>1回目は設定画なしでポーズと構図だけ、2回目に設定画を添付して見た目を合わせると、ずれにくい。</li>
+      <li>手がおかしくなったら「腕は2本だけ」「両手の場所を1つずつ決める」と書き足す。</li>
+    </ul>
+  </section>
+</div>
+<script>
+document.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click', () => {
+  const id = b.dataset.copy, t = document.getElementById(id), m = document.querySelector(`[data-msg="${id}"]`);
+  navigator.clipboard.writeText(t.value).then(() => { m.textContent = 'コピーしました'; }).catch(() => { t.focus(); t.select(); m.textContent = '選択しました。手動でコピーしてください'; });
+}));
+
+/* 設定画をコピー・保存する */
+(function () {
+  function nameOf(img) { const a = img.closest('article'); const n = a && a.querySelector('.name'); return n ? n.textContent.trim() : 'image'; }
+  async function pngBlob(img) {
+    const res = await fetch(img.currentSrc || img.src); const b = await res.blob();
+    if (b.type === 'image/png') return b;
+    const bmp = await createImageBitmap(b);
+    const cv = document.createElement('canvas'); cv.width = bmp.width; cv.height = bmp.height;
+    cv.getContext('2d').drawImage(bmp, 0, 0);
+    return await new Promise(r => cv.toBlob(r, 'image/png'));
+  }
+  document.querySelectorAll('article img').forEach(img => {
+    const art = img.closest('article'); if (!art) return;
+    const bar = document.createElement('div'); bar.className = 'imgbar';
+    bar.innerHTML = '<button type="button" data-act="copy">画像をコピー</button><button type="button" data-act="save">画像を保存</button><span class="imsg" aria-live="polite"></span>';
+    const body = art.querySelector('.pbody');
+    if (body) art.insertBefore(bar, body); else art.appendChild(bar);
+    if (art.classList.contains('main')) { bar.style.gridColumn = '1 / -1'; bar.style.order = '3'; }
+    const msg = bar.querySelector('.imsg');
+    bar.querySelector('[data-act="copy"]').addEventListener('click', async () => {
+      msg.textContent = 'コピー中…';
+      try {
+        if (!navigator.clipboard || !window.ClipboardItem) throw new Error('no');
+        await navigator.clipboard.write([new ClipboardItem({ 'image/png': pngBlob(img) })]);
+        msg.textContent = 'コピーしました。そのまま貼り付けられます';
+      } catch (e) { msg.textContent = 'コピーできませんでした。「画像を保存」か、画像を長押しして保存してください'; }
+    });
+    bar.querySelector('[data-act="save"]').addEventListener('click', async () => {
+      try {
+        const res = await fetch(img.currentSrc || img.src); const b = await res.blob();
+        const filename = nameOf(img) + (b.type === 'image/png' ? '.png' : '.jpg');
+        const dl = window.claude && window.claude.use ? await window.claude.use('downloads') : null;
+        if (!dl) { msg.textContent = '画像を長押しして保存してください'; return; }
+        await dl.save({ filename, data: b }); msg.textContent = '保存しました';
+      } catch (e) { msg.textContent = e && e.code === 'declined' ? '保存をやめました' : '保存できませんでした。画像を長押しして保存してください'; }
+    });
+  });
+})();
+</script>
