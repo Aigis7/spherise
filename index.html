@@ -430,6 +430,14 @@ body.in-game .modal .btn:focus-visible{outline:2px solid #ffd27a;outline-offset:
 .card .plate{border-top:2px solid var(--cc,transparent)}
 .cdot{display:inline-block;width:.8em;height:.8em;border-radius:50%;background:var(--cc);vertical-align:-.05em;margin-right:4px;box-shadow:0 0 0 1px rgb(255 255 255 / .5)}
 .ldrpick{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+.diffpick{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+@media (max-width:520px){.diffpick{grid-template-columns:1fr}}
+.diffpick button{all:unset;box-sizing:border-box;cursor:pointer;display:grid;gap:2px;padding:10px 12px;border-radius:12px;border:1px solid rgb(255 255 255 / .22);background:rgb(255 255 255 / .05);color:#eef1f8;min-width:0}
+.diffpick button b{font-family:var(--f-display);font-weight:400;font-size:1rem;letter-spacing:.06em}
+.diffpick button small{font-size:.7rem;color:#c2c8d8;line-height:1.4}
+.diffpick button span{font-size:.7rem;color:#ffd27a;font-weight:700}
+.diffpick button.sel{border-color:#ffd27a;background:rgb(255 210 122 / .12);box-shadow:0 0 0 2px #ffd27a,0 0 14px rgb(255 210 122 / .35)}
+.diffpick button:focus-visible{outline:2px solid #ffd27a;outline-offset:2px}
 .ldrpick button{all:unset;cursor:pointer;display:grid;justify-items:center;gap:4px;font-size:.72rem;color:#c2c8d8}
 .ldrpick .lp{position:relative;width:64px;height:64px;border-radius:50%;overflow:hidden;border:2px solid color-mix(in srgb,var(--lc) 70%,#fff);background:#05060b}
 .ldrpick .lp .ldr-svg{width:100%;height:100%;display:block}
@@ -965,7 +973,7 @@ body.drag-reserve @media (prefers-reduced-motion: reduce){.pile.reserve.hot .sta
     <p class="lead">自分のデッキと、相手（CPU）のデッキを選んでください。</p>
     <div class="btcols">
       <div><h3>自分のデッキ</h3><div class="tiles" id="btMine"></div><div id="btLeader"></div></div>
-      <div><h3>相手のデッキ</h3><div class="tiles" id="btCpu"></div></div>
+      <div><h3>相手のデッキ</h3><div class="tiles" id="btCpu"></div><div id="btDiff"></div></div>
     </div>
     <div class="btstart"><button class="sbtn end" type="button" id="btnNew">対戦開始</button></div>
     <select id="selMe" hidden aria-hidden="true"></select><select id="selCpu" hidden aria-hidden="true"></select>
@@ -1682,8 +1690,10 @@ function bjAuto(p) {
   while (true) {
     const ms = sumCost(st.mine);
     if (st.saved || ms >= 7) break;
-    const limit = boardHas(p, 'bustSave') && !p.tf.bustSave ? 5 : 4;
-    if (ms > limit) break;
+    if (p.diff === 'easy' || !p.isAI) {
+      const limit = boardHas(p, 'bustSave') && !p.tf.bustSave ? 5 : 4;
+      if (ms > limit) break;
+    } else if (!bjShouldHit(p, st)) break;
     if (bjHit(st) == null) break;
   }
   bjHouse(st);
@@ -1815,7 +1825,8 @@ function doStep(g, p, src, s, chosen, opt) {
   if (s.action === 'peek') {
     const k = Math.min(n, p.deck.length);
     const order = opt && opt.peeks && opt.peeks.length ? opt.peeks.shift() : null;
-    if (order && order.length === k) { p.deck.splice(p.deck.length - k, k); p.deck.push(...order.slice().reverse()); log(g, `${p.name}が山札の上${k}枚を並べ替えた`); }
+    const ord = order && order.length === k ? order : (p.isAI && p.diff !== 'easy' && k > 1 ? aiPeekOrder(g, p, k) : null);
+    if (ord && ord.length === k) { p.deck.splice(p.deck.length - k, k); p.deck.push(...ord.slice().reverse()); log(g, `${p.name}が山札の上${k}枚を並べ替えた`); }
     else log(g, `${p.name}が山札の上${k}枚を見た`);
     return;
   }
@@ -1962,12 +1973,12 @@ async function doAttack(g, p, a, target) {
   else fight(g, a, target.u, false);
   cleanup(g);
 }
-function newGame({ decks, ai, sim }) {
+function newGame({ decks, ai, sim, diffs }) {
   compile();
   const g = { sim: !!sim, players: [], turnNo: 1, over: false, winner: null, reason: '', log: [], ui: {}, phase: 'mulligan', busy: false };
   for (let i = 0; i < 2; i++) {
     g.players.push({
-      idx: i, name: ai[i] ? (sim ? ['A', 'B'][i] : 'CPU') : 'あなた', isAI: ai[i], deckId: decks[i], deck: shuffle(deckCards(decks[i])), hand: [], board: [null, null, null, null, null], reserve: [], grave: [], life: 25, lifeDraws: 0,
+      idx: i, name: ai[i] ? (sim ? ['A', 'B'][i] : 'CPU') : 'あなた', isAI: ai[i], diff: (diffs && diffs[i]) || 'normal', deckId: decks[i], deck: shuffle(deckCards(decks[i])), hand: [], board: [null, null, null, null, null], reserve: [], grave: [], life: 25, lifeDraws: 0,
       field: { id: deckField(decks[i]), lv: 1, pending: false, parts: new Set(), count: 0, season: 0, changes: 0, laps: 0 }, tf: {}, bonus: false, noBlock: false, reserveLeft: 0,
     });
   }
@@ -2013,6 +2024,7 @@ async function runTurn(g) {
     const pk = (stageOf(p).effects || []).filter(e => e.trigger === 'start' && !(e.lv && p.field.lv < e.lv)).flatMap(e => e.steps || []).filter(s => s.action === 'peek');
     if (pk.length) { render(); fopt = { peeks: [] }; for (const s of pk) fopt.peeks.push(await humanPeek(g, p, s.n ?? 1)); }
   }
+  p.tf.preDraw = g.turnNo > 1;
   fieldTrigger(g, p, 'start', null, null, fopt); cleanup(g);
   for (const inst of [...p.board]) {
     if (g.over) return;
@@ -2024,6 +2036,7 @@ async function runTurn(g) {
     }
   }
   if (g.over) return;
+  p.tf.preDraw = false;
   if (g.turnNo > 1) draw(g, p, 1);
   if (g.over) return;
   if (p.isAI) {
@@ -2202,6 +2215,25 @@ function aiReserve(g, p) {
 }
 async function aiMain(g, p) {
   for (let guard = 0; guard < 20 && !g.over; guard++) {
+    if (p.diff === 'hard' && HARD.main) {
+      const hb = await hardPick(g, p);
+      if (!hb) return;
+      play(g, p, hb.inst, hb.t, { grave: bestGrave(p) }); await drainGfx(g); rerender(g); await W(g, 650);
+      continue;
+    }
+    if (p.diff === 'easy') {
+      if (Math.random() < 0.2) return;
+      if (Math.random() < 0.4) {
+        const pool = p.hand.filter(i => canPlay(g, p, i));
+        if (pool.length) {
+          const inst = pool[Math.floor(Math.random() * pool.length)], c = C[inst.cid];
+          const ts = wantsTarget(g, p, c) ? targets(g, p, c.target) : [null];
+          const t = ts[Math.floor(Math.random() * ts.length)];
+          play(g, p, inst, t, { grave: bestGrave(p) }); await drainGfx(g); rerender(g); await W(g, 650);
+          continue;
+        }
+      }
+    }
     let best = null, bv = 1;
     for (const inst of p.hand) {
       if (!canPlay(g, p, inst)) continue;
@@ -2215,7 +2247,16 @@ async function aiMain(g, p) {
 }
 async function aiAttack(g, p) {
   const o = other(g, p);
+  if (p.diff === 'hard' && HARD.attack) {
+    for (let guard = 0; guard < 12 && !g.over; guard++) {
+      const pick = await hardAttackPick(g, p);
+      if (!pick) return;
+      await doAttack(g, p, pick.a, pick.target); rerender(g); await W(g, 700);
+    }
+    return;
+  }
   for (let guard = 0; guard < 12 && !g.over; guard++) {
+    if (p.diff === 'easy' && Math.random() < 0.3) return;
     const ready = units(p).filter(u => !u.sleep && !u.sick && getAtk(g, u) > 0).sort((x, y) => getAtk(g, y) - getAtk(g, x));
     if (!ready.length) return;
     const blockers = units(o).filter(u => !u.sleep);
@@ -2237,6 +2278,8 @@ async function aiAttack(g, p) {
   }
 }
 function aiBlock(g, o, att, target, blockers) {
+  if (o.diff === 'hard' && HARD.block) return hardBlock(g, o, att, target, blockers);
+  if (o.diff === 'easy' && Math.random() < 0.4) return Math.random() < 0.5 ? null : blockers[Math.floor(Math.random() * blockers.length)];
   const atk = getAtk(g, att);
   const kills = b => getAtk(g, b) >= rem(att);
   const survives = b => rem(b) > atk;
@@ -2249,6 +2292,145 @@ function aiBlock(g, o, att, target, blockers) {
   if (b && (C[b.cid].cost <= C[att.cid].cost || lethal)) return b;
   if (lethal) return blockers.sort((x, y) => C[x.cid].cost - C[y.cid].cost)[0];
   return null;
+}
+
+/* ---------- CPUの頭（難易度） ---------- */
+const HARD = { main: true, attack: true, block: false, S: 3, opp: true };
+/* ブラックジャック：山札に残っているカードの数字から、引いたほうが勝ちやすいかを見積もる（並び順は見ない） */
+function bjShouldHit(p, st) {
+  const pool = p.deck.slice(), stand = dealerStand(p), ms = sumCost(st.mine), save = boardHas(p, 'bustSave') && !p.tf.bustSave && !st.saved;
+  if (!pool.length) return false;
+  const score = (mine, deck) => { let hs = 0, i = deck.length - 1; while (hs < stand && i >= 0) hs += cardCost(deck[i--]); if (mine > 7) return 0; if (hs > 7 || mine > hs) return mine === 7 ? 1.25 : 1; return mine === hs ? (stageOf(p).drawWins ? 1 : 0.4) : 0; };
+  let sStand = 0, sHit = 0; const N = 40;
+  for (let k = 0; k < N; k++) {
+    const d = shuffle(pool.slice());
+    sStand += score(ms, d);
+    const c = d.pop(); let m = ms + cardCost(c);
+    if (m > 7 && save) m = ms;
+    sHit += score(m, d);
+  }
+  return sHit > sStand;
+}
+/* 山札の上を見たあとの並べ替え：次の勝負（ポーカー・ブラックジャック）と次に引くカードがよくなる順番を選ぶ */
+function aiPeekOrder(g, p, k) {
+  const top = p.deck.slice(-k).reverse();
+  const skip = p.tf && p.tf.preDraw ? 1 : 0;
+  const mana = avail(p) + (skip ? 1 : 0) + 1;
+  const hand = p.hand.map(i => C[i.cid]);
+  const gambles = hand.filter(c => c.cost <= mana).flatMap(c => playSteps(c).filter(s => s.action === 'gamble').map(s => s.game));
+  const wantPoker = gambles.includes('poker'), wantBJ = gambles.includes('blackjack');
+  const perms = a => a.length <= 1 ? [a] : a.flatMap((x, i) => perms([...a.slice(0, i), ...a.slice(i + 1)]).map(r => [x, ...r]));
+  let best = top, bs = -1e9;
+  for (const o of perms(top)) {
+    let s = 0;
+    const seq = o.slice(skip);
+    if (skip) { const c = C[o[0]]; s += c && c.cost <= mana ? 3 + c.cost * 0.5 : 0; }
+    if (wantPoker && seq.length >= 3) { const r = pokerRank(seq.slice(0, 3).map(cardCost)); s += { three: 12, straight: 8, pair: 4, none: 0 }[r]; }
+    if (wantBJ) { let t = 0; for (let i = 0; i < seq.length; i++) { t += cardCost(seq[i]); if (t === 7) { s += 9 - i; break; } if (t > 7) { s -= 2; break; } } }
+    if (!wantPoker && !wantBJ && !skip && seq.length) { const c = C[seq[0]]; s += c && c.cost <= mana ? 2 + c.cost * 0.4 : -1; }
+    if (s > bs) { bs = s; best = o; }
+  }
+  return best;
+}
+/* 盤面のよさ（むずかしいの先読みで使う） */
+function evalState(g, p) {
+  const o = other(g, p);
+  if (g.over) return g.winner === p.idx ? 10000 : g.winner == null ? 0 : -10000;
+  const uv = (pl) => units(pl).reduce((a, u) => a + 2 + getAtk(g, u) * 1.6 + rem(u) * 1.1 + (C[u.cid].effects.length ? 1 : 0), 0) + objects(pl).filter(x => !C[x.cid].fixed).length * 3;
+  const lifeV = l => l * 1.2 + (l <= 10 ? (l - 10) * 1.5 : 0) + (l <= 5 ? (l - 5) * 3 : 0);
+  let v = lifeV(p.life) - lifeV(o.life) * 1.15;
+  v += uv(p) - uv(o);
+  v += p.hand.length * 1.4 - o.hand.length * 1.0;
+  v += (p.field.lv - o.field.lv) * 5 + (p.field.pending ? 2.5 : 0) - (o.field.pending ? 2 : 0);
+  if (isCycle(p)) v += (p.field.changes || 0) * 0.6;
+  { const c = condOf(p); if (c && !p.field.pending) v += Math.min(1, condValue(p) / c.n) * 3; }
+  v -= avail(p) * 0.6;
+  return v;
+}
+/* 対戦を丸ごと写す（先読み用）。写した方は画面に出さず、どちらもCPUとして動く */
+function cloneGame(g, me) {
+  const tr = g.turnResolve, fx = g.fxq, lg = g.log;
+  g.turnResolve = null; g.fxq = []; g.log = [];
+  let c;
+  try { c = structuredClone(g); } finally { g.turnResolve = tr; g.fxq = fx; g.log = lg; }
+  c.sim = true; c.ui = {}; c.players.forEach(pl => { pl.isAI = true; pl.diff = 'normal'; });
+  /* 見えないものは見ない：山札の順番はシャッフルし、ほかの人の手札は山札に混ぜて引き直したことにする */
+  if (me != null) c.players.forEach(pl => {
+    if (pl.idx !== me) { const n = pl.hand.length; for (const x of pl.hand) pl.deck.push(x.cid); pl.hand = []; shuffle(pl.deck); for (let i = 0; i < n && pl.deck.length; i++) pl.hand.push(mk(pl.deck.pop(), pl.idx)); }
+    else shuffle(pl.deck);
+  });
+  return c;
+}
+const findIn = (g, uid) => { for (const pl of g.players) { for (const x of pl.board) if (x && x.uid === uid) return x; for (const x of pl.hand) if (x.uid === uid) return x; } return null; };
+/* むずかしい：出す手を1つずつ頭の中で試して、そのあとの盤面がいちばんよくなる手を選ぶ */
+async function hardPick(g, p) {
+  const opts = [];
+  for (const inst of p.hand) {
+    if (!canPlay(g, p, inst)) continue;
+    const c = C[inst.cid];
+    const ts = wantsTarget(g, p, c) ? targets(g, p, c.target) : [null];
+    for (const t of ts) opts.push({ inst, t });
+  }
+  if (!opts.length) return null;
+  /* そのカードを出したあと、ターンの終わりまで「ふつう」の考え方で進めてみて、終わった時の盤面でくらべる */
+  const roll = async (op) => {
+    let sum = 0;
+    for (let k = 0; k < HARD.S; k++) {
+      const c = cloneGame(g, p.idx), cp = c.players[p.idx];
+      if (op) {
+        const ci = findIn(c, op.inst.uid), ct = op.t ? findIn(c, op.t.uid) : null;
+        if (!ci) { sum -= 50; continue; }
+        play(c, cp, ci, ct, { grave: bestGrave(cp) });
+        if (!c.over) await aiMain(c, cp);
+      }
+      if (!c.over) await aiAttack(c, cp);
+      if (op && !c.over) await aiMain(c, cp);
+      if (HARD.opp && !c.over) { c.cur = 1 - p.idx; c.turnNo++; await runTurn(c); }
+      sum += evalState(c, cp);
+    }
+    return sum / HARD.S;
+  };
+  let best = null, bv = await roll(null);
+  for (const op of opts) { const v = await roll(op); if (v > bv) { bv = v; best = op; } }
+  return best;
+}
+async function hardAttackPick(g, p) {
+  const o = other(g, p);
+  const ready = units(p).filter(u => !u.sleep && !u.sick && getAtk(g, u) > 0);
+  if (!ready.length) return null;
+  const base = evalState(g, p);
+  let best = null, bv = base + 0.3;
+  for (const a of ready) {
+    const tgts = [{ kind: 'life' }, ...units(o).filter(u => u.sleep).map(u => ({ kind: 'unit', u }))];
+    for (const tg of tgts) {
+      let sum = 0; const S = 2;
+      for (let k = 0; k < S; k++) {
+        const c = cloneGame(g, p.idx), cp = c.players[p.idx], ca = findIn(c, a.uid);
+        const ct = tg.kind === 'life' ? tg : { kind: 'unit', u: findIn(c, tg.u.uid) };
+        if (!ca || (ct.kind === 'unit' && !ct.u)) continue;
+        await doAttack(c, cp, ca, ct);
+        sum += evalState(c, cp);
+      }
+      const v = sum / 2;
+      if (v > bv) { bv = v; best = { a, target: tg }; }
+    }
+  }
+  return best;
+}
+function hardBlock(g, o, att, target, blockers) {
+  const atk = getAtk(g, att);
+  let best = null, bv = -1e9;
+  for (const b of [null, ...blockers]) {
+    const c = cloneGame(g, o.idx), co = c.players[o.idx], ca = findIn(c, att.uid);
+    if (!ca) return aiBlock(g, o, att, target, blockers);
+    if (b) { const cb = findIn(c, b.uid); cb.sleep = true; fight(c, ca, cb, true); }
+    else if (target.kind === 'life') dmgPlayer(c, co, atk);
+    else { const cu = findIn(c, target.u.uid); if (cu) fight(c, ca, cu, false); }
+    cleanup(c);
+    const v = evalState(c, co) + (b ? -0.5 : 0);
+    if (v > bv) { bv = v; best = b; }
+  }
+  return best;
 }
 
 /* ================= 6. 対戦画面 ================= */
@@ -3071,7 +3253,8 @@ async function startGame() {
   closeModal(); closeSheet();
   const a = $('#selMe').value, b = $('#selCpu').value;
   if (!a || !b) return;
-  const g = newGame({ decks: [a, b], ai: [false, true] });
+  const diff = getDiff();
+  const g = newGame({ decks: [a, b], ai: [false, true], diffs: [null, diff] });
   G = g; LAST.life = [null, null]; LAST.dmg = {};
   rememberStage(g.players[0]);
   render();
@@ -3088,7 +3271,7 @@ async function startGame() {
   let pt = 0;
   if (g.winner != null) {
     saveResult({ first: g.first === 0, won: g.winner === 0, me: a, cpu: b });
-    pt = g.winner === 0 ? 100 : 30;
+    pt = g.winner === 0 ? DIFFS[diff].win : DIFFS[diff].lose;
     await awardPoints(pt);
     log(g, `${pt}ポイント手に入れた（合計${PLAYER.points}）`, 't'); render();
   }
@@ -4028,6 +4211,15 @@ function deckTileHTML(id, d, kind, sel, attr) {
   const st = cv ? artStyle(cv) : artStyle({ set: f.set, name: d.name });
   return `<button class="dtile${sel ? ' sel' : ''}" type="button" ${attr}="${esc(id)}" aria-pressed="${sel ? 'true' : 'false'}"><span class="dcover" style="${st}"></span><span class="dinfo"><b>${esc(d.name || '名前なし')}</b><small><span class="cdot" style="--cc:${COLORS[fieldColor(f)]}"></span>${kind}・${esc(f.name || '領域なし')}・${deckTotal(d)}枚</small></span></button>`;
 }
+/* 相手（CPU）の強さ */
+const DIFFS = {
+  easy: { name: 'やさしい', desc: 'ときどき迷う。いちばんいい手を選ばないこともある', win: 50, lose: 15 },
+  normal: { name: 'ふつう', desc: '手札と盤面を見て、いい手を選ぶ', win: 100, lose: 30 },
+  hard: { name: 'むずかしい', desc: '出す手を頭の中で試してから選ぶ', win: 150, lose: 45 },
+};
+const DIFFKEY = 'sphere-diff';
+function getDiff() { try { const v = localStorage.getItem(DIFFKEY); if (DIFFS[v]) return v; } catch (e) { } return 'normal'; }
+function setDiff(v) { if (!DIFFS[v]) return; try { localStorage.setItem(DIFFKEY, v); } catch (e) { } }
 function renderBattle() {
   const me = $('#selMe').value, cpu = $('#selCpu').value;
   const mine = Object.entries(PLAYER.decks).map(([id, d]) => deckTileHTML(id, d, 'マイデッキ', id === me, 'data-pick-me'));
@@ -4036,11 +4228,15 @@ function renderBattle() {
   { const md = getDeck(me), col = deckColor(md), cur = chosenLeader(col), ids = md ? leadersFor(col) : [];
     $('#btLeader').innerHTML = md ? `<h3>リーダー<small style="font-weight:400;color:#c2c8d8;margin-left:8px">${col}の色</small></h3><div class="ldrpick">${ids.map(id => `<button type="button" data-pick-leader="${id}" class="${id === cur ? 'sel' : ''}" aria-pressed="${id === cur}"><span class="lp" style="--lc:${COLORS[col]}">${leaderArt(id)}</span>${esc(LEADERS[id].name)}</button>`).join('')}</div>` : ''; }
   $('#btCpu').innerHTML = Object.entries(STORE.decks).map(([id, d]) => deckTileHTML(id, d, 'スターター', id === cpu, 'data-pick-cpu')).join('');
+  { const cur = getDiff();
+    $('#btDiff').innerHTML = `<h3>相手の強さ</h3><div class="diffpick" role="radiogroup" aria-label="相手の強さ">${Object.entries(DIFFS).map(([k, d]) => `<button type="button" role="radio" aria-checked="${k === cur}" data-pick-diff="${k}" class="${k === cur ? 'sel' : ''}"><b>${esc(d.name)}</b><small>${esc(d.desc)}</small><span>勝ち ${d.win}pt・負け ${d.lose}pt</span></button>`).join('')}</div>`; }
 }
 $('#view-battle').addEventListener('click', e => {
   const a = e.target.closest('[data-pick-me]'), b = e.target.closest('[data-pick-cpu]');
   if (a) { $('#selMe').value = a.dataset.pickMe; renderBattle(); }
   if (b) { $('#selCpu').value = b.dataset.pickCpu; renderBattle(); }
+  const df = e.target.closest('[data-pick-diff]');
+  if (df) { setDiff(df.dataset.pickDiff); sfx('play'); renderBattle(); }
   const l = e.target.closest('[data-pick-leader]');
   if (l) { setChosenLeader(deckColor(getDeck($('#selMe').value)), l.dataset.pickLeader); sfx('play'); renderBattle(); }
 });
