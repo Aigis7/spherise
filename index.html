@@ -535,8 +535,7 @@ body.drag-reserve [data-drop="reserve"] .stack{box-shadow:0 0 0 3px #ffd27a,0 0 
 
 /* ホーム */
 /* ホーム */
-#view-home{display:grid;grid-template-rows:auto minmax(0,1fr) auto auto auto auto;gap:clamp(4px,1.2dvh,10px);min-height:calc(100dvh - 70px)}
-@media (max-width:600px){body.in-scene #view-home{height:100dvh;min-height:0;padding-top:12px;padding-bottom:8px}}
+
 .hbg{position:absolute;inset:0;z-index:-1;background:center/cover no-repeat;filter:blur(2px) brightness(.6) saturate(1.15);transform:scale(1.05);transition:background-image .6s}
 #view-home::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(70% 55% at 50% 45%,transparent,rgb(4 5 10 / .75))}
 .carousel{position:relative;min-height:min(230px,30dvh);touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none;outline:none}
@@ -561,6 +560,9 @@ body.drag-reserve [data-drop="reserve"] .stack{box-shadow:0 0 0 3px #ffd27a,0 0 
 .hplay small{font-size:.72rem;font-weight:700;opacity:.75}
 .hplay::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 40%,rgb(255 255 255 / .7) 50%,transparent 60%);background-size:260% 100%;background-position:160% 0;animation:csheen 3.6s ease-in-out infinite}
 .hplay:disabled{opacity:.4;cursor:default}
+.hplay.small{padding:10px 18px;width:min(280px,80%)}
+.hplay.small span{font-size:1.05rem}
+.bsph{display:grid;gap:8px;margin:6px 0 18px}
 .hplay:focus-visible{outline:2px solid #fff;outline-offset:3px}
 .mcar{position:relative;min-height:min(130px,15dvh);touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none;outline:none}
 .mcar.dragging .morb{transition:none}
@@ -899,11 +901,8 @@ body.drag-reserve [data-drop="reserve"] .stack{box-shadow:0 0 0 3px #ffd27a,0 0 
       <div class="hstat" id="homeStat"></div>
     </div>
     <div class="hbg" id="homeBg" aria-hidden="true"></div>
-    <div class="carousel" id="homeCar" tabindex="0" role="listbox" aria-label="デッキを選ぶ。左右にスライド"></div>
-    <div class="hpick" id="homePick"></div>
-    <button class="hplay" type="button" id="homePlay"><span>対戦する</span><small>CPUと戦う</small></button>
-    <div class="mcar" id="homeMenu" tabindex="0" role="listbox" aria-label="メニュー。左右にスライドして、真ん中をタップで開く"></div>
-    <div class="mlabel" id="homeMenuLabel"></div>
+    <div class="featured" id="homeFeatured" aria-hidden="true"></div>
+    <div class="hgrid" id="homeGrid"></div>
   </section>
 
   <!-- 対戦の準備 -->
@@ -3689,122 +3688,87 @@ function homeDecks() {
   return mine.concat(st).filter(x => x.d);
 }
 
-/* メニューの球体 */
-const MENU_ORBS = [
-  { go: 'builder', name: 'デッキ', sub: 'デッキを作る', glyph: 'cards', c1: '#ffe7a6', c2: '#b8862a' },
-  { go: 'collection', name: 'コレクション', sub: '集めたカードを見る', glyph: 'star', c1: '#e2c6ff', c2: '#6b3fb0' },
-  { go: 'packs', name: 'パック', sub: '準備中', glyph: 'burst', c1: '#ffc0b0', c2: '#b3343a', soon: true },
-  { go: 'settings', name: '設定', sub: '効果音・データ', glyph: 'gear', c1: '#e6ecf8', c2: '#5a6680' },
-];
-let MENU_SEL = 1;
-function renderMenuOrbs() {
-  const g = k => `<svg viewBox="0 0 100 60" aria-hidden="true">${GLYPH[k]}</svg>`;
-  $('#homeMenu').innerHTML = MENU_ORBS.map((m, i) => `<button type="button" class="morb${m.soon ? ' soon' : ''}" role="option" data-mi="${i}" aria-selected="${i === MENU_SEL}" aria-label="${m.name}" style="--c1:${m.c1};--c2:${m.c2}">${g(m.glyph)}<span class="sph-gloss"></span></button>`).join('');
-  layoutMenu(0);
-  const m = MENU_ORBS[MENU_SEL];
-  $('#homeMenuLabel').innerHTML = `<b>${m.name}</b><small>${m.soon ? '<span class="tag">準備中</span>' : ''}${m.sub}・タップで開く</small>`;
+
+/* デッキ作り：デッキを球体で選ぶ */
+let BSEL = null;
+function builderDecks() {
+  const mine = Object.entries(PLAYER.decks).map(([id, d]) => ({ id, d, kind: 'マイデッキ', mine: true }));
+  const st = Object.entries(STORE.decks).map(([id, d]) => ({ id, d, kind: 'スターター', mine: false }));
+  return mine.concat(st).filter(x => x.d);
 }
-function layoutMenu(drag) {
-  const items = [...document.querySelectorAll('#homeMenu .morb')];
-  const w = $('#homeMenu').clientWidth || 360, step = Math.min(120, w * 0.27);
-  items.forEach((el, i) => {
-    const o = i - MENU_SEL + drag / step, a = Math.abs(o);
-    el.style.transform = `translate(-50%,-50%) translateX(${o * step}px) scale(${Math.max(0.45, 1 - a * 0.3)})`;
-    el.style.opacity = a > 2.4 ? 0 : Math.max(0.25, 1 - a * 0.35);
-    el.style.zIndex = String(10 - Math.round(a * 2));
-    el.classList.toggle('on', i === MENU_SEL && drag === 0);
-    el.tabIndex = -1;
-  });
-}
-function menuSelect(i) { MENU_SEL = (i + MENU_ORBS.length) % MENU_ORBS.length; sfx('play'); renderMenuOrbs(); }
-function menuOpen() { const m = MENU_ORBS[MENU_SEL]; setTab(m.go); }
-(() => {
-  const car = $('#homeMenu');
-  let d = null;
-  car.addEventListener('pointerdown', e => { if (e.button > 0) return; d = { x: e.clientX, id: e.pointerId, moved: false }; try { car.setPointerCapture(e.pointerId); } catch (er) { } car.classList.add('dragging'); });
-  car.addEventListener('pointermove', e => { if (!d || e.pointerId !== d.id) return; const dx = e.clientX - d.x; if (Math.abs(dx) > 6) d.moved = true; layoutMenu(dx); });
-  const end = e => {
-    if (!d || e.pointerId !== d.id) return;
-    const dx = e.clientX - d.x, moved = d.moved; d = null; car.classList.remove('dragging');
-    if (moved && Math.abs(dx) > 30) { menuSelect(MENU_SEL + (dx < 0 ? 1 : -1)); return; }
-    if (!moved) {
-      const el = document.elementFromPoint(e.clientX, e.clientY), b = el && el.closest('[data-mi]');
-      if (b) { const i = +b.dataset.mi; if (i === MENU_SEL) { menuOpen(); return; } menuSelect(i); return; }
-    }
-    layoutMenu(0);
-  };
-  car.addEventListener('pointerup', end); car.addEventListener('pointercancel', end);
-  car.addEventListener('keydown', e => { if (e.key === 'ArrowRight') { e.preventDefault(); menuSelect(MENU_SEL + 1); } if (e.key === 'ArrowLeft') { e.preventDefault(); menuSelect(MENU_SEL - 1); } if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); menuOpen(); } });
-  addEventListener('resize', () => { if (activeTab === 'home') layoutMenu(0); });
-})();
-let HOME_SEL = null;
-function renderHome() {
-  $('#homeStat').innerHTML = `<span class="chip2">ポイント <b>${PLAYER.points}</b></span><span class="chip2">カード <b>${kinds()}</b> / ${Object.keys(STORE.cards).filter(k => !STORE.cards[k].token).length}種類</span>`;
-  paintOrbs($('#homeOrbs'), 6);
-  /* 背景：最後に遊んだ領域 */
-  let s = null; try { s = JSON.parse(localStorage.getItem(LASTKEY)); } catch (e) { }
-  let f = s && STORE.fields[s.field];
-  if (!f) { const d0 = homeDecks()[0]; f = d0 && STORE.fields[d0.d.field]; s = { lv: 1 }; }
-  const st = f && (f.stages || [])[Math.min(3, Math.max(1, s.lv || 1)) - 1];
-  const bg = st ? stageImageUrl(st) : null;
-  $('#homeBg').style.backgroundImage = bg ? `url(${bg})` : '';
-  /* 球体のデッキ選び */
-  const list = homeDecks();
-  if (HOME_SEL == null) { try { HOME_SEL = localStorage.getItem('sphere-home-deck'); } catch (e) { } }
-  let idx = list.findIndex(x => x.id === HOME_SEL); if (idx < 0) idx = 0;
-  HOME_SEL = list[idx] ? list[idx].id : null;
-  $('#homeCar').innerHTML = list.map((x, i) => {
+function bcarHTML() {
+  const list = builderDecks();
+  if (BSEL == null) { try { BSEL = localStorage.getItem('sphere-builder-deck'); } catch (e) { } }
+  let idx = list.findIndex(x => x.id === BSEL); if (idx < 0) idx = 0;
+  BSEL = list[idx] ? list[idx].id : null;
+  const cur = list[idx];
+  const orbs = list.map((x, i) => {
     const col = COLORS[deckColor(x.d)] || '#9aa3b8', cv = coverCard(x.d), img = cv ? imageUrl(cv) : null;
     return `<button type="button" class="sph" role="option" data-hi="${i}" aria-selected="${i === idx}" aria-label="${esc(x.d.name || '')}" style="--lc:${col}">${img ? `<span class="sph-img" style="background-image:url(${img})"></span>` : ''}<span class="sph-gloss"></span><span class="sph-ring"></span></button>`;
-  }).join('') || '<p class="note">デッキがありません。</p>';
-  layoutCar(idx, 0);
-  const cur = list[idx];
-  $('#homePick').innerHTML = cur ? `<b>${esc(cur.d.name || '')}</b><small><span class="cdot" style="--cc:${COLORS[deckColor(cur.d)]}"></span>${cur.kind}・${esc((STORE.fields[cur.d.field] || {}).name || '')}</small><span class="hdots">${list.map((_, i) => `<i class="${i === idx ? 'on' : ''}"></i>`).join('')}</span>` : '';
-  $('#homePlay').disabled = !cur;
-  renderMenuOrbs();
+  }).join('');
+  const pick = cur ? `<b>${esc(cur.d.name || '')}</b><small><span class="cdot" style="--cc:${COLORS[deckColor(cur.d)]}"></span>${cur.kind}・${esc((STORE.fields[cur.d.field] || {}).name || '')}・${deckTotal(cur.d)}枚</small><span class="hdots">${list.map((_, i) => `<i class="${i === idx ? 'on' : ''}"></i>`).join('')}</span>` : '';
+  const act = cur ? (cur.mine ? `<button class="hplay small" type="button" data-bopen="${esc(cur.id)}"><span>このデッキを編集</span></button>` : `<button class="hplay small" type="button" data-bcopy="${esc(cur.id)}"><span>これをもとに作る</span></button>`) : '';
+  return `<div class="bsph"><div class="carousel" id="bCar" tabindex="0" role="listbox" aria-label="デッキを選ぶ。左右にスライド">${orbs}</div><div class="hpick">${pick}</div>${act}</div>`;
 }
 function layoutCar(idx, drag) {
-  const items = [...document.querySelectorAll('#homeCar .sph')];
-  const w = $('#homeCar').clientWidth || 360, step = Math.min(170, w * 0.42);
+  const car = $('#bCar'); if (!car) return;
+  const items = [...car.querySelectorAll('.sph')];
+  const w = car.clientWidth || 360, step = Math.min(170, w * 0.42);
   items.forEach((el, i) => {
     const o = i - idx + drag / step, a = Math.abs(o);
-    const sc = Math.max(0.35, 1 - a * 0.38), op = a > 2.2 ? 0 : Math.max(0.15, 1 - a * 0.45);
-    el.style.transform = `translate(-50%,-50%) translateX(${o * step}px) scale(${sc})`;
-    el.style.opacity = op; el.style.zIndex = String(10 - Math.round(a * 2));
+    el.style.transform = `translate(-50%,-50%) translateX(${o * step}px) scale(${Math.max(0.35, 1 - a * 0.38)})`;
+    el.style.opacity = a > 2.2 ? 0 : Math.max(0.15, 1 - a * 0.45); el.style.zIndex = String(10 - Math.round(a * 2));
     el.style.filter = a > 0.5 ? `brightness(${Math.max(0.45, 1 - a * 0.3)}) saturate(.8)` : '';
-    el.classList.toggle('on', i === idx && drag === 0);
-    el.tabIndex = -1;
+    el.classList.toggle('on', i === idx && drag === 0); el.tabIndex = -1;
   });
 }
-function homeSelect(i) {
-  const list = homeDecks(); if (!list.length) return;
-  i = (i + list.length) % list.length;
-  HOME_SEL = list[i].id; try { localStorage.setItem('sphere-home-deck', HOME_SEL); } catch (e) { }
-  sfx('play'); renderHome();
+function bSelect(i) {
+  const list = builderDecks(); if (!list.length) return;
+  i = (i + list.length) % list.length; BSEL = list[i].id;
+  try { localStorage.setItem('sphere-builder-deck', BSEL); } catch (e) { }
+  sfx('play'); renderBuilder();
 }
+function bIdx() { const list = builderDecks(); return Math.max(0, list.findIndex(x => x.id === BSEL)); }
 (() => {
-  const car = $('#homeCar');
+  const box = $('#builder');
   let d = null;
-  car.addEventListener('pointerdown', e => { if (e.button > 0) return; d = { x: e.clientX, id: e.pointerId, moved: false }; try { car.setPointerCapture(e.pointerId); } catch (er) { } car.classList.add('dragging'); });
-  car.addEventListener('pointermove', e => { if (!d || e.pointerId !== d.id) return; const dx = e.clientX - d.x; if (Math.abs(dx) > 6) d.moved = true; const list = homeDecks(), idx = Math.max(0, list.findIndex(x => x.id === HOME_SEL)); layoutCar(idx, dx); });
+  box.addEventListener('pointerdown', e => { const car = e.target.closest('#bCar'); if (!car || e.button > 0) return; d = { x: e.clientX, id: e.pointerId, moved: false, car }; try { car.setPointerCapture(e.pointerId); } catch (er) { } car.classList.add('dragging'); });
+  box.addEventListener('pointermove', e => { if (!d || e.pointerId !== d.id) return; const dx = e.clientX - d.x; if (Math.abs(dx) > 6) d.moved = true; layoutCar(bIdx(), dx); });
   const end = e => {
     if (!d || e.pointerId !== d.id) return;
-    const dx = e.clientX - d.x, moved = d.moved; d = null; car.classList.remove('dragging');
-    const list = homeDecks(), idx = Math.max(0, list.findIndex(x => x.id === HOME_SEL));
-    if (moved && Math.abs(dx) > 40) { homeSelect(idx + (dx < 0 ? 1 : -1)); return; }
-    if (!moved) { const b = e.target.closest && e.target.closest('[data-hi]'); if (b && +b.dataset.hi !== idx) { homeSelect(+b.dataset.hi); return; } }
-    layoutCar(idx, 0);
+    const dx = e.clientX - d.x, moved = d.moved; d.car.classList.remove('dragging'); d = null;
+    if (moved && Math.abs(dx) > 40) { bSelect(bIdx() + (dx < 0 ? 1 : -1)); return; }
+    if (!moved) { const el = document.elementFromPoint(e.clientX, e.clientY), b = el && el.closest('[data-hi]'); if (b && +b.dataset.hi !== bIdx()) { bSelect(+b.dataset.hi); return; } }
+    layoutCar(bIdx(), 0);
   };
-  car.addEventListener('pointerup', end); car.addEventListener('pointercancel', end);
-  car.addEventListener('keydown', e => { const list = homeDecks(), idx = Math.max(0, list.findIndex(x => x.id === HOME_SEL)); if (e.key === 'ArrowRight') { e.preventDefault(); homeSelect(idx + 1); } if (e.key === 'ArrowLeft') { e.preventDefault(); homeSelect(idx - 1); } if (e.key === 'Enter') $('#homePlay').click(); });
-  addEventListener('resize', () => { if (activeTab === 'home') { const list = homeDecks(); layoutCar(Math.max(0, list.findIndex(x => x.id === HOME_SEL)), 0); } });
-  $('#homePlay').addEventListener('click', () => {
-    if (!HOME_SEL) return;
-    $('#selMe').value = HOME_SEL;
-    const cpu = $('#selCpu'); if (!cpu.value || !STORE.decks[cpu.value]) { const others = Object.keys(STORE.decks).filter(k => k !== HOME_SEL); cpu.value = others[Math.floor(Math.random() * others.length)] || Object.keys(STORE.decks)[0]; }
-    setTab('game'); startGame();
-  });
+  box.addEventListener('pointerup', end); box.addEventListener('pointercancel', end);
+  box.addEventListener('keydown', e => { if (!e.target.closest('#bCar')) return; if (e.key === 'ArrowRight') { e.preventDefault(); bSelect(bIdx() + 1); } if (e.key === 'ArrowLeft') { e.preventDefault(); bSelect(bIdx() - 1); } });
+  addEventListener('resize', () => { if (activeTab === 'builder' && !BUILD) layoutCar(bIdx(), 0); });
 })();
+function renderHome() {
+  $('#homeStat').innerHTML = `<span class="chip2">ポイント <b>${PLAYER.points}</b></span><span class="chip2">カード <b>${kinds()}</b> / ${Object.keys(STORE.cards).length}種類</span><span class="chip2">マイデッキ <b>${Object.keys(PLAYER.decks).length}</b></span>`;
+  paintOrbs($('#homeOrbs'), 6);
+  /* 背景：最後に遊んだ領域 */
+  { let s = null; try { s = JSON.parse(localStorage.getItem(LASTKEY)); } catch (e) { }
+    let f = s && STORE.fields[s.field];
+    if (!f) { const d0 = Object.values(STORE.decks)[0]; f = d0 && STORE.fields[d0.field]; s = { lv: 1 }; }
+    const st = f && (f.stages || [])[Math.min(3, Math.max(1, s.lv || 1)) - 1];
+    const bg = st ? stageImageUrl(st) : null;
+    $('#homeBg').style.backgroundImage = bg ? `url(${bg})` : ''; }
+  const pick = [], seen = new Set();
+  for (const d of Object.values(STORE.decks)) { const c = coverCard(d); if (c && !seen.has(c.name)) { pick.push(c); seen.add(c.name); } }
+  const extra = Object.values(STORE.cards).filter(c => imageUrl(c) && c.type === 'unit' && !seen.has(c.name)).sort((a, b) => b.cost - a.cost);
+  const art = pick.concat(extra).slice(0, 5);
+  const rot = [-10, -5, 0, 5, 10], ys = [10, 3, 0, 3, 10];
+  $('#homeFeatured').innerHTML = art.map((c, i) => `<span style="${artStyle(c)};--r:${rot[i] || 0}deg;--y:${ys[i] || 0}px">${imageUrl(c) ? '' : artInner(c)}</span>`).join('');
+  const g = k => `<svg viewBox="0 0 100 60" aria-hidden="true">${GLYPH[k]}</svg>`;
+  $('#homeGrid').innerHTML = `
+    <button class="htile main" type="button" data-go="battle">${g('sword')}<b>対戦する</b><small>デッキを選んで、CPUと戦う</small></button>
+    <button class="htile" type="button" data-go="builder">${g('cards')}<b>デッキを作る</b><small>持っているカードで組む</small></button>
+    <button class="htile" type="button" data-go="collection">${g('star')}<b>コレクション</b><small>集めたカードを見る</small></button>
+    <button class="htile soon" type="button" data-go="packs"><span class="tag">準備中</span>${g('burst')}<b>パック</b><small>第一弾を準備中</small></button>
+    <button class="htile" type="button" data-go="settings">${g('gear')}<b>設定</b><small>効果音・データ</small></button>`;
+}
 
 /* ================= 17. 対戦の準備 ================= */
 function coverCard(d) {
@@ -3843,10 +3807,11 @@ function renderBuilder() {
   if (!BUILD) {
     const mine = Object.entries(PLAYER.decks).map(([id, d]) => deckTileHTML(id, d, 'マイデッキ', false, 'data-bopen')).join('');
     const st = Object.entries(STORE.decks).map(([id, d]) => deckTileHTML(id, d, 'スターター', false, 'data-bcopy')).join('');
-    box.innerHTML = `<h2>デッキを作る</h2><p class="lead">持っているカードで、40枚のデッキを組みます。同じカードは3枚まで。</p>
+    box.innerHTML = `<h2>デッキを作る</h2>${bcarHTML()}<p class="lead">持っているカードで、40枚のデッキを組みます。同じカードは3枚まで。</p>
       <h3>マイデッキ</h3><div class="tiles"><button class="dtile new" type="button" data-bnew>＋ 新しいデッキ</button>${mine}</div>
       <h3>スターターデッキをもとに作る</h3><div class="tiles">${st}</div>
       <p class="note" style="margin-top:14px">保存先：${playerStore()}</p>`;
+    requestAnimationFrame(() => layoutCar(bIdx(), 0));
     return;
   }
   const d = BUILD.deck, n = deckTotal(d);
