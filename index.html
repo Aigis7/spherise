@@ -193,6 +193,10 @@ textarea{width:100%;font-family:var(--f-mono);font-size:.72rem}
 .card.tgt{box-shadow:0 0 0 3px #ff6b6b,0 0 22px #ff6b6b;cursor:crosshair;animation:pulse 1s infinite}
 @keyframes pulse{50%{box-shadow:0 0 0 3px #ff6b6b,0 0 6px #ff6b6b}}
 .card.pick{box-shadow:0 0 0 3px #ffb35c,0 0 16px #ffb35c}
+.card.mull{cursor:pointer;transform:translateY(8px) scale(.96);box-shadow:0 0 0 3px #ff8a5c}
+.card.mull>:not(.mtag){filter:grayscale(.7) brightness(.45)}
+.card .mtag{z-index:5;position:absolute;left:50%;top:42%;transform:translate(-50%,-50%) rotate(-8deg);padding:3px 10px;border-radius:6px;font-weight:700;font-size:.85rem;letter-spacing:.08em;white-space:nowrap;color:#fff;background:#d9542f;box-shadow:0 2px 8px rgb(0 0 0 / .5)}
+#modalBox .cards .card{cursor:pointer}
 .card.enter{animation:enter .4s cubic-bezier(.2,1.4,.4,1)}
 @keyframes enter{from{transform:translateY(-26px) scale(.7);opacity:0}}
 .card.flash{animation:flash .5s}
@@ -363,6 +367,8 @@ details.panel ul{padding-left:1.2em;margin:6px 0;font-size:.78rem}
 .gcard .gface .card.mini{width:100%;height:100%;box-sizing:border-box}
 .gcard.hit .gface{border-radius:9px}
 /* 対戦中のダイアログはゲームの見た目に */
+body.in-game{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
+body.in-game input,body.in-game textarea{-webkit-user-select:text;user-select:text}
 body.in-game .modal{background:rgb(4 5 10 / .72)}
 body.in-game .modal .box{background:radial-gradient(circle at 90% 0%,rgb(232 200 121 / .14),transparent 40%),linear-gradient(180deg,#171d33,#090b14);color:#eef1f8;border:1px solid rgb(232 200 121 / .5);border-radius:16px;box-shadow:0 0 30px rgb(232 200 121 / .18),0 20px 50px rgb(0 0 0 / .6)}
 body.in-game .modal h3{color:#f3d995;letter-spacing:.08em;text-shadow:0 0 12px rgb(232 200 121 / .35)}
@@ -1109,7 +1115,7 @@ const has = (c, t) => (c.tags || []).includes(t);
 function newId(prefix) { return prefix + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
 
 /* ================= 1. 文章の自動生成 ================= */
-const TRIG_LABEL = { play: '場に出た時', death: '破壊された時', start: '自分のターン開始時', end: '自分のターン終了時', countdownEnd: 'カウントが0になった時', use: 'カードを使った時', gambleWin: '自分が勝負に勝った時', gambleLose: '自分が勝負に負けた時', gamble: '自分が勝負をするたび', unit: '自分がユニットを出した時', allyDeath: '自分のほかのユニットが破壊された時' };
+const TRIG_LABEL = { play: '場に出た時', death: '破壊された時', start: '自分のターン開始時', end: '自分のターン終了時', countdownEnd: 'カウントが0になった時', use: 'カードを使った時', gambleWin: '自分が勝負に勝った時', gambleLose: '自分が勝負に負けた時', gamble: '自分が勝負をするたび', unit: '自分がユニットを出した時', allyDeath: '自分のほかのユニットが破壊された時', seasonChange: '自分の季節が変わった時' };
 const FIELD_TRIG_LABEL = { allyDeath: '自分のユニットが破壊された時' };
 const ACT_LABEL = { advanceSeason: '季節を1つ進める', seasonStrike: '季節が変わった回数ぶん相手にダメージ', freeze: '眠らせる（次の相手のターンも起きない）', summon: 'カードを場に出す', draw: 'カードを引く', damage: 'ダメージ', heal: '回復', buff: '強化', destroy: '破壊', search: '山札から探す', revive: '墓地から場に出す', reserveBlast: 'リザーブを全部使ってダメージ', gamble: '勝負する', roulette: 'ルーレット', optPay: 'ライフを払ってもいい', payLife: 'ライフを払う', peek: '山札の上を見て並べ替え', replay: '場のユニットの「場に出た時」をもう一度（勝負は全部の結果）', fixNext: '次の勝負をいちばん強い結果にする' };
 const GAME_LABEL = { dice: 'サイコロ', blackjack: 'ブラックジャック', poker: 'ポーカー' };
@@ -1479,6 +1485,7 @@ function advanceSeason(g, p, keepPending) {
     if (gid && C[gid]) { p.hand.push(mk(gid, p.idx)); log(g, `${p.name}の手札に「${C[gid].name}」が加わった`); }
   }
   seasonSync(g, p);
+  for (const u of [...p.board]) { if (g.over) break; if (u && p.board.includes(u)) runTrigger(g, p, u, 'seasonChange'); }
   if (!g.sim) { g.lvFlash = p.idx; if (g === G) setTimeout(() => { fxText(`${SEASONS[f.season]}　${stageOf(p).name}`, skyOf(p).glow); sfx('lv'); }, 400); }
   return true;
 }
@@ -2565,8 +2572,8 @@ function humanMulligan(g) {
   return new Promise(resolve => {
     const me = g.players[0]; const sel = new Set();
     const draw_ = () => {
-      openModal(`<h3>マリガン</h3><p class="note">入れ替えたいカードを選んでください（1回だけ）。${g.first === 0 ? 'あなたが先攻です。' : 'あなたは後攻です。'}</p>
-        <div class="cards">${me.hand.map(i => cardHTML(g, i, 'hand', sel.has(i.uid) ? 'pick' : '')).join('')}</div>
+      openModal(`<h3>マリガン</h3><p class="note">入れ替えたいカードを押してください。暗くなったカードが山札に戻り、同じ枚数を引き直します（1回だけ）。${g.first === 0 ? 'あなたが先攻です。' : 'あなたは後攻です。'}</p>
+        <div class="cards">${me.hand.map(i => sel.has(i.uid) ? cardHTML(g, i, 'hand', 'mull').replace(/<\/button>$/, '<span class="mtag">入れ替え</span></button>') : cardHTML(g, i, 'hand', '')).join('')}</div>
         <div class="row"><button class="btn primary" type="button" id="mgo">${sel.size ? sel.size + '枚入れ替える' : 'このままでいく'}</button></div>`);
       $('#modalBox').querySelectorAll('.card').forEach(el => el.onclick = () => { const u = +el.dataset.uid; sel.has(u) ? sel.delete(u) : sel.add(u); draw_(); });
       $('#mgo').onclick = () => { mulligan(g, me, me.hand.filter(i => sel.has(i.uid))); closeModal(); resolve(); };
@@ -3148,8 +3155,8 @@ function opts(map, cur, blank) { return (blank != null ? `<option value="">${esc
 function triggerOptions(mode) {
   if (mode === 'art') return { play: '使った時' };
   const gm = { gambleWin: TRIG_LABEL.gambleWin, gambleLose: TRIG_LABEL.gambleLose };
-  if (mode === 'unit') return { play: TRIG_LABEL.play, death: TRIG_LABEL.death, allyDeath: TRIG_LABEL.allyDeath, start: TRIG_LABEL.start, end: TRIG_LABEL.end, ...gm };
-  if (mode === 'object') return { play: TRIG_LABEL.play, start: TRIG_LABEL.start, end: TRIG_LABEL.end, countdownEnd: TRIG_LABEL.countdownEnd, death: TRIG_LABEL.death, allyDeath: '自分のユニットが破壊された時', ...gm };
+  if (mode === 'unit') return { play: TRIG_LABEL.play, death: TRIG_LABEL.death, allyDeath: TRIG_LABEL.allyDeath, seasonChange: TRIG_LABEL.seasonChange, start: TRIG_LABEL.start, end: TRIG_LABEL.end, ...gm };
+  if (mode === 'object') return { play: TRIG_LABEL.play, start: TRIG_LABEL.start, end: TRIG_LABEL.end, countdownEnd: TRIG_LABEL.countdownEnd, death: TRIG_LABEL.death, allyDeath: '自分のユニットが破壊された時', seasonChange: TRIG_LABEL.seasonChange, ...gm };
   return { use: 'カードを使った時', unit: TRIG_LABEL.unit, start: TRIG_LABEL.start, end: TRIG_LABEL.end, gamble: TRIG_LABEL.gamble, allyDeath: FIELD_TRIG_LABEL.allyDeath };
 }
 function targetOptions(action, mode) {
