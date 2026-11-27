@@ -285,6 +285,14 @@ textarea{width:100%;font-family:var(--f-mono);font-size:.72rem}
 .peek .card .text{-webkit-line-clamp:10;font-size:.66rem}
 .peek .card .art{min-height:150px}
 .peek p{margin:0;font-size:.74rem;color:#d9d3f6}
+/* 領域の長押し：押している間だけ出る詳細 */
+.fpeek{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:58;width:min(440px,calc(100vw - 32px));max-height:80dvh;overflow:hidden;pointer-events:none;display:grid;gap:4px;padding:14px 16px;border-radius:14px;background:rgb(10 8 24 / .95);color:#f1eefc;border:1px solid rgb(255 255 255 / .2);box-shadow:0 18px 40px rgb(0 0 0 / .55);font-size:.8rem;line-height:1.5;animation:fpIn .15s ease-out}
+.fpeek .dn{font-weight:700;font-size:.95rem;margin-bottom:4px}
+.fpeek .dk{color:#b9b3da;font-size:.72rem;margin:-2px 0 4px}
+.fpeek p{margin:4px 0 0}
+.fpeek p[style]{color:#ffd27a!important}
+@keyframes fpIn{from{opacity:0;transform:translate(-50%,-48%)}}
+.fieldbox{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
 
 /* 引き出し（ログ・戦績・設定） */
 /* 対戦中のメニュー */
@@ -2783,6 +2791,21 @@ async function humanPlay(g, inst, t) {
 }
 async function humanAttack(g, a, target) { g.ui = {}; g.busy = true; render(); await doAttack(g, g.players[0], a, target); g.busy = false; render(); }
 
+/* 領域の長押し：押している間だけ詳細を出し、はなしたら閉じる。短く押した時は今までどおり */
+const FP = { t: null, shown: false, eat: false };
+function fpeekEl() { let el = $('#fpeek'); if (!el) { el = document.createElement('div'); el.id = 'fpeek'; el.className = 'fpeek'; el.hidden = true; el.setAttribute('role', 'status'); document.body.appendChild(el); } return el; }
+document.addEventListener('pointerdown', e => {
+  if (!G || e.button > 0) return;
+  const f = e.target.closest('#view-game [data-field]'); if (!f) return;
+  const p = G.players[+f.dataset.field]; if (!p) return;
+  clearTimeout(FP.t); FP.shown = false;
+  FP.t = setTimeout(() => { const el = fpeekEl(); el.innerHTML = fieldDetailHTML(p); el.hidden = false; FP.shown = true; }, 300);
+});
+function fpEnd() { clearTimeout(FP.t); if (FP.shown) { fpeekEl().hidden = true; FP.shown = false; FP.eat = true; setTimeout(() => { FP.eat = false; }, 400); } }
+['pointerup', 'pointercancel'].forEach(t => document.addEventListener(t, fpEnd));
+addEventListener('blur', fpEnd);
+document.addEventListener('contextmenu', e => { if (e.target.closest('#view-game [data-field]')) e.preventDefault(); });
+
 /* クリック操作 */
 document.addEventListener('click', async e => {
   if (!G || e.target.closest('#modal') || !e.target.closest('#view-game')) return;
@@ -2790,6 +2813,7 @@ document.addEventListener('click', async e => {
   const cardEl = e.target.closest('.card[data-uid]');
   const g = G, me = g.players[0];
   const fEl = e.target.closest('[data-field]');
+  if (fEl && FP.eat) { FP.eat = false; return; }
   if (fEl) { const fp = g.players[+fEl.dataset.field]; if (isMobile()) openSheet(fieldDetailHTML(fp), []); else showFieldDetail(fp); return; }
   if (actEl) {
     const act = actEl.dataset.act;
