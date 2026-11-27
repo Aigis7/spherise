@@ -1568,7 +1568,8 @@
      "trigger": "play",
      "steps": [
       {
-       "action": "revive"
+       "action": "revive",
+       "excludeSelf": true
       }
      ]
     }

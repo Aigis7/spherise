@@ -1167,7 +1167,7 @@ function stepText(s, card, again) {
       d += f.type ? TYPE[f.type] : 'カード';
       return `山札から${d}を1枚手札に加える`;
     }
-    case 'revive': return '自分の墓地のユニット1体を選んで、場に出す';
+    case 'revive': return `自分の墓地の${s.excludeSelf && card ? '「' + card.name + '」以外の' : ''}ユニット1体を選んで、場に出す`;
     case 'payLife': return `ライフを${n}払う`;
     case 'peek': return `山札の上を${n}枚見て、好きな順番で戻す`;
     case 'replay': return `${card && card.needs ? '「' + cardName(card.needs) + '」' : '自分のユニット'}の「場に出た時」の効果をもう一度起こす。その勝負は結果に関係なく、勝ちの効果が全部起きる（勝ちとして数える）`;
@@ -1182,7 +1182,7 @@ function stepText(s, card, again) {
     }
     case 'advanceSeason': return '季節を1つ進める';
     case 'reviveAll': {
-      let t = (s.clearObjects ? '自分の場のオブジェクトを全部破壊し、' : '') + '自分の墓地のユニットを、場が埋まるまでコストの高い順に場に出す';
+      let t = (s.clearObjects ? '自分の場のオブジェクトを全部破壊し、' : '') + '自分の墓地のユニットを、場が埋まるまでコストの高い順に場に出す（場に出た時の効果は起きない）';
       if (s.per) t += `。出したユニットは、自分の墓地${s.per}枚ごとに攻撃力+1、体力+1`;
       if (s.grantOn && s.grantOn.id) t += `。出した「${cardName(s.grantOn.id)}」は「破壊された時、『${cardName(s.grantOn.grant)}』を手札に加える」を得る`;
       return t;
@@ -1724,7 +1724,8 @@ function placeDealer(g, p) {
 }
 const flatSteps = steps => (steps || []).flatMap(s => [s, ...Object.values(s.on || {}).flatMap(b => flatSteps(b && b.steps))]);
 const graveUnits = p => [...new Set(p.grave.filter(cid => C[cid] && C[cid].type === 'unit'))];
-function bestGrave(p) { return graveUnits(p).sort((a, b) => C[b].cost - C[a].cost)[0] || null; }
+function bestGrave(p, ex) { return graveUnits(p).filter(x => x !== ex).sort((a, b) => C[b].cost - C[a].cost)[0] || null; }
+const reviveEx = (s, src) => s.excludeSelf && src ? src.cid : null;
 function doStep(g, p, src, s, chosen, opt) {
   if (g.over) return;
   const n = s.n ?? 1;
@@ -1743,8 +1744,6 @@ function doStep(g, p, src, s, chosen, opt) {
       if (s.grantOn && s.grantOn.id === cid) u.deathGrant = s.grantOn.grant;
       seasonSync(g, p);
       log(g, `${p.name}の「${C[cid].name}」が墓地から戻ってきた`);
-      runTrigger(g, p, u, 'play');
-      cleanup(g);
     }
     return;
   }
@@ -1793,8 +1792,9 @@ function doStep(g, p, src, s, chosen, opt) {
   if (s.action === 'revive') {
     const slot = emptySlot(p);
     if (slot < 0) { log(g, '盤面に空きがない'); return; }
+    const ex = reviveEx(s, src);
     let cid = opt && opt.grave;
-    if (!cid || !graveUnits(p).includes(cid)) cid = bestGrave(p);
+    if (!cid || cid === ex || !graveUnits(p).includes(cid)) cid = bestGrave(p, ex);
     if (!cid) { log(g, '墓地にユニットがいない'); return; }
     p.grave.splice(p.grave.lastIndexOf(cid), 1);
     const u = mk(cid, p.idx); p.board[slot] = u; u.sick = !C[cid].quick; seasonSync(g, p);
@@ -2060,7 +2060,7 @@ function stepValue(g, p, s, t, card) {
     case 'seasonStrike': { const k = (p.field.changes || 0) * n; return k * 1.6 + (o.life <= k ? 100 : 0); }
     case 'freeze': { if (s.target === 'chosen') return t && enemy && !t.frozen ? 2 + getAtk(g, t) * 1.5 : 0; const us = units(o); return us.length ? 2 + us.reduce((a, u) => a + getAtk(g, u), 0) / us.length : 0; }
     case 'summon': { const free = p.board.filter(x => !x).length, k = Math.min(n, free), c = C[s.id]; return c ? k * (2 + c.atk + c.hp * 0.8) : 0; }
-    case 'revive': { const b = bestGrave(p); return b && emptySlot(p) >= 0 ? 8 + C[b].cost * 2 : 0; }
+    case 'revive': { const b = bestGrave(p, s.excludeSelf && card ? card.id : null); return b && emptySlot(p) >= 0 ? 8 + C[b].cost * 2 : 0; }
     case 'payLife': return -n * (p.life <= 10 ? 3 : 1.2);
     case 'peek': return 1.5;
     case 'replay': {
@@ -2672,9 +2672,9 @@ function cardActions(g, inst) {
   return acts;
 }
 const p_free = (p, c) => p.board.filter(x => !x).length > (c.type === 'art' ? 0 : 1);
-function humanPickGrave(g, p) {
+function humanPickGrave(g, p, ex) {
   return new Promise(resolve => {
-    const ids = graveUnits(p);
+    const ids = graveUnits(p).filter(x => x !== ex);
     openModal(`<h3>墓地から場に出すユニット</h3><p class="note">1体選んでください。</p>
       <div class="cards">${ids.map(cid => `<button type="button" class="card unit" data-g="${esc(cid)}">${cardFace(C[cid])}</button>`).join('')}</div>
       <div class="row"><button class="btn" type="button" id="gCancel">やめる</button></div>`);
@@ -2768,7 +2768,8 @@ function humanBJ(g, p) {
 async function humanPlay(g, inst, t) {
   const me = g.players[0], c = C[inst.cid];
   const opt = {};
-  if (needsRevive(c) && graveUnits(me).length && p_free(me, c)) { const cid = await humanPickGrave(g, me); if (!cid) { render(); return; } opt.grave = cid; }
+  const rex = playSteps(c).some(s => s.action === 'revive' && s.excludeSelf) ? c.id : null;
+  if (needsRevive(c) && graveUnits(me).filter(x => x !== rex).length && p_free(me, c)) { const cid = await humanPickGrave(g, me, rex); if (!cid) { render(); return; } opt.grave = cid; }
   if (!me.hand.includes(inst) || !canPlay(g, me, inst)) { render(); return; }
   /* 先に決める選択（場に出た時の、いちばん外側の手順だけ） */
   const top = (c.effects || []).filter(e => e.trigger === 'play' && !(e.lv && me.field.lv < e.lv)).flatMap(e => e.steps || []);

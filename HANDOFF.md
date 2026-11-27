@@ -52,7 +52,7 @@
 - 「自分のほかのユニットが破壊された時」（trigger: allyDeath）。領域では「自分のユニットが破壊された時」。
 - カードを場に出す（action: summon、id と n）。出すカードは token: true のユニット。トークンは墓地に行かない。
 - 昇華の条件 lost（自分のユニットが破壊される）、kills（相手のユニットを破壊する）。
-- 墓地のユニットを場が埋まるまで出す（action: reviveAll、clearObjects・per・grantOn）。grantOn で戻したユニットに「破壊された時、カードを手札に加える」（インスタンスの deathGrant）を付ける。
+- 墓地のユニットを場が埋まるまで出す（action: reviveAll、clearObjects・per・grantOn）。戻したユニットの「場に出た時」は起きない。墓地から出す（revive）に excludeSelf を付けると、同じカードは戻せない（ルルナ）。grantOn で戻したユニットに「破壊された時、カードを手札に加える」（インスタンスの deathGrant）を付ける。
 - 季節が変わった時（trigger: seasonChange）。環は体力5、季節が変わるたびに攻撃力+1。
 - 季節が回る領域（field.cycle: true、stages と conds が4つ、lapGrant: {l1, l2}）。季節を進める（advanceSeason）、季節が変わった回数ぶんダメージ（seasonStrike）、眠らせる（freeze）、季節の間だけ+1/+1（カードの seasonal）、季節で変わる効果（効果の season）、昇華の条件 attacks（攻撃する）。
 - テーマ名と領域名は分けてもいい（四季ノ環の領域は「移ろいの郷」、はじまりの灯の領域は「狭間の旅路」）。
