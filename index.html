@@ -909,8 +909,8 @@ body.drag-reserve [data-drop="reserve"] .stack{box-shadow:0 0 0 3px #ffd27a,0 0 
       <div class="gm-view" id="gmMain">
         <div class="gm-head"><span class="gm-title">MENU</span><button class="gm-x" id="btnMenuClose" type="button" aria-label="閉じる">×</button></div>
         <button class="gm-btn" type="button" id="gmLog"><span class="gm-ico" aria-hidden="true">≣</span><span><b>ログ</b><small>これまでの流れを見る</small></span></button>
-        <button class="gm-btn" type="button" id="gmTitle"><span class="gm-ico" aria-hidden="true">◎</span><span><b>タイトルに戻る</b><small>対戦をやめて、はじめの画面へ</small></span></button>
-        <div class="gm-confirm" id="gmConfirm" hidden><p>対戦をやめて、タイトルに戻る？<br><small>この対戦の結果は残らない。</small></p><div class="gm-row"><button class="gm-mini gold" type="button" id="gmYes">戻る</button><button class="gm-mini" type="button" id="gmNo">続ける</button></div></div>
+        <button class="gm-btn" type="button" id="gmTitle"><span class="gm-ico" aria-hidden="true">◎</span><span><b>ホームに戻る</b><small>対戦をやめて、ホームへ</small></span></button>
+        <div class="gm-confirm" id="gmConfirm" hidden><p>対戦をやめて、ホームに戻る？<br><small>この対戦の結果は残らない。</small></p><div class="gm-row"><button class="gm-mini gold" type="button" id="gmYes">戻る</button><button class="gm-mini" type="button" id="gmNo">続ける</button></div></div>
       </div>
       <div class="gm-view" id="gmLogView" hidden>
         <div class="gm-head"><button class="gm-back" id="gmBack" type="button" aria-label="メニューにもどる">‹</button><span class="gm-title">LOG</span><button class="gm-x" type="button" data-gmclose aria-label="閉じる">×</button></div>
@@ -2435,7 +2435,7 @@ $('#gmBack').addEventListener('click', () => gmShow('main'));
 document.querySelectorAll('[data-gmclose]').forEach(b => b.addEventListener('click', () => setMenu(false)));
 $('#gmTitle').addEventListener('click', () => { $('#gmConfirm').hidden = false; $('#gmYes').focus(); });
 $('#gmNo').addEventListener('click', () => { $('#gmConfirm').hidden = true; });
-$('#gmYes').addEventListener('click', () => { setMenu(false); if (G) { G.over = true; G.abandoned = true; if (G.turnResolve) G.turnResolve(); } G = null; paintTitle(); setTab('title'); });
+$('#gmYes').addEventListener('click', () => { setMenu(false); if (G) { G.over = true; G.abandoned = true; if (G.turnResolve) G.turnResolve(); } G = null; setTab('home'); });
 
 $('#btnMenuClose').addEventListener('click', () => setMenu(false));
 $('#scrim').addEventListener('click', () => setMenu(false));
@@ -2833,7 +2833,7 @@ function showResult(g, pt, deckId) {
       <div class="rs-btns">
         <button class="rs-b gold" type="button" data-rs="again">もう一度</button>
         <button class="rs-b" type="button" data-rs="deck">デッキを選び直す</button>
-        <button class="rs-b" type="button" data-rs="title">タイトルへ</button>
+        <button class="rs-b" type="button" data-rs="home">ホームへ</button>
       </div>
     </div>`;
   st.appendChild(el);
@@ -2843,7 +2843,7 @@ function showResult(g, pt, deckId) {
     el.remove();
     if (b.dataset.rs === 'again') startGame();
     if (b.dataset.rs === 'deck') { G = null; setTab('battle'); }
-    if (b.dataset.rs === 'title') { G = null; paintTitle(); setTab('title'); }
+    if (b.dataset.rs === 'home') { G = null; setTab('home'); }
   });
   setTimeout(() => { const f = el.querySelector('[data-rs="again"]'); if (f) f.focus(); }, 50);
 }
