@@ -1423,7 +1423,8 @@
       }
      ]
     }
-   ]
+   ],
+   "image": "img/y_jig.jpg"
   },
   "y_grim": {
    "name": "グリム",
@@ -1451,7 +1452,8 @@
       }
      ]
     }
-   ]
+   ],
+   "image": "img/y_grim.jpg"
   },
   "y_shade": {
    "name": "残影",
