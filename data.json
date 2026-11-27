@@ -1850,7 +1850,8 @@
      ]
     }
    ],
-   "target": "allyUnit"
+   "target": "allyUnit",
+   "image": "img/k_kagero.jpg"
   },
   "k_momiji": {
    "name": "環流・秋時雨",
