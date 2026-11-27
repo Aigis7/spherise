@@ -534,6 +534,39 @@ body.drag-reserve [data-drop="reserve"] .stack{box-shadow:0 0 0 3px #ffd27a,0 0 
 .tver{position:absolute;bottom:calc(14px + env(safe-area-inset-bottom,0px));left:0;right:0;font-size:.7rem;color:#8f89b5;letter-spacing:.1em}
 
 /* ホーム */
+/* ホーム */
+#view-home{display:grid;grid-template-rows:auto minmax(0,1fr) auto auto auto;gap:10px;min-height:calc(100dvh - 70px)}
+.hbg{position:absolute;inset:0;z-index:-1;background:center/cover no-repeat;filter:blur(2px) brightness(.6) saturate(1.15);transform:scale(1.05);transition:background-image .6s}
+#view-home::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(70% 55% at 50% 45%,transparent,rgb(4 5 10 / .75))}
+.carousel{position:relative;min-height:230px;touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none;outline:none}
+.carousel.dragging{cursor:grabbing}
+.carousel.dragging .sph{transition:none}
+.carousel:focus-visible .sph.on{outline:2px solid #ffd27a;outline-offset:6px}
+.sph{all:unset;position:absolute;left:50%;top:50%;width:min(56vw,230px);aspect-ratio:1;border-radius:50%;cursor:pointer;transition:transform .35s cubic-bezier(.2,.9,.3,1),opacity .35s,filter .35s;background:radial-gradient(circle at 35% 30%,var(--lc),#05060b 75%);box-shadow:0 0 0 2px color-mix(in srgb,var(--lc) 60%,#fff),0 18px 40px rgb(0 0 0 / .6)}
+.sph-img{position:absolute;inset:0;border-radius:50%;background:center 20%/cover no-repeat}
+.sph-gloss{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 32% 24%,rgb(255 255 255 / .55),transparent 28%),radial-gradient(circle at 50% 50%,transparent 55%,rgb(0 0 0 / .55) 100%);box-shadow:inset -14px -18px 40px rgb(0 0 0 / .55),inset 8px 8px 24px rgb(255 255 255 / .12)}
+.sph-ring{position:absolute;inset:-14%;border-radius:50%;pointer-events:none;opacity:0;transition:opacity .4s}
+.sph.on{box-shadow:0 0 0 3px color-mix(in srgb,var(--lc) 70%,#fff),0 0 40px var(--lc),0 18px 40px rgb(0 0 0 / .6);animation:sphFloat 5s ease-in-out infinite}
+.sph.on .sph-ring{opacity:1;border:1.5px solid rgb(232 200 121 / .7);transform:rotateX(72deg) rotateZ(-18deg);box-shadow:0 0 16px rgb(232 200 121 / .4)}
+@keyframes sphFloat{50%{margin-top:-6px}}
+.hpick{display:grid;justify-items:center;gap:3px;text-align:center;color:#eef1f8}
+.hpick b{font-family:var(--f-display);font-weight:400;font-size:1.5rem;letter-spacing:.08em;text-shadow:0 0 14px rgb(0 0 0 / .8)}
+.hpick small{font-size:.78rem;color:#c2c8d8}
+.hdots{display:flex;gap:6px;margin-top:4px}
+.hdots i{width:6px;height:6px;border-radius:50%;background:rgb(255 255 255 / .3)}
+.hdots i.on{background:#ffd27a;box-shadow:0 0 6px #ffd27a}
+.hplay{all:unset;box-sizing:border-box;justify-self:center;cursor:pointer;display:grid;justify-items:center;width:min(320px,86%);padding:14px 20px;border-radius:999px;color:#2a1a00;background:linear-gradient(180deg,#ffe7a6,#f5b941);box-shadow:0 0 24px rgb(255 200 90 / .55),inset 0 -3px 0 rgb(0 0 0 / .18);position:relative;overflow:hidden}
+.hplay span{font-family:var(--f-display);font-size:1.4rem;letter-spacing:.12em}
+.hplay small{font-size:.72rem;font-weight:700;opacity:.75}
+.hplay::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 40%,rgb(255 255 255 / .7) 50%,transparent 60%);background-size:260% 100%;background-position:160% 0;animation:csheen 3.6s ease-in-out infinite}
+.hplay:disabled{opacity:.4;cursor:default}
+.hplay:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.hnav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;padding:8px 6px calc(6px + env(safe-area-inset-bottom,0px));border-radius:16px;background:linear-gradient(180deg,rgb(20 26 46 / .75),rgb(7 8 14 / .85));border:1px solid rgb(232 200 121 / .3);backdrop-filter:blur(6px)}
+.hnav button{all:unset;cursor:pointer;display:grid;justify-items:center;gap:3px;padding:6px 2px;border-radius:10px;font-size:.72rem;font-weight:700;color:#e3e6f0}
+.hnav button svg{width:34px;height:auto;fill:#f3d995}
+.hnav button:hover,.hnav button:focus-visible{background:rgb(255 255 255 / .08);outline:none}
+.hnav button.soon{opacity:.5}
+@media (prefers-reduced-motion: reduce){.sph,.sph.on,.hplay::after{animation:none;transition:none}}
 .hhead{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:10px 20px}
 .hlogo{font-family:var(--f-logo);font-weight:900;font-size:clamp(1.8rem,6vw,2.8rem);letter-spacing:.16em;color:#fff;text-shadow:0 0 18px #aab8dc,0 0 40px rgb(79 227 208 / .35);line-height:1.1}
 .hstat{display:flex;flex-wrap:wrap;gap:8px}
@@ -852,8 +885,11 @@ body.drag-reserve [data-drop="reserve"] .stack{box-shadow:0 0 0 3px #ffd27a,0 0 
       <div class="hlogo" lang="en">SPHERISE</div>
       <div class="hstat" id="homeStat"></div>
     </div>
-    <div class="featured" id="homeFeatured" aria-hidden="true"></div>
-    <div class="hgrid" id="homeGrid"></div>
+    <div class="hbg" id="homeBg" aria-hidden="true"></div>
+    <div class="carousel" id="homeCar" tabindex="0" role="listbox" aria-label="デッキを選ぶ。左右にスライド"></div>
+    <div class="hpick" id="homePick"></div>
+    <button class="hplay" type="button" id="homePlay"><span>対戦する</span><small>CPUと戦う</small></button>
+    <nav class="hnav" id="homeNav" aria-label="メニュー"></nav>
   </section>
 
   <!-- 対戦の準備 -->
@@ -3633,23 +3669,84 @@ $('#view-title').addEventListener('keydown', e => { if (e.key === 'Enter' || e.k
 document.addEventListener('click', e => { const b = e.target.closest('[data-go]'); if (b) { e.preventDefault(); setTab(b.dataset.go === 'tools' ? lastTool() : b.dataset.go); } });
 function lastTool() { try { const t = localStorage.getItem('ryoiki-tool'); if (['cards', 'decks', 'fields', 'data'].includes(t)) return t; } catch (e) { } return 'cards'; }
 const kinds = () => Object.keys(STORE.cards).filter(id => ownedCount(id) > 0).length;
-function renderHome() {
-  $('#homeStat').innerHTML = `<span class="chip2">ポイント <b>${PLAYER.points}</b></span><span class="chip2">カード <b>${kinds()}</b> / ${Object.keys(STORE.cards).length}種類</span><span class="chip2">マイデッキ <b>${Object.keys(PLAYER.decks).length}</b></span>`;
-  paintOrbs($('#homeOrbs'), 6);
-  const pick = [], seen = new Set();
-  for (const d of Object.values(STORE.decks)) { const c = coverCard(d); if (c && !seen.has(c.name)) { pick.push(c); seen.add(c.name); } }
-  const extra = Object.values(STORE.cards).filter(c => imageUrl(c) && c.type === 'unit' && !seen.has(c.name)).sort((a, b) => b.cost - a.cost);
-  const art = pick.concat(extra).slice(0, 5);
-  const rot = [-10, -5, 0, 5, 10], ys = [10, 3, 0, 3, 10];
-  $('#homeFeatured').innerHTML = art.map((c, i) => `<span style="${artStyle(c)};--r:${rot[i] || 0}deg;--y:${ys[i] || 0}px">${imageUrl(c) ? '' : artInner(c)}</span>`).join('');
-  const g = k => `<svg viewBox="0 0 100 60" aria-hidden="true">${GLYPH[k]}</svg>`;
-  $('#homeGrid').innerHTML = `
-    <button class="htile main" type="button" data-go="battle">${g('sword')}<b>対戦する</b><small>デッキを選んで、CPUと戦う</small></button>
-    <button class="htile" type="button" data-go="builder">${g('cards')}<b>デッキを作る</b><small>持っているカードで組む</small></button>
-    <button class="htile" type="button" data-go="collection">${g('star')}<b>コレクション</b><small>集めたカードを見る</small></button>
-    <button class="htile soon" type="button" data-go="packs"><span class="tag">準備中</span>${g('burst')}<b>パック</b><small>第一弾を準備中</small></button>
-    <button class="htile" type="button" data-go="settings">${g('gear')}<b>設定</b><small>効果音・データ</small></button>`;
+function homeDecks() {
+  const mine = Object.entries(PLAYER.decks).map(([id, d]) => ({ id, d, kind: 'マイデッキ' }));
+  const st = Object.entries(STORE.decks).map(([id, d]) => ({ id, d, kind: 'スターター' }));
+  return mine.concat(st).filter(x => x.d);
 }
+let HOME_SEL = null;
+function renderHome() {
+  $('#homeStat').innerHTML = `<span class="chip2">ポイント <b>${PLAYER.points}</b></span><span class="chip2">カード <b>${kinds()}</b> / ${Object.keys(STORE.cards).filter(k => !STORE.cards[k].token).length}種類</span>`;
+  paintOrbs($('#homeOrbs'), 6);
+  /* 背景：最後に遊んだ領域 */
+  let s = null; try { s = JSON.parse(localStorage.getItem(LASTKEY)); } catch (e) { }
+  let f = s && STORE.fields[s.field];
+  if (!f) { const d0 = homeDecks()[0]; f = d0 && STORE.fields[d0.d.field]; s = { lv: 1 }; }
+  const st = f && (f.stages || [])[Math.min(3, Math.max(1, s.lv || 1)) - 1];
+  const bg = st ? stageImageUrl(st) : null;
+  $('#homeBg').style.backgroundImage = bg ? `url(${bg})` : '';
+  /* 球体のデッキ選び */
+  const list = homeDecks();
+  if (HOME_SEL == null) { try { HOME_SEL = localStorage.getItem('sphere-home-deck'); } catch (e) { } }
+  let idx = list.findIndex(x => x.id === HOME_SEL); if (idx < 0) idx = 0;
+  HOME_SEL = list[idx] ? list[idx].id : null;
+  $('#homeCar').innerHTML = list.map((x, i) => {
+    const col = COLORS[deckColor(x.d)] || '#9aa3b8', cv = coverCard(x.d), img = cv ? imageUrl(cv) : null;
+    return `<button type="button" class="sph" role="option" data-hi="${i}" aria-selected="${i === idx}" aria-label="${esc(x.d.name || '')}" style="--lc:${col}">${img ? `<span class="sph-img" style="background-image:url(${img})"></span>` : ''}<span class="sph-gloss"></span><span class="sph-ring"></span></button>`;
+  }).join('') || '<p class="note">デッキがありません。</p>';
+  layoutCar(idx, 0);
+  const cur = list[idx];
+  $('#homePick').innerHTML = cur ? `<b>${esc(cur.d.name || '')}</b><small><span class="cdot" style="--cc:${COLORS[deckColor(cur.d)]}"></span>${cur.kind}・${esc((STORE.fields[cur.d.field] || {}).name || '')}</small><span class="hdots">${list.map((_, i) => `<i class="${i === idx ? 'on' : ''}"></i>`).join('')}</span>` : '';
+  $('#homePlay').disabled = !cur;
+  const g = k => `<svg viewBox="0 0 100 60" aria-hidden="true">${GLYPH[k]}</svg>`;
+  $('#homeNav').innerHTML = `
+    <button type="button" data-go="builder">${g('cards')}<span>デッキ</span></button>
+    <button type="button" data-go="collection">${g('star')}<span>コレクション</span></button>
+    <button type="button" data-go="packs" class="soon">${g('burst')}<span>パック</span></button>
+    <button type="button" data-go="settings">${g('gear')}<span>設定</span></button>`;
+}
+function layoutCar(idx, drag) {
+  const items = [...document.querySelectorAll('#homeCar .sph')];
+  const w = $('#homeCar').clientWidth || 360, step = Math.min(170, w * 0.42);
+  items.forEach((el, i) => {
+    const o = i - idx + drag / step, a = Math.abs(o);
+    const sc = Math.max(0.35, 1 - a * 0.38), op = a > 2.2 ? 0 : Math.max(0.15, 1 - a * 0.45);
+    el.style.transform = `translate(-50%,-50%) translateX(${o * step}px) scale(${sc})`;
+    el.style.opacity = op; el.style.zIndex = String(10 - Math.round(a * 2));
+    el.style.filter = a > 0.5 ? `brightness(${Math.max(0.45, 1 - a * 0.3)}) saturate(.8)` : '';
+    el.classList.toggle('on', i === idx && drag === 0);
+    el.tabIndex = -1;
+  });
+}
+function homeSelect(i) {
+  const list = homeDecks(); if (!list.length) return;
+  i = (i + list.length) % list.length;
+  HOME_SEL = list[i].id; try { localStorage.setItem('sphere-home-deck', HOME_SEL); } catch (e) { }
+  sfx('play'); renderHome();
+}
+(() => {
+  const car = $('#homeCar');
+  let d = null;
+  car.addEventListener('pointerdown', e => { if (e.button > 0) return; d = { x: e.clientX, id: e.pointerId, moved: false }; try { car.setPointerCapture(e.pointerId); } catch (er) { } car.classList.add('dragging'); });
+  car.addEventListener('pointermove', e => { if (!d || e.pointerId !== d.id) return; const dx = e.clientX - d.x; if (Math.abs(dx) > 6) d.moved = true; const list = homeDecks(), idx = Math.max(0, list.findIndex(x => x.id === HOME_SEL)); layoutCar(idx, dx); });
+  const end = e => {
+    if (!d || e.pointerId !== d.id) return;
+    const dx = e.clientX - d.x, moved = d.moved; d = null; car.classList.remove('dragging');
+    const list = homeDecks(), idx = Math.max(0, list.findIndex(x => x.id === HOME_SEL));
+    if (moved && Math.abs(dx) > 40) { homeSelect(idx + (dx < 0 ? 1 : -1)); return; }
+    if (!moved) { const b = e.target.closest && e.target.closest('[data-hi]'); if (b && +b.dataset.hi !== idx) { homeSelect(+b.dataset.hi); return; } }
+    layoutCar(idx, 0);
+  };
+  car.addEventListener('pointerup', end); car.addEventListener('pointercancel', end);
+  car.addEventListener('keydown', e => { const list = homeDecks(), idx = Math.max(0, list.findIndex(x => x.id === HOME_SEL)); if (e.key === 'ArrowRight') { e.preventDefault(); homeSelect(idx + 1); } if (e.key === 'ArrowLeft') { e.preventDefault(); homeSelect(idx - 1); } if (e.key === 'Enter') $('#homePlay').click(); });
+  addEventListener('resize', () => { if (activeTab === 'home') { const list = homeDecks(); layoutCar(Math.max(0, list.findIndex(x => x.id === HOME_SEL)), 0); } });
+  $('#homePlay').addEventListener('click', () => {
+    if (!HOME_SEL) return;
+    $('#selMe').value = HOME_SEL;
+    const cpu = $('#selCpu'); if (!cpu.value || !STORE.decks[cpu.value]) { const others = Object.keys(STORE.decks).filter(k => k !== HOME_SEL); cpu.value = others[Math.floor(Math.random() * others.length)] || Object.keys(STORE.decks)[0]; }
+    setTab('game'); startGame();
+  });
+})();
 
 /* ================= 17. 対戦の準備 ================= */
 function coverCard(d) {
