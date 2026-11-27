@@ -289,8 +289,8 @@ textarea{width:100%;font-family:var(--f-mono);font-size:.72rem}
 .ent-p.staff i{display:block;height:2px;background:#c8fff4;box-shadow:0 0 6px var(--ci)}
 .ent-p.staff b{position:absolute;top:-10px;left:28%;color:#fff;font-size:28px;text-shadow:0 0 8px var(--ci)}
 .ent-p.staff b+b{left:68%;top:4px}
-.ent-p.pcard{width:44px;height:62px;border-radius:6px;background:#fffaf0;border:2px solid #e8c879;display:grid;place-items:center;font-size:26px;color:#161320;box-shadow:0 0 10px rgb(255 210 122 / .7)}
-.ent-p.pcard.red{color:#d2283c}
+.ent-p.tcard{width:44px;height:62px;border-radius:6px;background:#fffaf0;border:2px solid #e8c879;display:grid;place-items:center;font-size:26px;color:#161320;box-shadow:0 0 10px rgb(255 210 122 / .7)}
+.ent-p.tcard.red{color:#d2283c}
 .ent-p.bubble{width:var(--s);height:var(--s);border-radius:50%;background:radial-gradient(circle at 32% 28%,rgb(255 255 255 / .85),transparent 30%),radial-gradient(circle,transparent 55%,rgb(210 180 255 / .55) 72%,rgb(160 225 255 / .65));border:1px solid rgb(255 255 255 / .55)}
 .ent-p.glyph{font-size:34px;line-height:1;text-shadow:0 0 8px currentColor}
 .ent-p.star{color:#fff6c8}
@@ -306,6 +306,12 @@ textarea{width:100%;font-family:var(--f-mono);font-size:.72rem}
 .ent-p.flower i:nth-child(2){transform:rotate(72deg)}.ent-p.flower i:nth-child(3){transform:rotate(144deg)}.ent-p.flower i:nth-child(4){transform:rotate(216deg)}.ent-p.flower i:nth-child(5){transform:rotate(288deg)}
 .ent-p.flower b{position:absolute;left:50%;top:50%;width:26px;height:26px;margin:-13px;border-radius:50%;background:radial-gradient(circle,#fff6c0,#ffcf3f 60%,#e89a2f);box-shadow:0 0 12px #ffcf3f}
 .ent-p.petal{width:16px;height:22px;border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;background:linear-gradient(#ffe0ea,#ff9ec0)}
+.ent-p.tcard.big{width:62px;height:88px;border-radius:8px;font-size:22px;font-weight:700;transform-origin:50% 100%;background:linear-gradient(160deg,#fffdf6,#f3ead2);box-shadow:0 0 18px rgb(255 210 122 / .9)}
+.ent-p.chip{width:22px;height:22px;border-radius:50%;background:radial-gradient(circle,#fff6c8 0 22%,#e8b84a 24% 46%,#fff0b0 48% 54%,#c8902a 56%);border:2px dashed #fff3c4;box-shadow:0 0 8px #ffcf3f}
+.ent-p.eye{width:170px;height:90px;filter:drop-shadow(0 0 14px #c69cff) drop-shadow(0 0 30px #8a4cff)}
+.ent-p.eye svg{width:100%;height:100%;overflow:visible}
+.ent-p.eye .eye-open{transform-origin:60px 32px}
+.ent-p.ring.dreamwave{border-color:#c69cff;box-shadow:0 0 22px #b06cff,inset 0 0 14px #b06cff}
 .ent-p.burst{width:26px;height:26px;border-radius:50%;background:radial-gradient(circle,#fff,var(--ci) 40%,transparent 70%)}
 /* レアカードの演出 */
 .cutin{position:absolute;inset:0;z-index:70;display:grid;place-items:center;overflow:hidden;cursor:pointer;--ci:#ffd27a}
@@ -2688,7 +2694,7 @@ async function playEntrance(ev) {
     for (let i = 0; i < 14; i++) {
       const a0 = i / 14 * Math.PI * 2, rr = R * rnd(.7, 1);
       const pts = [0, .5, 1].map(t => { const a = a0 + t * 2.4, k = 1 - t; return [Math.cos(a) * rr * k, Math.sin(a) * rr * k, t * 540]; });
-      const s = suits[i % 4], d = part(s, 'pcard' + (s === '♥' || s === '♦' ? ' red' : ''));
+      const s = suits[i % 4], d = part(s, 'tcard' + (s === '♥' || s === '♦' ? ' red' : ''));
       anims.push(d.animate(pts.map(([x, y, rot], k) => ({ transform: `translate(-50%,-50%) translate(${x}px,${y}px) rotate(${rot}deg) scale(${1 - k * .35})`, opacity: k === 0 ? 0 : k === 2 ? 0 : 1 })), { duration: D, delay: i * 35, easing: 'cubic-bezier(.4,0,.3,1)', fill: 'both' }));
     }
   } else if (kind === 'dream') {
@@ -2716,7 +2722,7 @@ async function playEntrance(ev) {
   wrap.addEventListener('pointerdown', () => anims.forEach(a => { try { a.finish(); } catch (e) { } }));
   sfxSafe('play');
   await Promise.all(anims.map(a => a.finished.catch(() => { })));
-  const t2 = fast ? 120 : kind === 'staff' || kind === 'seasons' ? 900 : 520;
+  const t2 = fast ? 120 : kind === 'light' ? 520 : kind === 'dream' ? 1150 : 900;
   for (const el of [circ, core]) el.animate([{ opacity: 1 }, { opacity: 0, transform: 'translate(-50%,-50%) scale(1.6)' }], { duration: 220, fill: 'forwards' });
   if (kind === 'staff') {
     /* リオラ：水しぶきが飛び散り、波紋が広がる */
@@ -2727,6 +2733,28 @@ async function playEntrance(ev) {
       dp.animate([{ transform: 'translate(-50%,-50%) scale(.3)', opacity: 1 }, { transform: `translate(-50%,-50%) translate(${x}px,${y}px) scale(1)`, opacity: 1, offset: .45 }, { transform: `translate(-50%,-50%) translate(${x * 1.25}px,${y * .2 + sp * .5}px) scale(.6)`, opacity: 0 }], { duration: t2, easing: 'cubic-bezier(.2,.7,.4,1)', fill: 'both' });
     }
     const sh = part('', 'burst water'); sh.animate([{ transform: 'translate(-50%,-50%) scale(.5)', opacity: 1 }, { transform: 'translate(-50%,-50%) scale(6)', opacity: 0 }], { duration: t2 * .6, easing: 'ease-out', fill: 'both' });
+  } else if (kind === 'cards') {
+    /* レティシア：トランプが扇のように広がり、金のチップが噴水のように舞う */
+    const hand = ['A♠', 'A♥', 'A♦', 'A♣', '★'];
+    hand.forEach((t, i) => {
+      const ang = (i - 2) * 18, d = part(`<span>${t}</span>`, 'tcard big' + (t.includes('♥') || t.includes('♦') ? ' red' : ''));
+      d.animate([{ transform: 'translate(-50%,-80%) rotate(0deg) scale(.4)', opacity: 0, easing: 'cubic-bezier(.2,1.3,.4,1)' }, { transform: `translate(-50%,-80%) rotate(${ang}deg) scale(1.1)`, opacity: 1, offset: .3, easing: 'ease-out' }, { transform: `translate(-50%,-80%) rotate(${ang}deg) scale(1)`, opacity: 1, offset: .75, easing: 'ease-in' }, { transform: `translate(-50%,-80%) rotate(${ang * 1.4}deg) scale(1.2)`, opacity: 0 }], { duration: t2 * 1.2, fill: 'both' });
+    });
+    for (let i = 0; i < 22; i++) {
+      const x = rnd(-1, 1) * R * .35, up = rnd(.5, 1) * R * .55, dp = part('', 'chip');
+      dp.animate([{ transform: 'translate(-50%,-50%) scale(.4) rotateX(0deg)', opacity: 0 }, { opacity: 1, offset: .1 }, { transform: `translate(-50%,-50%) translate(${x * .6}px,${-up}px) scale(1) rotateX(540deg)`, opacity: 1, offset: .5 }, { transform: `translate(-50%,-50%) translate(${x}px,${up * .4}px) scale(.8) rotateX(1080deg)`, opacity: 0 }], { duration: t2, delay: t2 * .25 + rnd(0, 120), easing: 'cubic-bezier(.3,.6,.5,1)', fill: 'both' });
+    }
+    const gb = part('', 'burst'); gb.animate([{ transform: 'translate(-50%,-50%) scale(.5)', opacity: 1 }, { transform: 'translate(-50%,-50%) scale(6)', opacity: 0 }], { duration: t2 * .6, delay: t2 * .25, easing: 'ease-out', fill: 'both' });
+  } else if (kind === 'dream') {
+    /* ルルナ：閉じた目が浮かび、ゆっくり目を開いて、紫の光が広がる */
+    const eye = part(`<svg viewBox="0 0 120 64" aria-hidden="true"><defs><radialGradient id="eyeIr" cx="50%" cy="45%" r="55%"><stop offset="0" stop-color="#f3e8ff"/><stop offset=".45" stop-color="#b06cff"/><stop offset="1" stop-color="#4a1f8a"/></radialGradient></defs>
+      <g class="eye-closed" fill="none" stroke="#f3e8ff" stroke-width="4" stroke-linecap="round"><path d="M12 30 Q60 58 108 30"/><path d="M28 39 L23 50"/><path d="M44 44 L41 56"/><path d="M60 46 L60 58"/><path d="M76 44 L79 56"/><path d="M92 39 L97 50"/></g>
+      <g class="eye-open"><path d="M8 32 Q60 -6 112 32 Q60 70 8 32Z" fill="#fff" stroke="#f3e8ff" stroke-width="3"/><circle cx="60" cy="32" r="17" fill="url(#eyeIr)"/><circle cx="60" cy="32" r="7" fill="#22104a"/><circle cx="54" cy="26" r="4" fill="#fff"/></g></svg>`, 'eye');
+    const cl = eye.querySelector('.eye-closed'), op = eye.querySelector('.eye-open');
+    eye.animate([{ transform: 'translate(-50%,-50%) scale(.6)', opacity: 0 }, { transform: 'translate(-50%,-50%) scale(1)', opacity: 1, offset: .2 }, { transform: 'translate(-50%,-50%) scale(1.05)', opacity: 1, offset: .8 }, { transform: 'translate(-50%,-50%) scale(1.4)', opacity: 0 }], { duration: t2, easing: 'ease-out', fill: 'both' });
+    cl.animate([{ opacity: 1 }, { opacity: 1, offset: .35 }, { opacity: 0, offset: .5 }, { opacity: 0 }], { duration: t2, fill: 'both' });
+    op.animate([{ transform: 'scaleY(.05)', opacity: 0 }, { transform: 'scaleY(.05)', opacity: 0, offset: .35 }, { transform: 'scaleY(1)', opacity: 1, offset: .6 }, { transform: 'scaleY(1)', opacity: 1 }], { duration: t2, easing: 'ease-out', fill: 'both' });
+    for (let i = 0; i < 2; i++) { const w = part('', 'ring dreamwave'); w.animate([{ transform: 'translate(-50%,-50%) scale(.3)', opacity: 0 }, { opacity: 1, offset: .1 }, { transform: 'translate(-50%,-50%) scale(6)', opacity: 0 }], { duration: t2 * .55, delay: t2 * (.55 + i * .12), easing: 'ease-out', fill: 'both' }); }
   } else if (kind === 'seasons') {
     /* 環：大きな桜の花が咲いて、花びらが舞い散る */
     const fl = part('<i></i><i></i><i></i><i></i><i></i><b></b>', 'flower');
