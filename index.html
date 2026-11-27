@@ -561,6 +561,9 @@ body.drag-reserve [data-drop="reserve"] .stack{box-shadow:0 0 0 3px #ffd27a,0 0 
 .hplay::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 40%,rgb(255 255 255 / .7) 50%,transparent 60%);background-size:260% 100%;background-position:160% 0;animation:csheen 3.6s ease-in-out infinite}
 .hplay:disabled{opacity:.4;cursor:default}
 .hplay.small{padding:10px 18px;width:min(280px,80%)}
+.hplay.using{opacity:1;background:linear-gradient(180deg,#3a4a6e,#1b2340);color:#ffe7a6;box-shadow:0 0 0 1px #e8c879}
+.hplay.using::after{display:none}
+.bsub{justify-self:center;border-radius:999px;padding:5px 14px;background:rgb(255 255 255 / .07);color:#eef1f8;border:1px solid rgb(255 255 255 / .25)}
 .hplay.small span{font-size:1.05rem}
 .bsph{display:grid;gap:8px;margin:6px 0 18px}
 .hplay:focus-visible{outline:2px solid #fff;outline-offset:3px}
@@ -3707,7 +3710,8 @@ function bcarHTML() {
     return `<button type="button" class="sph" role="option" data-hi="${i}" aria-selected="${i === idx}" aria-label="${esc(x.d.name || '')}" style="--lc:${col}">${img ? `<span class="sph-img" style="background-image:url(${img})"></span>` : ''}<span class="sph-gloss"></span><span class="sph-ring"></span></button>`;
   }).join('');
   const pick = cur ? `<b>${esc(cur.d.name || '')}</b><small><span class="cdot" style="--cc:${COLORS[deckColor(cur.d)]}"></span>${cur.kind}・${esc((STORE.fields[cur.d.field] || {}).name || '')}・${deckTotal(cur.d)}枚</small><span class="hdots">${list.map((_, i) => `<i class="${i === idx ? 'on' : ''}"></i>`).join('')}</span>` : '';
-  const act = cur ? (cur.mine ? `<button class="hplay small" type="button" data-bopen="${esc(cur.id)}"><span>このデッキを編集</span></button>` : `<button class="hplay small" type="button" data-bcopy="${esc(cur.id)}"><span>これをもとに作る</span></button>`) : '';
+  const using = cur && $('#selMe').value === cur.id;
+  const act = cur ? `<button class="hplay small${using ? ' using' : ''}" type="button" data-buse="${esc(cur.id)}" ${using ? 'disabled' : ''}><span>${using ? '✓ 使用デッキ' : '使用デッキにする'}</span></button>${cur.mine ? `<button class="btn bsub" type="button" data-bopen="${esc(cur.id)}">このデッキを編集</button>` : ''}` : '';
   return `<div class="bsph"><div class="carousel" id="bCar" tabindex="0" role="listbox" aria-label="デッキを選ぶ。左右にスライド">${orbs}</div><div class="hpick">${pick}</div>${act}</div>`;
 }
 function layoutCar(idx, drag) {
@@ -3875,6 +3879,7 @@ function bChange(id, delta) {
 $('#builder').addEventListener('click', async e => {
   const t = e.target.closest('button'); if (!t) return;
   const ds = t.dataset;
+  if (ds.buse) { $('#selMe').value = ds.buse; sfx('play'); return renderBuilder(); }
   if (ds.bnew != null) { BUILD = { id: newId('p'), isNew: true, deck: { name: '新しいデッキ', field: Object.keys(STORE.fields)[0] || '', list: [] } }; return renderBuilder(); }
   if (ds.bopen) { BUILD = { id: ds.bopen, isNew: false, deck: clone(PLAYER.decks[ds.bopen]) }; return renderBuilder(); }
   if (ds.bcopy) { const src = clone(STORE.decks[ds.bcopy]); src.name = (src.name || '') + '（マイデッキ）'; src.list = (src.list || []).map(x => ({ id: x.id, n: Math.min(x.n, ownedCount(x.id)) })).filter(x => x.n > 0); BUILD = { id: newId('p'), isNew: true, deck: src }; return renderBuilder(); }
