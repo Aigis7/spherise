@@ -298,6 +298,14 @@ textarea{width:100%;font-family:var(--f-mono);font-size:.72rem}
 .ent-p.ring{width:34px;height:34px;border-radius:50%;border:3px solid var(--ci);box-shadow:0 0 18px var(--ci)}
 .ent-p.core{width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,rgb(255 255 255 / .9),var(--ci) 25%,transparent 65%);mix-blend-mode:screen}
 .ent-p.circle{width:170px;height:170px;border-radius:50%;border:2px solid var(--ci);box-shadow:0 0 20px var(--ci),inset 0 0 20px var(--ci);background:repeating-conic-gradient(from 0deg,transparent 0 8deg,color-mix(in srgb,var(--ci) 35%,transparent) 8deg 10deg)}
+.ent-p.ripple{width:60px;height:22px;border-radius:50%;border:2px solid #b8fff2;box-shadow:0 0 12px #4fe3d0,inset 0 0 8px #4fe3d0;margin-top:30px}
+.ent-p.drop{width:var(--s);height:calc(var(--s) * 1.3);border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;background:radial-gradient(circle at 35% 35%,#fff,#9ff5ff 35%,#2fb8c8 80%);box-shadow:0 0 8px #4fe3d0}
+.ent-p.burst.water{background:radial-gradient(circle,#fff,#9ff5ff 35%,rgb(47 184 200 / .4) 60%,transparent 72%)}
+.ent-p.flower{width:150px;height:150px}
+.ent-p.flower i{position:absolute;left:50%;top:50%;width:46px;height:70px;margin:-70px 0 0 -23px;border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;background:radial-gradient(ellipse at 50% 90%,#fff 0,#ffd0e0 35%,#ff9ec0 90%);transform-origin:50% 100%;box-shadow:0 0 14px rgb(255 158 192 / .8)}
+.ent-p.flower i:nth-child(2){transform:rotate(72deg)}.ent-p.flower i:nth-child(3){transform:rotate(144deg)}.ent-p.flower i:nth-child(4){transform:rotate(216deg)}.ent-p.flower i:nth-child(5){transform:rotate(288deg)}
+.ent-p.flower b{position:absolute;left:50%;top:50%;width:26px;height:26px;margin:-13px;border-radius:50%;background:radial-gradient(circle,#fff6c0,#ffcf3f 60%,#e89a2f);box-shadow:0 0 12px #ffcf3f}
+.ent-p.petal{width:16px;height:22px;border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;background:linear-gradient(#ffe0ea,#ff9ec0)}
 .ent-p.burst{width:26px;height:26px;border-radius:50%;background:radial-gradient(circle,#fff,var(--ci) 40%,transparent 70%)}
 /* レアカードの演出 */
 .cutin{position:absolute;inset:0;z-index:70;display:grid;place-items:center;overflow:hidden;cursor:pointer;--ci:#ffd27a}
@@ -2661,7 +2669,8 @@ async function playEntrance(ev) {
   const part = (html, cls) => { const d = document.createElement('div'); d.className = 'ent-p ' + cls; d.innerHTML = html; d.style.left = cx + 'px'; d.style.top = cy + 'px'; wrap.appendChild(d); return d; };
   const rnd = (a, b) => a + Math.random() * (b - a);
   const kind = ENTRANCE[ev.cid] || 'light';
-  { const circ = part('', 'circle'), core = part('', 'core');
+  const circ = part('', 'circle'), core = part('', 'core');
+  {
     circ.animate([{ transform: 'translate(-50%,-50%) scale(.2) rotate(0deg)', opacity: 0 }, { transform: 'translate(-50%,-50%) scale(1) rotate(120deg)', opacity: 1, offset: .6 }, { transform: 'translate(-50%,-50%) scale(.8) rotate(200deg)', opacity: 1 }], { duration: D * 1.15, easing: 'ease-out', fill: 'both' });
     core.animate([{ transform: 'translate(-50%,-50%) scale(.1)', opacity: 0 }, { transform: 'translate(-50%,-50%) scale(1.1)', opacity: 1 }], { duration: D * 1.15, easing: 'ease-in', fill: 'both' }); }
   if (kind === 'staff') {
@@ -2707,10 +2716,31 @@ async function playEntrance(ev) {
   wrap.addEventListener('pointerdown', () => anims.forEach(a => { try { a.finish(); } catch (e) { } }));
   sfxSafe('play');
   await Promise.all(anims.map(a => a.finished.catch(() => { })));
-  const ring = part('', 'ring'), burst = part('', 'burst');
-  const t2 = fast ? 120 : 520;
-  ring.animate([{ transform: 'translate(-50%,-50%) scale(.3)', opacity: 1 }, { transform: 'translate(-50%,-50%) scale(5)', opacity: 0 }], { duration: t2, easing: 'ease-out', fill: 'both' });
-  burst.animate([{ transform: 'translate(-50%,-50%) scale(.5)', opacity: 1 }, { transform: 'translate(-50%,-50%) scale(7)', opacity: 0 }], { duration: t2, easing: 'ease-out', fill: 'both' });
+  const t2 = fast ? 120 : kind === 'staff' || kind === 'seasons' ? 900 : 520;
+  for (const el of [circ, core]) el.animate([{ opacity: 1 }, { opacity: 0, transform: 'translate(-50%,-50%) scale(1.6)' }], { duration: 220, fill: 'forwards' });
+  if (kind === 'staff') {
+    /* リオラ：水しぶきが飛び散り、波紋が広がる */
+    for (let i = 0; i < 2; i++) { const rp = part('', 'ripple'); rp.animate([{ transform: 'translate(-50%,-50%) scale(.2)', opacity: 1 }, { transform: 'translate(-50%,-50%) scale(4.5)', opacity: 0 }], { duration: t2, delay: i * 160, easing: 'ease-out', fill: 'both' }); }
+    for (let i = 0; i < 22; i++) {
+      const a = rnd(-Math.PI * .95, -Math.PI * .05), sp = rnd(.35, 1) * R * .55, x = Math.cos(a) * sp, y = Math.sin(a) * sp, s = rnd(8, 18);
+      const dp = part('', 'drop'); dp.style.setProperty('--s', s + 'px');
+      dp.animate([{ transform: 'translate(-50%,-50%) scale(.3)', opacity: 1 }, { transform: `translate(-50%,-50%) translate(${x}px,${y}px) scale(1)`, opacity: 1, offset: .45 }, { transform: `translate(-50%,-50%) translate(${x * 1.25}px,${y * .2 + sp * .5}px) scale(.6)`, opacity: 0 }], { duration: t2, easing: 'cubic-bezier(.2,.7,.4,1)', fill: 'both' });
+    }
+    const sh = part('', 'burst water'); sh.animate([{ transform: 'translate(-50%,-50%) scale(.5)', opacity: 1 }, { transform: 'translate(-50%,-50%) scale(6)', opacity: 0 }], { duration: t2 * .6, easing: 'ease-out', fill: 'both' });
+  } else if (kind === 'seasons') {
+    /* 環：大きな桜の花が咲いて、花びらが舞い散る */
+    const fl = part('<i></i><i></i><i></i><i></i><i></i><b></b>', 'flower');
+    fl.animate([{ transform: 'translate(-50%,-50%) scale(.1) rotate(-60deg)', opacity: 0 }, { transform: 'translate(-50%,-50%) scale(1.15) rotate(10deg)', opacity: 1, offset: .35 }, { transform: 'translate(-50%,-50%) scale(1) rotate(0deg)', opacity: 1, offset: .6 }, { transform: 'translate(-50%,-50%) scale(1.4) rotate(15deg)', opacity: 0 }], { duration: t2, easing: 'cubic-bezier(.2,1.2,.4,1)', fill: 'both' });
+    for (let i = 0; i < 18; i++) {
+      const a = rnd(0, Math.PI * 2), sp = rnd(.4, 1) * R * .6, x = Math.cos(a) * sp, y = Math.sin(a) * sp;
+      const pt = part('', 'petal');
+      pt.animate([{ transform: `translate(-50%,-50%) rotate(${rnd(0, 360)}deg) scale(.4)`, opacity: 0 }, { opacity: 1, offset: .35 }, { transform: `translate(-50%,-50%) translate(${x}px,${y + 40}px) rotate(${rnd(180, 720)}deg) scale(1)`, opacity: 0 }], { duration: t2, delay: t2 * .3, easing: 'ease-out', fill: 'both' });
+    }
+  } else {
+    const ring = part('', 'ring'), burst = part('', 'burst');
+    ring.animate([{ transform: 'translate(-50%,-50%) scale(.3)', opacity: 1 }, { transform: 'translate(-50%,-50%) scale(5)', opacity: 0 }], { duration: t2, easing: 'ease-out', fill: 'both' });
+    burst.animate([{ transform: 'translate(-50%,-50%) scale(.5)', opacity: 1 }, { transform: 'translate(-50%,-50%) scale(7)', opacity: 0 }], { duration: t2, easing: 'ease-out', fill: 'both' });
+  }
   cardEl.style.opacity = '';
   cardEl.animate([{ transform: 'scale(1.35)', filter: 'brightness(2.4)' }, { transform: 'none', filter: 'none' }], { duration: t2, easing: 'cubic-bezier(.2,1.4,.4,1)' });
   sfxSafe('lv');
