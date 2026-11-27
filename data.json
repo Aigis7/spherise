@@ -1617,7 +1617,8 @@
       }
      ]
     }
-   ]
+   ],
+   "image": "img/k_tamaki.jpg"
   },
   "k_deer": {
    "name": "霞",
@@ -1646,7 +1647,8 @@
     }
    ],
    "seasonal": "春",
-   "epithet": "春告げの鹿"
+   "epithet": "春告げの鹿",
+   "image": "img/k_deer.jpg"
   },
   "k_swallow": {
    "name": "青嵐",
@@ -1664,7 +1666,8 @@
    "artPrompt": "青嵐（ツバメ。背中は深い青で、つばさの先が青緑にほのかに光る。おなかは白、長い二股の尾、足に青い組紐）が、入道雲の夏空を、画面の手前に向かって鋭く飛んでくる。つばさの先に光る風の筋。下に青い田んぼ。青嵐は画面の中で大きく。",
    "seasonal": "夏",
    "quick": true,
-   "epithet": "夏空のツバメ"
+   "epithet": "夏空のツバメ",
+   "image": "img/k_swallow.jpg"
   },
   "k_fox": {
    "name": "稲穂",
@@ -1693,7 +1696,8 @@
     }
    ],
    "seasonal": "秋",
-   "epithet": "紅葉のキツネ"
+   "epithet": "紅葉のキツネ",
+   "image": "img/k_fox.jpg"
   },
   "k_wolf": {
    "name": "六花",
@@ -1711,7 +1715,8 @@
    "artPrompt": "六花（大きな白いオオカミ。薄い青の目。白い毛並みに、うっすらと雪の結晶の模様。首に白と銀の組紐）が、吹雪の雪原で頭を上げて遠吠えしている。息が白く、背中に雪が積もる。六花は画面の中で大きく。",
    "seasonal": "冬",
    "pierce": true,
-   "epithet": "雪原の白オオカミ"
+   "epithet": "雪原の白オオカミ",
+   "image": "img/k_wolf.jpg"
   },
   "k_sprout": {
    "name": "芽吹きの精",
