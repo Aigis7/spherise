@@ -3299,7 +3299,7 @@ function showResult(g, pt, deckId) {
       </div>
       <div class="rs-btns">
         <button class="rs-b gold" type="button" data-rs="again">もう一度</button>
-        <button class="rs-b" type="button" data-rs="deck">デッキを選び直す</button>
+        <button class="rs-b" type="button" data-rs="deck">デッキを変える</button>
         <button class="rs-b" type="button" data-rs="home">ホームへ</button>
       </div>
     </div>`;
@@ -3309,7 +3309,7 @@ function showResult(g, pt, deckId) {
     const b = e.target.closest('[data-rs]'); if (!b) return;
     el.remove();
     if (b.dataset.rs === 'again') startGame();
-    if (b.dataset.rs === 'deck') { G = null; setTab('battle'); }
+    if (b.dataset.rs === 'deck') { G = null; setTab('builder'); }
     if (b.dataset.rs === 'home') { G = null; setTab('home'); }
   });
   setTimeout(() => { const f = el.querySelector('[data-rs="again"]'); if (f) f.focus(); }, 50);
