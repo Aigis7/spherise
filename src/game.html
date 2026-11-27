@@ -486,6 +486,9 @@ body.drag-reserve [data-drop="reserve"] .stack{box-shadow:0 0 0 3px #ffd27a,0 0 
 .pile.reserve.hot .stack{animation:rsvHot 1.2s ease-in-out infinite}
 @keyframes rsvHot{50%{box-shadow:2px 2px 0 #0008,4px 4px 0 #0006,0 0 0 3px #4fe3d0,0 0 24px #4fe3d0}}
 .midline .msg.rsvmsg{color:#7ff0e0}
+#meBoard.rsvzone{position:relative}
+#meBoard.rsvzone::after{content:"リザーブフェーズ\Aここにドラッグしてリザーブに置く";white-space:pre;position:absolute;inset:-4px;display:grid;place-items:center;text-align:center;border:2px dashed #4fe3d0;border-radius:14px;background:rgb(8 40 44 / .55);color:#bff8ef;font-family:var(--f-display);font-size:clamp(1rem,3.6vw,1.5rem);line-height:1.6;letter-spacing:.06em;text-shadow:0 0 12px #4fe3d0,0 1px 3px #000;pointer-events:none;z-index:3}
+body.drag-reserve #meBoard.rsvzone::after{background:rgb(20 80 80 / .7);border-style:solid;box-shadow:0 0 24px #4fe3d0}
 @media (prefers-reduced-motion: reduce){.pile.reserve.hot .stack{animation:none;box-shadow:0 0 0 3px #4fe3d0}}
 .drop-hover{outline:3px solid #ff6b6b!important;outline-offset:3px}
 .only-m{display:none!important}
@@ -2522,7 +2525,7 @@ function phaseHTML(g) {
   if (g.phase === 'reserve') {
     const left = me.reserveLeft;
     const sel = me.hand.find(i => i.uid === g.ui.rsv);
-    return `<div class="msg me rsvmsg">${turn}リザーブの時間<span class="hint">${sel ? `「${esc(C[sel.cid].name)}」をリザーブに置く？` : `リザーブに置くカードを選ぶ。光っている青緑の束へドラッグしてもいい（あと${left}枚）`}</span></div>
+    return `<div class="msg me rsvmsg">${turn}リザーブの時間<span class="hint">${sel ? `「${esc(C[sel.cid].name)}」をリザーブに置く？` : `リザーブに置くカードを選ぶか、盤面へドラッグする（あと${left}枚）`}</span></div>
       ${sel ? '<button class="sbtn end" type="button" data-act="doReserve">リザーブに置く</button>' : ''}
       ${me.bonus && left === 1 ? '<button class="sbtn" type="button" data-act="bonus">2枚置く（後攻1回）</button>' : ''}
       <button class="sbtn" type="button" data-act="skipReserve">${left === 1 ? '置かない' : 'これで終わり'}</button>`;
@@ -2543,6 +2546,7 @@ function render() {
   $('#oppInfo').innerHTML = infoHTML(g, op, true);
   $('#oppBoard').innerHTML = boardHTML(g, op, true);
   $('#meBoard').innerHTML = boardHTML(g, me, false);
+  $('#meBoard').classList.toggle('rsvzone', !g.over && isMyTurn(g) && g.phase === 'reserve');
   $('#meInfo').innerHTML = infoHTML(g, me, false);
   g.lvFlash = null;
   $('#hand').innerHTML = handHTML(g, me, false);
@@ -2911,7 +2915,7 @@ function dropTarget(g, d, x, y) {
   const me = g.players[0], op = g.players[1];
   const cardEl = el.closest('.card[data-uid]');
   const inst = cardEl ? findInst(+cardEl.dataset.uid) : null;
-  if (d.kind === 'reserve') { const z = el.closest('[data-drop="reserve"]'); return z ? { el: z } : null; }
+  if (d.kind === 'reserve') { const z = el.closest('[data-drop="reserve"]') || el.closest('#meBoard') || el.closest('#meInfo'); return z ? { el: z } : null; }
   if (d.kind === 'play') {
     const dc = C[d.inst.cid];
     if (inst && wantsTarget(g, me, dc) && targets(g, me, dc.target).includes(inst)) return { el: cardEl, inst };
@@ -2988,7 +2992,7 @@ document.addEventListener('pointerup', async e => {
   const t = dropTarget(g, d, e.clientX, e.clientY);
   endDrag();
   g.ui = {};
-  if (!t) { if (d.kind === 'reserve' && !g.sim) fxText('リザーブは青緑の束へ', '#7ff0e0', true); render(); return; }
+  if (!t) { render(); return; }
   if (d.kind === 'reserve') { doReserve(g, d.inst); render(); }
   else if (d.kind === 'play') { const dc = C[d.inst.cid]; if (t.inst) await humanPlay(g, d.inst, t.inst); else if (wantsTarget(g, me, dc)) { g.ui = { mode: 'art', uid: d.inst.uid, place: dc.type !== 'art' }; sfx('play'); render(); } else await humanPlay(g, d.inst, null); }
   else if (d.kind === 'art') await humanPlay(g, d.inst, t.inst);
