@@ -4216,9 +4216,9 @@ function deckTileHTML(id, d, kind, sel, attr) {
 }
 /* 相手（CPU）の強さ */
 const DIFFS = {
-  easy: { name: 'やさしい', desc: 'ときどき迷う。いちばんいい手を選ばないこともある', win: 50, lose: 15 },
-  normal: { name: 'ふつう', desc: '手札と盤面を見て、いい手を選ぶ', win: 100, lose: 30 },
-  hard: { name: 'むずかしい', desc: '出す手を頭の中で試してから選ぶ', win: 150, lose: 45 },
+  easy: { name: 'ビギナー', desc: 'ときどき迷う。いちばんいい手を選ばないこともある', win: 50, lose: 15 },
+  normal: { name: 'ノーマル', desc: '手札と盤面を見て、いい手を選ぶ', win: 100, lose: 30 },
+  hard: { name: 'エキスパート', desc: '出す手を頭の中で試してから選ぶ', win: 150, lose: 45 },
 };
 const DIFFKEY = 'sphere-diff';
 function getDiff() { try { const v = localStorage.getItem(DIFFKEY); if (DIFFS[v]) return v; } catch (e) { } return 'normal'; }
