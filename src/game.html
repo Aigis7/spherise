@@ -280,6 +280,32 @@ textarea{width:100%;font-family:var(--f-mono);font-size:.72rem}
 @keyframes rsBig{from{transform:scale(1.6);opacity:0}}
 @keyframes rsSpark{from{opacity:.4}to{opacity:1}}
 @media (prefers-reduced-motion: reduce){.result,.rs-big,.rs-spark{animation:none}}
+/* 大技の演出 */
+.fin{position:absolute;inset:0;z-index:62;overflow:hidden;cursor:pointer}
+.fin-dim{position:absolute;inset:0;background:rgb(4 4 12 / .5)}
+.fin.wake .fin-dim{background:radial-gradient(circle at 50% 30%,rgb(40 20 70 / .55),rgb(2 2 8 / .85))}
+.fin.dawn .fin-dim{background:linear-gradient(0deg,rgb(255 160 80 / .35),rgb(10 10 30 / .55) 60%)}
+.fin.awaken .fin-dim{background:linear-gradient(0deg,rgb(120 60 200 / .4),rgb(6 4 18 / .6) 70%)}
+.fin-svg{position:absolute;left:0;top:0;overflow:visible;pointer-events:none}
+.fin-line{fill:none;stroke-width:7;stroke-linecap:round;filter:drop-shadow(0 0 6px currentColor) drop-shadow(0 0 14px rgb(255 255 255 / .6))}
+.fin-beam{stroke-linecap:round;filter:drop-shadow(0 0 12px #fff) drop-shadow(0 0 26px #ffd6ea)}
+.fin-crack{fill:none;stroke:#fff;stroke-width:4;stroke-linejoin:bevel;filter:drop-shadow(0 0 6px #e6d0ff) drop-shadow(0 0 16px #a36bff)}
+.fin-p{position:absolute;left:0;top:0;pointer-events:none;will-change:transform,opacity}
+.fin-p.glyph{font-size:30px;line-height:1;text-shadow:0 0 10px currentColor,0 0 20px currentColor}
+.fin-p.boom{width:40px;height:40px;border-radius:50%;background:radial-gradient(circle,#fff,var(--c) 40%,transparent 70%)}
+.fin-p.shock{width:40px;height:40px;border-radius:50%;border:3px solid var(--c);box-shadow:0 0 16px var(--c)}
+.fin-p.sun{width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,#fffbe6,#ffd27a 35%,rgb(255 150 70 / .5) 60%,transparent 72%)}
+.fin-p.rays{width:900px;height:900px;border-radius:50%;background:repeating-conic-gradient(rgb(255 220 140 / .32) 0 6deg,transparent 6deg 18deg);-webkit-mask:radial-gradient(circle,#000 10%,transparent 60%);mask:radial-gradient(circle,#000 10%,transparent 60%)}
+.fin-p.note{font-size:34px;color:#fff6d8;text-shadow:0 0 10px #ffd27a,0 0 22px #ff9a4a}
+.fin-p.ring{width:90px;height:90px}
+.fin-p.ring i{position:absolute;inset:0;border-radius:50%;border:9px solid #f2c75c;box-shadow:0 0 18px #ffd27a,inset 0 0 10px #fff3c4;background:none}
+.fin-p.ring b{position:absolute;left:50%;top:-14px;transform:translateX(-50%);font-size:26px;color:#fff;text-shadow:0 0 10px #bfe8ff,0 0 20px #fff}
+.fin-p.spark{font-size:20px;color:#fff3c4;text-shadow:0 0 8px #ffd27a}
+.fin-p.pillar{background:linear-gradient(0deg,rgb(230 210 255 / .95),rgb(160 100 255 / .6) 40%,transparent);filter:blur(3px);transform-origin:50% 100%;border-radius:40% 40% 0 0}
+.fin-p.bub{width:var(--s);height:var(--s);border-radius:50%;background:radial-gradient(circle at 32% 28%,rgb(255 255 255 / .85),transparent 30%),radial-gradient(circle,transparent 55%,rgb(210 180 255 / .6) 72%);border:1px solid rgb(255 255 255 / .5)}
+.fin-p.ghost{display:flex}
+.fin-p.ghost>.slot{flex:1;width:100%;height:100%;max-height:none;aspect-ratio:auto;border:0;background:none}
+.fin-p.shard{width:10px;height:16px;background:linear-gradient(135deg,#fff,#c9a8ff);clip-path:polygon(50% 0,100% 100%,0 70%);box-shadow:0 0 8px #fff}
 /* L（スフィア）の登場演出 */
 .ent{position:absolute;inset:0;z-index:60;overflow:hidden;cursor:pointer;--ci:#ffd27a}
 .ent.out{opacity:0;transition:opacity .3s}
@@ -1997,6 +2023,7 @@ function play(g, p, inst, t, opt) {
   const c = C[inst.cid];
   if (isCutin(c) && !(opt && opt.cutDone)) gq(g, { kind: 'cutin', cid: c.id, opp: p.idx !== 0 });
   if (isEntrance(c)) gq(g, { kind: 'entrance', cid: c.id, uid: inst.uid });
+  if (FINISHER[c.id] && !g.sim && g === G) gq(g, { kind: 'finisher', cid: c.id, n: p.reserve.length, snap: fxSnap(p, c) });
   if (!(opt && opt.prepaid)) { pay(p, cost(g, p, c)); p.hand.splice(p.hand.indexOf(inst), 1); }
   if (c.type === 'art') log(g, `${p.name}が「${c.name}」を使った${t ? '（対象：' + C[t.cid].name + '）' : ''}`);
   else { const s = emptySlot(p); p.board[s] = inst; inst.sick = !c.quick; inst.sleep = false; seasonSync(g, p); log(g, `${p.name}が「${c.name}」を出した`); }
@@ -2603,6 +2630,7 @@ function gfxResult(el, text, kind) { const r = el.querySelector('.gres'); r.clas
 async function playGfx(ev) {
   if (ev.kind === 'cutin') return playCutin(ev);
   if (ev.kind === 'entrance') return playEntrance(ev);
+  if (ev.kind === 'finisher') return playFinisher(ev);
   const t = (ms) => GFX.fast || reduceMotion.matches ? gsleep(Math.min(ms, 120)) : gsleep(ms);
   const el = gfxBox(`${ev.who}の${ev.title}`); if (!el) return;
   const body = el.querySelector('.gbody');
@@ -2775,6 +2803,130 @@ async function playEntrance(ev) {
   await new Promise(res => setTimeout(res, t2));
   wrap.classList.add('out');
   setTimeout(() => wrap.remove(), 300);
+}
+
+
+/* 大技の演出：使った瞬間の画面の位置を覚えておき（結果が出たあとに再生しても場所がずれないように）、カットインのあとに流す */
+const FINISHER = { k_meguri: 'seasons', n_last: 'dawn', s_ring: 'ring', y_still: 'awaken', y_end: 'wake' };
+function fxSnap(p, c) {
+  try {
+    const st = $('#stage'); if (!st || activeTab !== 'game') return null;
+    const sr = st.getBoundingClientRect();
+    const rc = el => { if (!el) return null; const r = el.getBoundingClientRect(); return { x: r.left + r.width / 2 - sr.left, y: r.top + r.height / 2 - sr.top, w: r.width, h: r.height }; };
+    const mine = p.idx === 0, myI = mine ? '#meInfo' : '#oppInfo', opI = mine ? '#oppInfo' : '#meInfo', myB = mine ? '#meBoard' : '#oppBoard', opB = mine ? '#oppBoard' : '#meBoard';
+    const need = c.needs && p.board.find(u => u && u.cid === c.needs);
+    return {
+      from: rc(document.querySelector(myI + ' .lifebox')), to: rc(document.querySelector(opI + ' .lifebox')),
+      mySlots: [...document.querySelectorAll(myB + ' .slot')].map(rc),
+      foes: [...document.querySelectorAll(opB + ' .slot .card')].map(e => ({ ...rc(e), html: '<div class="slot">' + e.outerHTML.replace(/ data-uid="[^"]*"/g, '') + '</div>' })),
+      unit: need ? rc(document.querySelector(`.card[data-uid="${need.uid}"]`)) : null,
+      W: sr.width, H: sr.height
+    };
+  } catch (e) { return null; }
+}
+async function playFinisher(ev) {
+  const s = ev.snap, kind = FINISHER[ev.cid];
+  if (activeTab !== 'game' || !G || !s || reduceMotion.matches) return;
+  const st = $('#stage'); if (!st || !st.animate) return;
+  const sp = GFX.fast ? .25 : 1;
+  const wrap = document.createElement('div'); wrap.className = 'fin ' + kind;
+  wrap.innerHTML = `<div class="fin-dim"></div><svg class="fin-svg" viewBox="0 0 ${s.W} ${s.H}" width="${s.W}" height="${s.H}"></svg>`;
+  st.appendChild(wrap);
+  const svg = wrap.querySelector('svg'), A = [];
+  const an = (el, kf, o) => { const a = el.animate(kf, { fill: 'both', ...o, duration: o.duration * sp, delay: (o.delay || 0) * sp }); A.push(a); return a; };
+  const part = (html, cls, x, y) => { const d = document.createElement('div'); d.className = 'fin-p ' + cls; d.innerHTML = html; d.style.left = x + 'px'; d.style.top = y + 'px'; wrap.appendChild(d); return d; };
+  const rnd = (a, b) => a + Math.random() * (b - a);
+  const F = s.from || { x: s.W / 2, y: s.H * .85 }, T = s.to || { x: s.W / 2, y: s.H * .12 };
+  const boom = (x, y, col, delay, size = 7) => {
+    const b = part('', 'boom', x, y); b.style.setProperty('--c', col);
+    an(b, [{ transform: 'translate(-50%,-50%) scale(.3)', opacity: 1 }, { transform: `translate(-50%,-50%) scale(${size})`, opacity: 0 }], { duration: 520, delay, easing: 'ease-out' });
+    const r = part('', 'shock', x, y); r.style.setProperty('--c', col);
+    an(r, [{ transform: 'translate(-50%,-50%) scale(.2)', opacity: 1 }, { transform: `translate(-50%,-50%) scale(${size * .8})`, opacity: 0 }], { duration: 620, delay: delay + 40, easing: 'ease-out' });
+  };
+  const shake = (delay) => an(st, [{ transform: 'none' }, { transform: 'translate(6px,-4px)' }, { transform: 'translate(-5px,3px)' }, { transform: 'translate(3px,2px)' }, { transform: 'none' }], { duration: 300, delay, fill: 'none' });
+  an(wrap.querySelector('.fin-dim'), [{ opacity: 0 }, { opacity: 1, offset: .15 }, { opacity: 1, offset: .85 }, { opacity: 0 }], { duration: kind === 'wake' ? 1900 : 1800 });
+  if (kind === 'seasons') {
+    /* 巡り咲き：春夏秋冬の4色の線が弧を描いて相手へ。最後に1本の環流になって貫く */
+    const S4 = [['#ffb8d2', '✿'], ['#8ef0a8', '❦'], ['#ff9a4a', '✸'], ['#dff1ff', '❄']];
+    const dx = T.x - F.x, dy = T.y - F.y, L = Math.hypot(dx, dy) || 1, nx = -dy / L, ny = dx / L;
+    S4.forEach(([col, gl], i) => {
+      const k = (i - 1.5) * Math.min(150, s.W * .28), mx = (F.x + T.x) / 2 + nx * k, my = (F.y + T.y) / 2 + ny * k;
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('d', `M${F.x} ${F.y} Q${mx} ${my} ${T.x} ${T.y}`); path.setAttribute('class', 'fin-line'); path.style.stroke = col;
+      svg.appendChild(path);
+      const len = path.getTotalLength(); path.style.strokeDasharray = len; path.style.strokeDashoffset = len;
+      const d0 = 150 + i * 110;
+      an(path, [{ strokeDashoffset: len, opacity: 1 }, { strokeDashoffset: 0, opacity: 1, offset: .55 }, { strokeDashoffset: 0, opacity: 1, offset: .75 }, { strokeDashoffset: -len, opacity: 0 }], { duration: 900, delay: d0, easing: 'cubic-bezier(.5,0,.4,1)' });
+      const head = part(gl, 'glyph', 0, 0); head.style.color = col;
+      const ks = []; for (let j = 0; j <= 10; j++) { const q = path.getPointAtLength(len * j / 10); ks.push({ transform: `translate(${q.x}px,${q.y}px) translate(-50%,-50%) rotate(${j * 54}deg) scale(${j === 10 ? 1.6 : 1.1})`, opacity: j === 10 ? 0 : 1 }); }
+      an(head, ks, { duration: 495, delay: d0, easing: 'cubic-bezier(.5,0,.4,1)' });
+    });
+    const tEnd = 150 + 3 * 110 + 495;
+    /* 4本がそろったあと、虹色の1本の線（環流）が一直線に貫く */
+    const beam = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    beam.setAttribute('x1', F.x); beam.setAttribute('y1', F.y); beam.setAttribute('x2', T.x); beam.setAttribute('y2', T.y); beam.setAttribute('class', 'fin-beam');
+    svg.insertAdjacentHTML('afterbegin', `<defs><linearGradient id="finRain" gradientUnits="userSpaceOnUse" x1="${F.x}" y1="${F.y}" x2="${T.x}" y2="${T.y}"><stop offset="0" stop-color="#ffb8d2"/><stop offset=".33" stop-color="#8ef0a8"/><stop offset=".66" stop-color="#ffb070"/><stop offset="1" stop-color="#e8f6ff"/></linearGradient></defs>`);
+    beam.style.stroke = 'url(#finRain)'; svg.appendChild(beam);
+    an(beam, [{ strokeWidth: 0, opacity: 0 }, { strokeWidth: 26, opacity: 1, offset: .25 }, { strokeWidth: 10, opacity: 1, offset: .6 }, { strokeWidth: 0, opacity: 0 }], { duration: 620, delay: tEnd - 60, easing: 'ease-out' });
+    boom(T.x, T.y, '#fff3f8', tEnd, 8); shake(tEnd);
+    for (let i = 0; i < 24; i++) {
+      const [col, gl] = S4[i % 4], a = rnd(0, Math.PI * 2), r = rnd(60, 190), d = part(gl, 'glyph', T.x, T.y); d.style.color = col;
+      an(d, [{ transform: 'translate(-50%,-50%) scale(.4)', opacity: 1 }, { transform: `translate(-50%,-50%) translate(${Math.cos(a) * r}px,${Math.sin(a) * r}px) rotate(${rnd(-300, 300)}deg) scale(1.2)`, opacity: 0 }], { duration: 900, delay: tEnd + rnd(0, 80), easing: 'cubic-bezier(.2,.8,.4,1)' });
+    }
+  } else if (kind === 'dawn') {
+    /* 夜明けを呼ぶ歌：下から朝日がのぼり、リザーブの数だけ光の音符が相手へ飛ぶ */
+    const sun = part('', 'sun', s.W / 2, s.H + 40);
+    an(sun, [{ transform: 'translate(-50%,-50%) scale(.4)', opacity: 0 }, { transform: 'translate(-50%,-50%) translateY(-90px) scale(1.4)', opacity: 1, offset: .5 }, { transform: 'translate(-50%,-50%) translateY(-120px) scale(1.8)', opacity: 0 }], { duration: 1800, easing: 'ease-out' });
+    const rays = part('', 'rays', s.W / 2, s.H);
+    an(rays, [{ transform: 'translate(-50%,-50%) rotate(0deg) scale(.6)', opacity: 0 }, { opacity: .9, offset: .35 }, { transform: 'translate(-50%,-50%) rotate(25deg) scale(1.3)', opacity: 0 }], { duration: 1800 });
+    const n = Math.max(1, Math.min(ev.n || 1, 12));
+    for (let i = 0; i < n; i++) {
+      const x0 = F.x + (i - (n - 1) / 2) * 34, y0 = F.y - 20, d0 = 350 + i * 110, bend = rnd(-140, 140);
+      const d = part(i % 2 ? '♫' : '♪', 'note', 0, 0);
+      const ks = []; for (let j = 0; j <= 8; j++) { const t = j / 8, x = x0 + (T.x - x0) * t + Math.sin(t * Math.PI) * bend, y = y0 + (T.y - y0) * t; ks.push({ transform: `translate(${x}px,${y}px) translate(-50%,-50%) scale(${.8 + t * .6})`, opacity: j === 8 ? .2 : 1 }); }
+      an(d, ks, { duration: 560, delay: d0, easing: 'ease-in' });
+      boom(T.x, T.y, '#ffe39a', d0 + 540, 3);
+    }
+    shake(350 + (n - 1) * 110 + 540);
+  } else if (kind === 'ring') {
+    /* 約束の指輪：大きな金の指輪が回りながら降りてきて、相棒のユニットにはまる */
+    const U = s.unit || { x: s.W / 2, y: s.H * .6 };
+    const ring = part('<i></i><b>◆</b>', 'ring', s.W / 2, s.H * .42);
+    an(ring, [{ transform: 'translate(-50%,-50%) scale(2.6) rotateY(0deg)', opacity: 0 }, { transform: 'translate(-50%,-50%) scale(2.2) rotateY(360deg)', opacity: 1, offset: .35 }, { transform: 'translate(-50%,-50%) scale(2) rotateY(720deg)', opacity: 1, offset: .55 }, { transform: `translate(-50%,-50%) translate(${U.x - s.W / 2}px,${U.y - s.H * .42}px) scale(.7) rotateY(1080deg)`, opacity: 1, offset: .85 }, { transform: `translate(-50%,-50%) translate(${U.x - s.W / 2}px,${U.y - s.H * .42}px) scale(1.3)`, opacity: 0 }], { duration: 1500, easing: 'ease-in-out' });
+    boom(U.x, U.y, '#ffe39a', 1250, 6);
+    for (let i = 0; i < 14; i++) { const a = i / 14 * Math.PI * 2, d = part('✦', 'spark', U.x, U.y); an(d, [{ transform: 'translate(-50%,-50%) scale(.3)', opacity: 1 }, { transform: `translate(-50%,-50%) translate(${Math.cos(a) * 110}px,${Math.sin(a) * 110}px) scale(1)`, opacity: 0 }], { duration: 700, delay: 1260, easing: 'ease-out' }); }
+  } else if (kind === 'awaken') {
+    /* まだ、終わらない：自分の場の5つの枠から、紫の光の柱が立ちのぼる */
+    (s.mySlots || []).forEach((r, i) => {
+      if (!r) return;
+      const col = part('', 'pillar', r.x, r.y + r.h / 2); col.style.width = r.w * .9 + 'px'; col.style.height = s.H * .9 + 'px';
+      an(col, [{ transform: 'translate(-50%,-100%) scaleY(0)', opacity: 0 }, { transform: 'translate(-50%,-100%) scaleY(1)', opacity: 1, offset: .4 }, { transform: 'translate(-50%,-100%) scaleY(1) scaleX(.2)', opacity: 0 }], { duration: 1100, delay: 200 + i * 110, easing: 'cubic-bezier(.2,.9,.3,1)' });
+      for (let j = 0; j < 4; j++) { const b = part('', 'bub', r.x + rnd(-r.w / 2, r.w / 2), r.y + r.h / 2); b.style.setProperty('--s', rnd(10, 22) + 'px'); an(b, [{ transform: 'translate(-50%,-50%) scale(.3)', opacity: 0 }, { opacity: 1, offset: .2 }, { transform: `translate(-50%,-50%) translateY(${-rnd(120, 260)}px) scale(1)`, opacity: 0 }], { duration: 1200, delay: 250 + i * 110 + j * 80, easing: 'ease-out' }); }
+      boom(r.x, r.y, '#d8b8ff', 600 + i * 110, 3);
+    });
+  } else if (kind === 'wake') {
+    /* 夢の終わり：相手の場に白いひびが走り、カードが割れて消える */
+    const foes = s.foes || [], yy = foes.length ? foes.reduce((a, f) => a + f.y, 0) / foes.length : T.y + 120;
+    const ghosts = foes.map(f => { const g2 = part(f.html, 'ghost', f.x, f.y); g2.style.width = f.w + 'px'; g2.style.height = f.h + 'px'; return [g2, f]; });
+    let d = `M -20 ${yy}`; for (let x = 0; x <= s.W + 40; x += 40) d += ` L ${x} ${yy + rnd(-26, 26)}`;
+    const crack = document.createElementNS('http://www.w3.org/2000/svg', 'path'); crack.setAttribute('d', d); crack.setAttribute('class', 'fin-crack'); svg.appendChild(crack);
+    const len = crack.getTotalLength(); crack.style.strokeDasharray = len;
+    an(crack, [{ strokeDashoffset: len, opacity: 1 }, { strokeDashoffset: 0, opacity: 1, offset: .5 }, { strokeDashoffset: 0, opacity: 1, offset: .8 }, { strokeDashoffset: 0, opacity: 0 }], { duration: 1100, delay: 300, easing: 'ease-in' });
+    ghosts.forEach(([g2, f], i) => {
+      const t0 = 560 + i * 60;
+      for (const [cp, dy, rot] of [['inset(0 0 50% 0)', -30, -10], ['inset(50% 0 0 0)', 34, 12]]) {
+        const half = part(f.html, 'ghost', f.x, f.y); half.style.width = f.w + 'px'; half.style.height = f.h + 'px'; half.style.clipPath = cp;
+        an(half, [{ transform: 'translate(-50%,-50%)', opacity: 0 }, { transform: 'translate(-50%,-50%)', opacity: 1, offset: .01 }, { transform: `translate(-50%,-50%) translate(${rnd(-20, 20)}px,${dy}px) rotate(${rot}deg)`, opacity: 0, filter: 'brightness(2.5)' }], { duration: 700, delay: t0, easing: 'ease-in' });
+      }
+      an(g2, [{ transform: 'translate(-50%,-50%)', opacity: 1, filter: 'none' }, { transform: 'translate(-50%,-50%)', opacity: 1, filter: 'brightness(1.8) saturate(.3)', offset: .9 }, { transform: 'translate(-50%,-50%)', opacity: 0 }], { duration: t0, easing: 'linear' });
+      for (let k = 0; k < 6; k++) { const sh = part('', 'shard', f.x, f.y); const a = rnd(0, Math.PI * 2); an(sh, [{ transform: 'translate(-50%,-50%) rotate(0deg)', opacity: 1 }, { transform: `translate(-50%,-50%) translate(${Math.cos(a) * 90}px,${Math.sin(a) * 90}px) rotate(${rnd(-200, 200)}deg)`, opacity: 0 }], { duration: 650, delay: t0, easing: 'ease-out' }); }
+    });
+    boom(s.W / 2, yy, '#f3e8ff', 560, 9); shake(560);
+  }
+  wrap.addEventListener('pointerdown', () => A.forEach(a => { try { a.finish(); } catch (e) { } }));
+  sfxSafe('lv');
+  await Promise.all(A.map(a => a.finished.catch(() => { })));
+  wrap.remove();
 }
 
 /* RR（ライズレア）を使った時の演出。タップで飛ばせる */
