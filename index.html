@@ -579,6 +579,12 @@ body.drag-reserve [data-drop="reserve"] .stack{box-shadow:0 0 0 3px #ffd27a,0 0 
 .mlabel b{font-family:var(--f-display);font-weight:400;font-size:1.1rem;letter-spacing:.08em}
 .mlabel small{font-size:.72rem;color:#c2c8d8;display:flex;gap:6px;align-items:center}
 .mlabel .tag{font-size:.62rem;font-weight:700;padding:1px 7px;border-radius:999px;background:#ffd27a;color:#2a1a00}
+#view-home{display:grid;grid-template-rows:auto minmax(0,1fr) auto auto;gap:clamp(8px,2dvh,18px);min-height:calc(100dvh - 70px)}
+@media (max-width:600px){body.in-scene #view-home{min-height:100dvh;padding-bottom:calc(10px + env(safe-area-inset-bottom,0px))}}
+.horb{display:grid;align-content:center;justify-items:center;gap:12px;min-height:0}
+.horb .sph{position:relative;left:auto;top:auto;transform:none;width:min(62vw,260px,30dvh)}
+.horb .sph:focus-visible{outline:2px solid #ffd27a;outline-offset:6px}
+.hlabel{font-size:.66rem!important;letter-spacing:.3em;color:#e8c879!important;font-weight:700}
 .hnav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;padding:8px 6px calc(6px + env(safe-area-inset-bottom,0px));border-radius:16px;background:linear-gradient(180deg,rgb(20 26 46 / .75),rgb(7 8 14 / .85));border:1px solid rgb(232 200 121 / .3);backdrop-filter:blur(6px)}
 .hnav button{all:unset;cursor:pointer;display:grid;justify-items:center;gap:3px;padding:6px 2px;border-radius:10px;font-size:.72rem;font-weight:700;color:#e3e6f0}
 .hnav button svg{width:34px;height:auto;fill:#f3d995}
@@ -904,8 +910,9 @@ body.drag-reserve [data-drop="reserve"] .stack{box-shadow:0 0 0 3px #ffd27a,0 0 
       <div class="hstat" id="homeStat"></div>
     </div>
     <div class="hbg" id="homeBg" aria-hidden="true"></div>
-    <div class="featured" id="homeFeatured" aria-hidden="true"></div>
-    <div class="hgrid" id="homeGrid"></div>
+    <div class="horb" id="homeOrb"></div>
+    <button class="hplay" type="button" data-go="battle"><span>対戦する</span><small>CPUと戦う</small></button>
+    <nav class="hnav" id="homeNav" aria-label="メニュー"></nav>
   </section>
 
   <!-- 対戦の準備 -->
@@ -3750,7 +3757,7 @@ function bIdx() { const list = builderDecks(); return Math.max(0, list.findIndex
   addEventListener('resize', () => { if (activeTab === 'builder' && !BUILD) layoutCar(bIdx(), 0); });
 })();
 function renderHome() {
-  $('#homeStat').innerHTML = `<span class="chip2">ポイント <b>${PLAYER.points}</b></span><span class="chip2">カード <b>${kinds()}</b> / ${Object.keys(STORE.cards).length}種類</span><span class="chip2">マイデッキ <b>${Object.keys(PLAYER.decks).length}</b></span>`;
+  $('#homeStat').innerHTML = `<span class="chip2">ポイント <b>${PLAYER.points}</b></span><span class="chip2">カード <b>${kinds()}</b> / ${Object.keys(STORE.cards).length}種類</span>`;
   paintOrbs($('#homeOrbs'), 6);
   /* 背景：最後に遊んだ領域 */
   { let s = null; try { s = JSON.parse(localStorage.getItem(LASTKEY)); } catch (e) { }
@@ -3759,19 +3766,19 @@ function renderHome() {
     const st = f && (f.stages || [])[Math.min(3, Math.max(1, s.lv || 1)) - 1];
     const bg = st ? stageImageUrl(st) : null;
     $('#homeBg').style.backgroundImage = bg ? `url(${bg})` : ''; }
-  const pick = [], seen = new Set();
-  for (const d of Object.values(STORE.decks)) { const c = coverCard(d); if (c && !seen.has(c.name)) { pick.push(c); seen.add(c.name); } }
-  const extra = Object.values(STORE.cards).filter(c => imageUrl(c) && c.type === 'unit' && !seen.has(c.name)).sort((a, b) => b.cost - a.cost);
-  const art = pick.concat(extra).slice(0, 5);
-  const rot = [-10, -5, 0, 5, 10], ys = [10, 3, 0, 3, 10];
-  $('#homeFeatured').innerHTML = art.map((c, i) => `<span style="${artStyle(c)};--r:${rot[i] || 0}deg;--y:${ys[i] || 0}px">${imageUrl(c) ? '' : artInner(c)}</span>`).join('');
+  /* 使用デッキの球体 */
+  const sel = $('#selMe').value, id = getDeck(sel) ? sel : Object.keys(STORE.decks)[0], d = getDeck(id);
+  if (d) {
+    const col = COLORS[deckColor(d)] || '#9aa3b8', cv = coverCard(d), img = cv ? imageUrl(cv) : null;
+    $('#homeOrb').innerHTML = `<button type="button" class="sph on" data-go="builder" aria-label="使用デッキ：${esc(d.name || '')}。タップでデッキを変える" style="--lc:${col}">${img ? `<span class="sph-img" style="background-image:url(${img})"></span>` : ''}<span class="sph-gloss"></span><span class="sph-ring"></span></button>
+      <div class="hpick"><small class="hlabel">使用デッキ</small><b>${esc(d.name || '')}</b><small><span class="cdot" style="--cc:${col}"></span>${esc((STORE.fields[d.field] || {}).name || '')}・タップで変える</small></div>`;
+  } else $('#homeOrb').innerHTML = '';
   const g = k => `<svg viewBox="0 0 100 60" aria-hidden="true">${GLYPH[k]}</svg>`;
-  $('#homeGrid').innerHTML = `
-    <button class="htile main" type="button" data-go="battle">${g('sword')}<b>対戦する</b><small>デッキを選んで、CPUと戦う</small></button>
-    <button class="htile" type="button" data-go="builder">${g('cards')}<b>デッキを作る</b><small>持っているカードで組む</small></button>
-    <button class="htile" type="button" data-go="collection">${g('star')}<b>コレクション</b><small>集めたカードを見る</small></button>
-    <button class="htile soon" type="button" data-go="packs"><span class="tag">準備中</span>${g('burst')}<b>パック</b><small>第一弾を準備中</small></button>
-    <button class="htile" type="button" data-go="settings">${g('gear')}<b>設定</b><small>効果音・データ</small></button>`;
+  $('#homeNav').innerHTML = `
+    <button type="button" data-go="builder">${g('cards')}<span>デッキ</span></button>
+    <button type="button" data-go="collection">${g('star')}<span>コレクション</span></button>
+    <button type="button" data-go="packs" class="soon">${g('burst')}<span>パック</span></button>
+    <button type="button" data-go="settings">${g('gear')}<span>設定</span></button>`;
 }
 
 /* ================= 17. 対戦の準備 ================= */
