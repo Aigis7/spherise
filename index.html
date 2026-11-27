@@ -565,6 +565,7 @@ body.drag-reserve [data-drop="reserve"] .stack{box-shadow:0 0 0 3px #ffd27a,0 0 
 .hplay.using::after{display:none}
 .bsub{justify-self:center;border-radius:999px;padding:5px 14px;background:rgb(255 255 255 / .07);color:#eef1f8;border:1px solid rgb(255 255 255 / .25)}
 .hplay.small span{font-size:1.05rem}
+.bfilters input[type=search]{flex:1 1 180px;min-width:0;padding:6px 12px;border-radius:999px;border:1px solid rgb(255 255 255 / .25);background:rgb(255 255 255 / .06);color:inherit;font:inherit}
 .bsph{display:grid;gap:8px;margin:6px 0 18px}
 .hplay:focus-visible{outline:2px solid #fff;outline-offset:3px}
 .mcar{position:relative;min-height:min(130px,15dvh);touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none;outline:none}
@@ -2258,8 +2259,12 @@ async function fxLunge(g, a, target) {
   try { await an.finished; } catch (e) { }
 }
 
+function cardHay(c) { return [c.name, c.epithet, c.set, c.part, ...(c.tags || []), TYPE[c.type], cardText(c)].filter(Boolean).join(' ').toLowerCase(); }
+function qMatch(c, q) { q = (q || '').trim().toLowerCase(); if (!q) return true; const hay = cardHay(c); return q.split(/\s+/).every(w => hay.includes(w)); }
+function keepFocus(id, fn) { const el = document.getElementById(id), had = document.activeElement === el, pos = el ? el.selectionStart : 0; fn(); if (had) { const n = document.getElementById(id); if (n) { n.focus(); try { n.setSelectionRange(pos, pos); } catch (e) { } } } }
 function kindLine(c) {
   const bits = [];
+  if (c.set) bits.push(c.set);
   if (c.part) bits.push(c.part);
   (c.tags || []).forEach(t => bits.push(t));
   return `<b>${TYPE[c.type]}</b>${bits.length ? '・' + esc(bits.join('・')) : ''}`;
@@ -3812,7 +3817,7 @@ $('#view-battle').addEventListener('click', e => {
 
 /* ================= 18. デッキを作る ================= */
 let BUILD = null;
-const BF = { set: '', type: '', cost: '' };
+const BF = { set: '', type: '', cost: '', q: '' };
 function renderBuilder() {
   const box = $('#builder');
   if (!BUILD) {
@@ -3829,7 +3834,7 @@ function renderBuilder() {
   const inDeck = id => ((d.list || []).find(x => x.id === id) || { n: 0 }).n;
   const sets = setNames();
   const dcol = deckColor(d);
-  const pool = sortCards(Object.entries(STORE.cards)).filter(([id, c]) => ownedCount(id) > 0 && !c.token && (cardColor(c) === '無' || cardColor(c) === dcol) && (!BF.set || c.set === BF.set) && (!BF.type || c.type === BF.type) && (BF.cost === '' || (BF.cost === '6' ? c.cost >= 6 : c.cost === +BF.cost)));
+  const pool = sortCards(Object.entries(STORE.cards)).filter(([id, c]) => ownedCount(id) > 0 && !c.token && (cardColor(c) === '無' || cardColor(c) === dcol) && (!BF.set || c.set === BF.set) && (!BF.type || c.type === BF.type) && qMatch(c, BF.q) && (BF.cost === '' || (BF.cost === '6' ? c.cost >= 6 : c.cost === +BF.cost)));
   const issues = builderIssues(d);
   const curve = Array.from({ length: 7 }, () => 0);
   for (const x of d.list || []) { const c = STORE.cards[x.id]; if (c) curve[Math.min(6, c.cost)] += x.n; }
@@ -3848,6 +3853,7 @@ function renderBuilder() {
     <div class="bmain">
       <div>
         <div class="bfilters">
+          <input type="search" id="bfQ" value="${esc(BF.q)}" placeholder="名前・テーマ・効果で探す" aria-label="カードを探す">
           <select id="bfSet" aria-label="テーマ"><option value="">すべてのテーマ</option>${sets.map(s => `<option${s === BF.set ? ' selected' : ''}>${esc(s)}</option>`).join('')}</select>
           <select id="bfType" aria-label="種類"><option value="">すべての種類</option>${Object.entries(TYPE).map(([k, v]) => `<option value="${k}"${k === BF.type ? ' selected' : ''}>${v}</option>`).join('')}</select>
           <span class="cchips" role="group" aria-label="コスト">${['', '0', '1', '2', '3', '4', '5', '6'].map(c => `<button class="cchip${BF.cost === c ? ' sel' : ''}" type="button" data-bcost="${c}">${c === '' ? '全' : c === '6' ? '6+' : c}</button>`).join('')}</span>
@@ -3910,15 +3916,16 @@ $('#builder').addEventListener('change', e => {
   if (e.target.id === 'bfSet') { BF.set = e.target.value; renderBuilder(); }
   if (e.target.id === 'bfType') { BF.type = e.target.value; renderBuilder(); }
 });
-$('#builder').addEventListener('input', e => { if (e.target.id === 'bName' && BUILD) { BUILD.deck.name = e.target.value; BUILD.dirty = true; } });
+$('#builder').addEventListener('input', e => { if (e.target.id === 'bfQ') { BF.q = e.target.value; keepFocus('bfQ', renderBuilder); return; } if (e.target.id === 'bName' && BUILD) { BUILD.deck.name = e.target.value; BUILD.dirty = true; } });
 
 /* ================= 19. コレクション ================= */
-const CF = { set: '', type: '', rar: '', own: '' };
+const CF = { set: '', type: '', rar: '', own: '', q: '' };
 function renderCollection() {
   const all = sortCards(Object.entries(STORE.cards)).filter(([id, c]) => !c.token);
-  const list = all.filter(([id, c]) => !c.token && (!CF.set || c.set === CF.set) && (!CF.type || c.type === CF.type) && (!CF.rar || (c.rarity || 'C') === CF.rar) && (!CF.own || (CF.own === 'yes' ? ownedCount(id) > 0 : ownedCount(id) === 0)));
+  const list = all.filter(([id, c]) => !c.token && qMatch(c, CF.q) && (!CF.set || c.set === CF.set) && (!CF.type || c.type === CF.type) && (!CF.rar || (c.rarity || 'C') === CF.rar) && (!CF.own || (CF.own === 'yes' ? ownedCount(id) > 0 : ownedCount(id) === 0)));
   $('#collection').innerHTML = `<div class="hhead"><h2>コレクション</h2><div class="hstat"><span class="chip2">持っている <b>${kinds()}</b> / ${all.length}種類</span><span class="chip2">ポイント <b>${PLAYER.points}</b></span><span class="chip2">かけら <b>${PLAYER.shards}</b></span></div></div>
     <div class="bfilters" style="margin:12px 0">
+      <input type="search" id="cfQ" value="${esc(CF.q)}" placeholder="名前・テーマ・効果で探す" aria-label="カードを探す">
       <select id="cfSet" aria-label="テーマ"><option value="">すべてのテーマ</option>${setNames().map(s => `<option${s === CF.set ? ' selected' : ''}>${esc(s)}</option>`).join('')}</select>
       <select id="cfType" aria-label="種類"><option value="">すべての種類</option>${Object.entries(TYPE).map(([k, v]) => `<option value="${k}"${k === CF.type ? ' selected' : ''}>${v}</option>`).join('')}</select>
       <select id="cfRar" aria-label="レア度"><option value="">すべてのレア度</option>${Object.entries(RARITY).map(([k, v]) => `<option value="${k}"${k === CF.rar ? ' selected' : ''}>${v}</option>`).join('')}</select>
@@ -3931,6 +3938,7 @@ $('#collection').addEventListener('change', e => {
   const m = { cfSet: 'set', cfType: 'type', cfRar: 'rar', cfOwn: 'own' }[e.target.id];
   if (m) { CF[m] = e.target.value; renderCollection(); }
 });
+$('#collection').addEventListener('input', e => { if (e.target.id === 'cfQ') { CF.q = e.target.value; keepFocus('cfQ', renderCollection); } });
 
 /* ================= 20. 設定 ================= */
 function renderSettings() {
