@@ -2640,6 +2640,278 @@
      "n": 2
     }
    ]
+  },
+  "easy_soiree": {
+   "name": "ソワレ（やさしい）",
+   "field": "col_yellow",
+   "list": [
+    {
+     "id": "s_lolo",
+     "n": 3
+    },
+    {
+     "id": "s_canaria",
+     "n": 3
+    },
+    {
+     "id": "s_sigma",
+     "n": 3
+    },
+    {
+     "id": "s_vera",
+     "n": 3
+    },
+    {
+     "id": "s_letizia",
+     "n": 3
+    },
+    {
+     "id": "s_dice",
+     "n": 3
+    },
+    {
+     "id": "s_invite",
+     "n": 3
+    },
+    {
+     "id": "s_roulette",
+     "n": 3
+    },
+    {
+     "id": "s_blackjack",
+     "n": 3
+    },
+    {
+     "id": "s_allin",
+     "n": 3
+    },
+    {
+     "id": "b_amp",
+     "n": 2
+    },
+    {
+     "id": "b_strike",
+     "n": 2
+    },
+    {
+     "id": "s_sweep",
+     "n": 3
+    },
+    {
+     "id": "s_chip",
+     "n": 3
+    }
+   ],
+   "cpu": "easy",
+   "base": "soiree"
+  },
+  "easy_noctiluca": {
+   "name": "ノクティルカ（やさしい）",
+   "field": "col_blue",
+   "list": [
+    {
+     "id": "n_garna",
+     "n": 3
+    },
+    {
+     "id": "n_fine",
+     "n": 3
+    },
+    {
+     "id": "n_urka",
+     "n": 3
+    },
+    {
+     "id": "n_nox",
+     "n": 3
+    },
+    {
+     "id": "n_riora",
+     "n": 3
+    },
+    {
+     "id": "n_lesson",
+     "n": 3
+    },
+    {
+     "id": "n_heart",
+     "n": 3
+    },
+    {
+     "id": "n_encore",
+     "n": 3
+    },
+    {
+     "id": "n_call",
+     "n": 3
+    },
+    {
+     "id": "n_shout",
+     "n": 3
+    },
+    {
+     "id": "b_amp",
+     "n": 2
+    },
+    {
+     "id": "c_exchange",
+     "n": 2
+    },
+    {
+     "id": "b_metro",
+     "n": 3
+    },
+    {
+     "id": "b_strike",
+     "n": 2
+    },
+    {
+     "id": "x_lamp",
+     "n": 1
+    }
+   ],
+   "cpu": "easy",
+   "base": "noctiluca"
+  },
+  "easy_yumemakura": {
+   "name": "夢枕（やさしい）",
+   "field": "col_purple",
+   "list": [
+    {
+     "id": "y_luluna",
+     "n": 3
+    },
+    {
+     "id": "y_muu",
+     "n": 3
+    },
+    {
+     "id": "y_blanc",
+     "n": 3
+    },
+    {
+     "id": "y_jig",
+     "n": 3
+    },
+    {
+     "id": "y_grim",
+     "n": 3
+    },
+    {
+     "id": "y_fly",
+     "n": 3
+    },
+    {
+     "id": "y_chase",
+     "n": 3
+    },
+    {
+     "id": "y_sweets",
+     "n": 2
+    },
+    {
+     "id": "y_door",
+     "n": 3
+    },
+    {
+     "id": "y_wake",
+     "n": 3
+    },
+    {
+     "id": "y_mirror",
+     "n": 3
+    },
+    {
+     "id": "y_fall",
+     "n": 2
+    },
+    {
+     "id": "y_true",
+     "n": 2
+    },
+    {
+     "id": "y_diary",
+     "n": 2
+    },
+    {
+     "id": "c_exchange",
+     "n": 2
+    }
+   ],
+   "cpu": "easy",
+   "base": "yumemakura"
+  },
+  "easy_shiki": {
+   "name": "四季ノ環（やさしい）",
+   "field": "col_green",
+   "list": [
+    {
+     "id": "k_tamaki",
+     "n": 3
+    },
+    {
+     "id": "k_deer",
+     "n": 3
+    },
+    {
+     "id": "k_swallow",
+     "n": 3
+    },
+    {
+     "id": "k_fox",
+     "n": 3
+    },
+    {
+     "id": "k_wolf",
+     "n": 2
+    },
+    {
+     "id": "k_pupil",
+     "n": 3
+    },
+    {
+     "id": "k_miko",
+     "n": 2
+    },
+    {
+     "id": "k_sakura",
+     "n": 3
+    },
+    {
+     "id": "k_kagero",
+     "n": 3
+    },
+    {
+     "id": "k_momiji",
+     "n": 3
+    },
+    {
+     "id": "k_hyoka",
+     "n": 3
+    },
+    {
+     "id": "c_exchange",
+     "n": 2
+    },
+    {
+     "id": "b_amp",
+     "n": 2
+    },
+    {
+     "id": "x_lamp",
+     "n": 2
+    },
+    {
+     "id": "h_signpost",
+     "n": 1
+    },
+    {
+     "id": "x_warden",
+     "n": 2
+    }
+   ],
+   "cpu": "easy",
+   "base": "shiki"
   }
  },
  "fields": {

@@ -3231,7 +3231,7 @@ function renderStats() {
 /* 対戦の開始 */
 function deckOptions(sel, prefer, withMine) {
   const cur = sel.value || prefer;
-  const rows = (withMine ? Object.entries(PLAYER.decks).map(([id, d]) => [id, 'マイデッキ：' + (d.name || id)]) : []).concat(Object.entries(STORE.decks).map(([id, d]) => [id, (withMine ? 'スターター：' : '') + (d.name || id)]));
+  const rows = (withMine ? Object.entries(PLAYER.decks).map(([id, d]) => [id, 'マイデッキ：' + (d.name || id)]) : []).concat(starterEntries().map(([id, d]) => [id, (withMine ? 'スターター：' : '') + (d.name || id)]));
   sel.innerHTML = rows.map(([id, nm]) => `<option value="${esc(id)}">${esc(nm)}</option>`).join('');
   const ids = rows.map(r => r[0]);
   if (ids.includes(cur)) sel.value = cur; else if (ids.includes(prefer)) sel.value = prefer; else if (ids.length) sel.value = ids[0];
@@ -3244,7 +3244,7 @@ async function startGame() {
   const a = $('#selMe').value, b = $('#selCpu').value;
   if (!a || !b) return;
   const diff = getDiff();
-  const g = newGame({ decks: [a, b], ai: [false, true], diffs: [null, diff] });
+  const g = newGame({ decks: [a, cpuDeckFor(b, diff)], ai: [false, true], diffs: [null, diff] });
   G = g; LAST.life = [null, null]; LAST.dmg = {};
   rememberStage(g.players[0]);
   render();
@@ -4022,6 +4022,9 @@ function starterOwned() {
 }
 const ownedCount = cid => PLAYER.testAll ? 3 : (PLAYER.owned[cid] || 0);
 const getDeck = id => PLAYER.decks[id] || STORE.decks[id];
+/* CPU専用のデッキ（cpu: 'easy' か 'hard'、base: もとのデッキ）は、遊ぶ人の一覧には出さない */
+const starterEntries = () => Object.entries(STORE.decks).filter(([, d]) => d && !d.cpu);
+function cpuDeckFor(base, diff) { const e = Object.entries(STORE.decks).find(([, d]) => d && d.cpu === diff && d.base === base); return e ? e[0] : base; }
 const deckTotal = d => (d.list || []).reduce((a, x) => a + x.n, 0);
 function loadLocal() {
   PLAYER.mode = 'local';
@@ -4102,7 +4105,7 @@ function lastTool() { try { const t = localStorage.getItem('ryoiki-tool'); if ([
 const kinds = () => Object.keys(STORE.cards).filter(id => ownedCount(id) > 0).length;
 function homeDecks() {
   const mine = Object.entries(PLAYER.decks).map(([id, d]) => ({ id, d, kind: 'マイデッキ' }));
-  const st = Object.entries(STORE.decks).map(([id, d]) => ({ id, d, kind: 'スターター' }));
+  const st = starterEntries().map(([id, d]) => ({ id, d, kind: 'スターター' }));
   return mine.concat(st).filter(x => x.d);
 }
 
@@ -4111,7 +4114,7 @@ function homeDecks() {
 let BSEL = null;
 function builderDecks() {
   const mine = Object.entries(PLAYER.decks).map(([id, d]) => ({ id, d, kind: 'マイデッキ', mine: true }));
-  const st = Object.entries(STORE.decks).map(([id, d]) => ({ id, d, kind: 'スターター', mine: false }));
+  const st = starterEntries().map(([id, d]) => ({ id, d, kind: 'スターター', mine: false }));
   return mine.concat(st).filter(x => x.d);
 }
 function bcarHTML() {
@@ -4213,11 +4216,11 @@ function setDiff(v) { if (!DIFFS[v]) return; try { localStorage.setItem(DIFFKEY,
 function renderBattle() {
   const me = $('#selMe').value, cpu = $('#selCpu').value;
   const mine = Object.entries(PLAYER.decks).map(([id, d]) => deckTileHTML(id, d, 'マイデッキ', id === me, 'data-pick-me'));
-  const st = Object.entries(STORE.decks).map(([id, d]) => deckTileHTML(id, d, 'スターター', id === me, 'data-pick-me'));
+  const st = starterEntries().map(([id, d]) => deckTileHTML(id, d, 'スターター', id === me, 'data-pick-me'));
   $('#btMine').innerHTML = mine.concat(st).join('') || '<p class="note">デッキがありません。</p>';
   { const md = getDeck(me), col = deckColor(md), cur = chosenLeader(col), ids = md ? leadersFor(col) : [];
     $('#btLeader').innerHTML = md ? `<h3>リーダー<small style="font-weight:400;color:#c2c8d8;margin-left:8px">${col}の色</small></h3><div class="ldrpick">${ids.map(id => `<button type="button" data-pick-leader="${id}" class="${id === cur ? 'sel' : ''}" aria-pressed="${id === cur}"><span class="lp" style="--lc:${COLORS[col]}">${leaderArt(id)}</span>${esc(LEADERS[id].name)}</button>`).join('')}</div>` : ''; }
-  $('#btCpu').innerHTML = Object.entries(STORE.decks).map(([id, d]) => deckTileHTML(id, d, 'スターター', id === cpu, 'data-pick-cpu')).join('');
+  $('#btCpu').innerHTML = starterEntries().map(([id, d]) => deckTileHTML(id, d, 'スターター', id === cpu, 'data-pick-cpu')).join('');
   { const cur = getDiff();
     $('#btDiff').innerHTML = `<h3>相手の強さ</h3><div class="diffpick" role="radiogroup" aria-label="相手の強さ">${Object.entries(DIFFS).map(([k, d]) => `<button type="button" role="radio" aria-checked="${k === cur}" data-pick-diff="${k}" class="${k === cur ? 'sel' : ''}"><b>${esc(d.name)}</b><small>${esc(d.desc)}</small><span>勝ち ${d.win}pt・負け ${d.lose}pt</span></button>`).join('')}</div>`; }
 }
@@ -4238,7 +4241,7 @@ function renderBuilder() {
   const box = $('#builder');
   if (!BUILD) {
     const mine = Object.entries(PLAYER.decks).map(([id, d]) => deckTileHTML(id, d, 'マイデッキ', false, 'data-bopen')).join('');
-    const st = Object.entries(STORE.decks).map(([id, d]) => deckTileHTML(id, d, 'スターター', false, 'data-bcopy')).join('');
+    const st = starterEntries().map(([id, d]) => deckTileHTML(id, d, 'スターター', false, 'data-bcopy')).join('');
     box.innerHTML = `<h2>デッキを作る</h2>${bcarHTML()}<p class="lead">持っているカードで、40枚のデッキを組みます。同じカードは3枚まで。</p>
       <h3>マイデッキ</h3><div class="tiles"><button class="dtile new" type="button" data-bnew>＋ 新しいデッキ</button>${mine}</div>
       <h3>スターターデッキをもとに作る</h3><div class="tiles">${st}</div>
