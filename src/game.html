@@ -1101,7 +1101,7 @@ function newId(prefix) { return prefix + Date.now().toString(36) + Math.random()
 /* ================= 1. 文章の自動生成 ================= */
 const TRIG_LABEL = { play: '場に出た時', death: '破壊された時', start: '自分のターン開始時', end: '自分のターン終了時', countdownEnd: 'カウントが0になった時', use: 'カードを使った時', gambleWin: '自分が勝負に勝った時', gambleLose: '自分が勝負に負けた時', gamble: '自分が勝負をするたび', unit: '自分がユニットを出した時', allyDeath: '自分のほかのユニットが破壊された時' };
 const FIELD_TRIG_LABEL = { allyDeath: '自分のユニットが破壊された時' };
-const ACT_LABEL = { summon: 'カードを場に出す', draw: 'カードを引く', damage: 'ダメージ', heal: '回復', buff: '強化', destroy: '破壊', search: '山札から探す', revive: '墓地から場に出す', reserveBlast: 'リザーブを全部使ってダメージ', gamble: '勝負する', roulette: 'ルーレット', optPay: 'ライフを払ってもいい', payLife: 'ライフを払う', peek: '山札の上を見て並べ替え', replay: '場のユニットの「場に出た時」をもう一度（勝負は全部の結果）', fixNext: '次の勝負をいちばん強い結果にする' };
+const ACT_LABEL = { advanceSeason: '季節を1つ進める', seasonStrike: '季節が変わった回数ぶん相手にダメージ', freeze: '眠らせる（次の相手のターンも起きない）', summon: 'カードを場に出す', draw: 'カードを引く', damage: 'ダメージ', heal: '回復', buff: '強化', destroy: '破壊', search: '山札から探す', revive: '墓地から場に出す', reserveBlast: 'リザーブを全部使ってダメージ', gamble: '勝負する', roulette: 'ルーレット', optPay: 'ライフを払ってもいい', payLife: 'ライフを払う', peek: '山札の上を見て並べ替え', replay: '場のユニットの「場に出た時」をもう一度（勝負は全部の結果）', fixNext: '次の勝負をいちばん強い結果にする' };
 const GAME_LABEL = { dice: 'サイコロ', blackjack: 'ブラックジャック', poker: 'ポーカー' };
 const BRANCH_LABEL = { win: '勝ち', lose: '負け', seven: 'ちょうど7で勝ち', three: '3枚そろい', straight: '階段', pair: '2枚そろい', red: '赤（奇数）', black: '黒（偶数）', yes: '払ったら' };
 const RANK_NAME = { three: '3枚そろい', straight: '階段', pair: '2枚そろい', none: 'ばらばら' };
@@ -1118,9 +1118,10 @@ const ACT_TARGETS = {
   search: [],
   revive: [],
   reserveBlast: [],
-  summon: [],
+  summon: [], advanceSeason: [], seasonStrike: [],
+  freeze: ['chosen', 'randomEnemy'],
 };
-const COND_LABEL = { lost: '自分のユニットが破壊される', kills: '相手のユニットを破壊する', parts: '異なるパートのユニットを出す', tag: 'タグのカードを使う', units: 'ユニットを出す', arts: 'アーツを使う', heads: 'コイントスで表を出す', dealt: '相手にダメージを与える', taken: 'ダメージを受ける', gambles: '勝負をする', wins: '勝負に勝つ', uses: 'カードを使う' };
+const COND_LABEL = { attacks: '攻撃する', lost: '自分のユニットが破壊される', kills: '相手のユニットを破壊する', parts: '異なるパートのユニットを出す', tag: 'タグのカードを使う', units: 'ユニットを出す', arts: 'アーツを使う', heads: 'コイントスで表を出す', dealt: '相手にダメージを与える', taken: 'ダメージを受ける', gambles: '勝負をする', wins: '勝負に勝つ', uses: 'カードを使う' };
 function tgtText(s, card, again) {
   if (s.target !== 'chosen') return TGT_LABEL[s.target] || '';
   const k = card && card.target;
@@ -1163,6 +1164,9 @@ function stepText(s, card, again) {
       for (const b of branchesOf(s)) { const t = subText(s, b, card); if (t) parts.push(`${b === 'lose' && g === 'poker' ? 'ばらばら（負け）' : BRANCH_LABEL[b]}：${t}`); }
       return head + (parts.length ? '。' + parts.join('／') : '');
     }
+    case 'advanceSeason': return '季節を1つ進める';
+    case 'seasonStrike': return `相手に、季節が変わった回数${n > 1 ? '×' + n : ''}ぶんダメージ`;
+    case 'freeze': return `${T}を眠らせる（次の相手のターンも起きない）`;
     case 'summon': return `「${cardName(s.id)}」を${n > 1 ? n + '体' : ''}場に出す`;
     case 'reserveBlast': return `リザーブをすべて墓地に送る。送った枚数${n > 1 ? `×${n}` : ''}ぶん、相手にダメージ`;
   }
@@ -1173,6 +1177,7 @@ const grantsOf = st => [].concat((st && st.grant) || []).filter(Boolean);
 function effectText(e, card) {
   let pre = '';
   if (e.lv) pre += `昇華${e.lv}：`;
+  if (e.season) pre += `${e.season}なら、`;
   const isArtPlay = card && card.type === 'art' && e.trigger === 'play';
   if (e.trigger === 'use') pre += `${e.tag ? `「${e.tag}」の` : ''}カードを使った時、`;
   else if (!isArtPlay) pre += (((!card || card.type === 'object') && FIELD_TRIG_LABEL[e.trigger]) || TRIG_LABEL[e.trigger] || '') + (e.lv ? '、' : '：');
@@ -1208,6 +1213,7 @@ function cardText(c) {
   if (c.cheat) out.push('1ターンに1回、自分が勝負に負けた時、このユニットをスリープにして勝ちにする。');
   if (c.dealerStand) out.push(`場にいる間、ブラックジャックでディーラーは合計${c.dealerStand}で止まる。`);
   if (c.lvAtk && c.lvAtk.n) out.push(`昇華${c.lvAtk.lv}：攻撃力+${c.lvAtk.n}。`);
+  if (c.seasonal) out.push(`${c.seasonal}の間、攻撃力+1、体力+1。`);
   for (const e of c.effects || []) out.push(effectText(e, c));
   if (c.extra) out.push(c.extra);
   return out.join(' ');
@@ -1225,6 +1231,7 @@ function condText(c) {
     case 'gambles': return `勝負を${c.n}回する`;
     case 'wins': return `勝負に${c.n}回勝つ`;
     case 'lost': return `自分のユニットが合計${c.n}体破壊される`;
+    case 'attacks': return `攻撃を${c.n}回する`;
     case 'kills': return `相手のユニットを合計${c.n}体破壊する`;
   }
   return '';
@@ -1421,9 +1428,9 @@ function compile() {
     C[id].cost = +C[id].cost || 0; C[id].atk = +C[id].atk || 0; C[id].hp = Math.max(1, +C[id].hp || 1);
   }
   for (const [id, f] of Object.entries(STORE.fields)) {
-    const st = (f.stages || []).slice(0, 3);
-    while (st.length < 3) st.push({ name: '（未設定）', effects: [] });
-    FIELDS[id] = { id, name: f.name || id, set: f.set, scene: f.scene, stages: st, conds: (f.conds || []).slice(0, 2) };
+    const N = f.cycle ? 4 : 3, st = (f.stages || []).slice(0, N);
+    while (st.length < N) st.push({ name: '（未設定）', effects: [] });
+    FIELDS[id] = { id, name: f.name || id, set: f.set, scene: f.scene, stages: st, conds: (f.conds || []).slice(0, f.cycle ? 4 : 2), cycle: !!f.cycle, lapGrant: f.lapGrant || {} };
   }
 }
 function deckCards(deckId) {
@@ -1440,15 +1447,40 @@ function mk(cid, owner) { return { uid: UID++, cid, owner, damage: 0, sleep: fal
 const other = (g, p) => g.players[1 - p.idx];
 const units = p => p.board.filter(u => u && C[u.cid].type === 'unit');
 const objects = p => p.board.filter(u => u && C[u.cid].type === 'object');
-const stageOf = p => FIELDS[p.field.id].stages[p.field.lv - 1];
+const SEASONS = ['春', '夏', '秋', '冬'];
+const isCycle = p => !!(FIELDS[p.field.id] && FIELDS[p.field.id].cycle);
+const stageIdx = p => isCycle(p) ? (p.field.season || 0) : p.field.lv - 1;
+const stageOf = p => FIELDS[p.field.id].stages[stageIdx(p)];
+const seasonOf = p => isCycle(p) ? SEASONS[p.field.season || 0] : null;
+/* 「◯の間」のユニットの体力を、今の季節に合わせる */
+function seasonSync(g, p) { const s = seasonOf(p); for (const u of p.board) if (u) u.sbH = C[u.cid].seasonal && C[u.cid].seasonal === s ? 1 : 0; }
+/* 季節を1つ進める。冬から春に戻ったら昇華（1周目→2周目→3周目以降） */
+function advanceSeason(g, p, keepPending) {
+  if (!isCycle(p)) return false;
+  const f = p.field, F = FIELDS[f.id];
+  if (!keepPending) f.pending = false;
+  f.parts = new Set(); f.count = 0;
+  f.season = ((f.season || 0) + 1) % 4; f.changes = (f.changes || 0) + 1;
+  log(g, `${p.name}の季節が${SEASONS[f.season]}になった：${stageOf(p).name}（${f.changes}回目）`, 't');
+  if (f.season === 0) {
+    f.laps = (f.laps || 0) + 1;
+    if (f.lv < 3) { f.lv++; log(g, `${p.name}の領域が昇華（${LV_NAME[f.lv - 1]}）`, 't'); }
+    const gid = F.lapGrant['l' + f.laps];
+    if (gid && C[gid]) { p.hand.push(mk(gid, p.idx)); log(g, `${p.name}の手札に「${C[gid].name}」が加わった`); }
+  }
+  seasonSync(g, p);
+  if (!g.sim) { g.lvFlash = p.idx; if (g === G) setTimeout(() => { fxText(`${SEASONS[f.season]}　${stageOf(p).name}`, skyOf(p).glow); sfx('lv'); }, 400); }
+  return true;
+}
 function getAtk(g, u) {
   const c = C[u.cid], p = g.players[u.owner];
   let a = c.atk + u.atkMod + u.temp;
   for (const o of p.board) if (o && o !== u && C[o.cid].aura) a += +C[o.cid].aura;
   if (c.lvAtk && c.lvAtk.n && p.field.lv >= c.lvAtk.lv) a += +c.lvAtk.n;
+  if (c.seasonal && c.seasonal === seasonOf(p)) a += 1;
   return Math.max(0, a);
 }
-const getHp = u => C[u.cid].hp + u.hpMod;
+const getHp = u => C[u.cid].hp + u.hpMod + (u.sbH || 0);
 const rem = u => getHp(u) - u.damage;
 const W = (g, ms) => g.sim ? Promise.resolve() : new Promise(r => setTimeout(r, ms));
 function log(g, s, cls) { if (g.sim) return; g.log.push({ s, cls }); if (g.log.length > 300) g.log.shift(); }
@@ -1522,7 +1554,7 @@ function summon(g, p, cid, n) {
   if (!C[cid]) return;
   for (let i = 0; i < n; i++) {
     const s = emptySlot(p); if (s < 0) { log(g, '盤面に空きがない'); return; }
-    const u = mk(cid, p.idx); u.sick = !C[cid].quick; p.board[s] = u;
+    const u = mk(cid, p.idx); u.sick = !C[cid].quick; p.board[s] = u; seasonSync(g, p);
     log(g, `${p.name}の場に「${C[cid].name}」が出た`);
   }
 }
@@ -1675,6 +1707,8 @@ function doStep(g, p, src, s, chosen, opt) {
   if (s.action === 'draw') { draw(g, s.target === 'opponent' ? other(g, p) : p, n); return; }
   if (s.action === 'search') { search(g, p, s.filter); return; }
   if (s.action === 'summon') { summon(g, p, s.id, n); return; }
+  if (s.action === 'advanceSeason') { advanceSeason(g, p, true); return; }
+  if (s.action === 'seasonStrike') { const k = (p.field.changes || 0) * n; log(g, `季節が変わった回数：${p.field.changes || 0}`); dmgPlayer(g, other(g, p), k); return; }
   if (s.action === 'gamble') { resolveGamble(g, p, src, s, chosen, opt); return; }
   if (s.action === 'roulette') {
     const roll = 1 + Math.floor(Math.random() * 6) + boardSum(p, 'diceBonus'), red = roll % 2 === 1;
@@ -1722,7 +1756,7 @@ function doStep(g, p, src, s, chosen, opt) {
     if (!cid || !graveUnits(p).includes(cid)) cid = bestGrave(p);
     if (!cid) { log(g, '墓地にユニットがいない'); return; }
     p.grave.splice(p.grave.lastIndexOf(cid), 1);
-    const u = mk(cid, p.idx); p.board[slot] = u; u.sick = !C[cid].quick;
+    const u = mk(cid, p.idx); p.board[slot] = u; u.sick = !C[cid].quick; seasonSync(g, p);
     log(g, `${p.name}の「${C[cid].name}」が墓地から戻ってきた`);
     runTrigger(g, p, u, 'play');
     return;
@@ -1732,12 +1766,14 @@ function doStep(g, p, src, s, chosen, opt) {
     if (s.action === 'damage') { if (isPlayer(t)) dmgPlayer(g, t, n); else dmgUnit(g, t, n); }
     else if (s.action === 'heal') { if (isPlayer(t)) { t.life = Math.min(25, t.life + n); log(g, `${t.name}のライフが${n}回復`); } else t.damage = n >= 99 ? 0 : Math.max(0, t.damage - n); }
     else if (s.action === 'buff' && !isPlayer(t)) { if (s.temp) t.temp += n; else { t.atkMod += n; t.hpMod += (s.hp || 0); } }
+    else if (s.action === 'freeze' && !isPlayer(t)) { t.sleep = true; t.frozen = true; log(g, `${C[t.cid].name}が眠った`); }
     else if (s.action === 'destroy' && !isPlayer(t)) { if (C[t.cid].type === 'unit') { t.damage = Math.max(t.damage, getHp(t)); log(g, `${C[t.cid].name}を破壊`); } else destroy(g, t); }
   }
 }
 function runEffect(g, p, src, e, chosen, opt) {
   if (g.over) return;
   if (e.lv && p.field.lv < e.lv) return;
+  if (e.season && e.season !== seasonOf(p)) return;
   const steps = e.steps || [], flips = e.flips || 0;
   if (!flips) { for (const s of steps) if (!s.if) doStep(g, p, src, s, chosen, opt); }
   else for (let i = 0; i < flips && !g.over; i++) {
@@ -1750,7 +1786,7 @@ function runTrigger(g, p, inst, trig, chosen, opt) {
 }
 const playSteps = c => (c.effects || []).filter(e => e.trigger === 'play').flatMap(e => flatSteps(e.steps));
 const needsRevive = c => playSteps(c).some(s => s.action === 'revive');
-function condOf(p) { return p.field.lv >= 3 ? null : FIELDS[p.field.id].conds[p.field.lv - 1] || null; }
+function condOf(p) { if (isCycle(p)) return FIELDS[p.field.id].conds[p.field.season || 0] || null; return p.field.lv >= 3 ? null : FIELDS[p.field.id].conds[p.field.lv - 1] || null; }
 function condValue(p) { const c = condOf(p); if (!c) return 0; return c.type === 'parts' ? p.field.parts.size : p.field.count; }
 function progress(g, p, ev) {
   const f = p.field, c = condOf(p);
@@ -1762,6 +1798,7 @@ function progress(g, p, ev) {
   if (c.type === 'heads' && ev.type === 'heads') f.count++;
   if (c.type === 'uses' && ev.type === 'use') f.count++;
   if ((c.type === 'gambles' && ev.type === 'gamble') || (c.type === 'wins' && ev.type === 'win')) f.count++;
+  if (c.type === 'attacks' && ev.type === 'attack') f.count++;
   if ((c.type === 'lost' && ev.type === 'lost') || (c.type === 'kills' && ev.type === 'kill')) f.count++;
   if ((c.type === 'dealt' && ev.type === 'dealt') || (c.type === 'taken' && ev.type === 'taken')) f.count += ev.n;
   if (condValue(p) >= c.n) { f.pending = true; log(g, `${p.name}の領域が昇華の条件を満たした（次の自分のターン開始時に昇華）`, 't'); }
@@ -1810,7 +1847,7 @@ function play(g, p, inst, t, opt) {
   const c = C[inst.cid];
   if (!(opt && opt.prepaid)) { pay(p, cost(g, p, c)); p.hand.splice(p.hand.indexOf(inst), 1); }
   if (c.type === 'art') log(g, `${p.name}が「${c.name}」を使った${t ? '（対象：' + C[t.cid].name + '）' : ''}`);
-  else { const s = emptySlot(p); p.board[s] = inst; inst.sick = !c.quick; inst.sleep = false; log(g, `${p.name}が「${c.name}」を出した`); }
+  else { const s = emptySlot(p); p.board[s] = inst; inst.sick = !c.quick; inst.sleep = false; seasonSync(g, p); log(g, `${p.name}が「${c.name}」を出した`); }
   runTrigger(g, p, inst, 'play', t, opt);
   if (c.type === 'art') p.grave.push(c.id);
   if (c.type === 'unit') progress(g, p, { type: 'unit', part: c.part });
@@ -1834,6 +1871,7 @@ function fight(g, a, b, blocked) {
 async function doAttack(g, p, a, target) {
   const o = other(g, p);
   a.sleep = true;
+  progress(g, p, { type: 'attack' });
   log(g, `${p.name}の${C[a.cid].name}が${target.kind === 'life' ? o.name + 'のライフ' : C[target.u.cid].name}を攻撃`);
   const blockers = units(o).filter(u => !u.sleep);
   let b = null;
@@ -1850,7 +1888,7 @@ function newGame({ decks, ai, sim }) {
   for (let i = 0; i < 2; i++) {
     g.players.push({
       idx: i, name: ai[i] ? (sim ? ['A', 'B'][i] : 'CPU') : 'あなた', isAI: ai[i], deckId: decks[i], deck: shuffle(deckCards(decks[i])), hand: [], board: [null, null, null, null, null], reserve: [], grave: [], life: 25, lifeDraws: 0,
-      field: { id: deckField(decks[i]), lv: 1, pending: false, parts: new Set(), count: 0 }, tf: {}, bonus: false, noBlock: false, reserveLeft: 0,
+      field: { id: deckField(decks[i]), lv: 1, pending: false, parts: new Set(), count: 0, season: 0, changes: 0, laps: 0 }, tf: {}, bonus: false, noBlock: false, reserveLeft: 0,
     });
   }
   g.players.forEach(p => { const col = deckColor(getDeck(p.deckId)); p.color = col; p.leader = p.isAI ? DEFAULT_LEADER[col] || 'em_white' : chosenLeader(col); });
@@ -1873,9 +1911,15 @@ async function runTurn(g) {
   p.noBlock = false; o.noBlock = false; g.ui = {}; p.tf = {}; g.fxq = []; o.tf = o.tf || {};
   log(g, `第${Math.ceil(g.turnNo / 2)}ターン ${p.name}`, 't');
   if (!g.sim && g === G && activeTab === 'game') showTurnBanner(p);
-  for (const u of p.board) if (u) { u.sleep = false; u.sick = false; }
+  for (const u of p.board) if (u) { if (u.frozen) { u.frozen = false; u.sleep = true; } else u.sleep = false; u.sick = false; }
   p.reserve.forEach(r => r.tapped = false);
-  if (p.field.pending) {
+  if (p.field.pending && isCycle(p)) {
+    const lv0 = p.field.lv;
+    advanceSeason(g, p);
+    if (!g.sim && g === G && p.idx === 0) rememberStage(p);
+    if (!g.sim && g === G && p.field.lv === 3 && lv0 < 3) { rerender(g); await riseCut(p); }
+    cleanup(g);
+  } else if (p.field.pending) {
     p.field.lv++; p.field.pending = false; p.field.parts = new Set(); p.field.count = 0;
     placeDealer(g, p);
     log(g, `${p.name}の領域が昇華：${stageOf(p).name}（${LV_NAME[p.field.lv - 1]}）`, 't');
@@ -1963,6 +2007,9 @@ function stepValue(g, p, s, t, card) {
       if (s.target === 'chosen') return t ? (C[t.cid].type === 'unit' ? 6 + getAtk(g, t) * 2 + C[t.cid].cost : 6) * (enemy ? 1 : -1) : 0;
       if (s.target === 'allEnemies') { const us = units(o); return us.length >= 2 ? us.reduce((a, u) => a + 6 + getAtk(g, u) * 2 + C[u.cid].cost, 0) : us.length * 4; }
       return units(o).length ? 7 : 0;
+    case 'advanceSeason': return isCycle(p) ? 2 : 0;
+    case 'seasonStrike': { const k = (p.field.changes || 0) * n; return k * 1.6 + (o.life <= k ? 100 : 0); }
+    case 'freeze': { if (s.target === 'chosen') return t && enemy && !t.frozen ? 2 + getAtk(g, t) * 1.5 : 0; const us = units(o); return us.length ? 2 + us.reduce((a, u) => a + getAtk(g, u), 0) / us.length : 0; }
     case 'summon': { const free = p.board.filter(x => !x).length, k = Math.min(n, free), c = C[s.id]; return c ? k * (2 + c.atk + c.hp * 0.8) : 0; }
     case 'revive': { const b = bestGrave(p); return b && emptySlot(p) >= 0 ? 8 + C[b].cost * 2 : 0; }
     case 'payLife': return -n * (p.life <= 10 ? 3 : 1.2);
@@ -2021,6 +2068,7 @@ function effectsValue(g, p, card, trig, t) {
   for (const e of card.effects) {
     if (e.trigger !== trig) continue;
     if (e.lv && p.field.lv < e.lv) continue;
+    if (e.season && e.season !== seasonOf(p)) continue;
     const flips = e.flips || 0;
     for (const s of e.steps || []) {
       const sv = stepValue(g, p, s, t, card);
@@ -2140,8 +2188,10 @@ const NOCT_SKY = [
   { top: '#170b2e', bot: '#4a1250', glow: '#ff4fb6' },
   { top: '#0a1230', bot: '#22305e', glow: '#9fd8ff' },
 ];
+const SEASON_SKY = [{ top: '#2a1430', bot: '#6a3358', glow: '#ffb3d6' }, { top: '#0b2a2a', bot: '#1f5a48', glow: '#7dffc0' }, { top: '#2a160a', bot: '#6a3412', glow: '#ffb35c' }, { top: '#0e1a2e', bot: '#3a5070', glow: '#cfe8ff' }];
 function skyOf(p) {
   const f = FIELDS[p.field.id] || {}, lv = p.field.lv;
+  if (f.cycle) return SEASON_SKY[p.field.season || 0];
   if (f.id === 'noctiluca') return NOCT_SKY[lv - 1];
   const h = setHue(f.set);
   return { top: `hsl(${h} 45% ${7 + lv}%)`, bot: `hsl(${h + 25} 50% ${16 + lv * 5}%)`, glow: `hsl(${h + 40} 90% ${55 + lv * 5}%)` };
@@ -2339,16 +2389,19 @@ function cardHTML(g, inst, ctx, cls = '') {
 function fieldHTML(g, p) {
   const F = FIELDS[p.field.id], lv = p.field.lv, c = condOf(p);
   let cond;
+  const cyc = F.cycle, nm = F.stages[stageIdx(p)].name, head = cyc ? `${SEASONS[p.field.season || 0]}・${nm}` : nm;
   if (!c) cond = '<span class="fcond">最終段階</span>';
-  else if (p.field.pending) cond = '<span class="pend">昇華待機中：次の自分のターン開始時</span>';
+  else if (p.field.pending) cond = `<span class="pend">${cyc ? '季節が進む' : '昇華待機中'}：次の自分のターン開始時</span>`;
   else {
     const v = Math.min(condValue(p), c.n);
     const meter = c.n <= 8 ? `<span class="meter" aria-label="${v}/${c.n}">${Array.from({ length: c.n }, (_, i) => `<i class="${i < v ? 'on' : ''}"></i>`).join('')}</span>` : `（${v}/${c.n}）`;
-    cond = `<span class="fcond">次の昇華：${esc(condText(c))} ${meter}</span>`;
+    cond = `<span class="fcond">${cyc ? '次の季節' : '次の昇華'}：${esc(condText(c))} ${meter}</span>`;
+  }
+  if (cyc) { cond += `<span class="fcond">季節が変わった回数 ${p.field.changes || 0}</span>`;
   }
   const lvup = g.lvFlash === p.idx ? ' lvup' : '';
   const glow = skyOf(p).glow;
-  return `<button type="button" class="fieldbox${lvup}" data-field="${p.idx}" style="--fglow:${glow}" aria-label="領域の詳細：${esc(F.stages[lv - 1].name)}"><span class="fname"><b>${esc(F.stages[lv - 1].name)}</b><span class="lvpips" aria-label="${LV_NAME[lv - 1]}">${[1, 2, 3].map(i => `<i class="${i <= lv ? 'on' : ''}"></i>`).join('')}</span></span>${cond}</button>`;
+  return `<button type="button" class="fieldbox${lvup}" data-field="${p.idx}" style="--fglow:${glow}" aria-label="領域の詳細：${esc(head)}"><span class="fname"><b>${esc(head)}</b><span class="lvpips" aria-label="${LV_NAME[lv - 1]}">${[1, 2, 3].map(i => `<i class="${i <= lv ? 'on' : ''}"></i>`).join('')}</span></span>${cond}</button>`;
 }
 function infoHTML(g, p, isOpp) {
   const tgt = isOpp && g.ui.mode === 'attack' ? 'tgt' : '';
@@ -2477,6 +2530,15 @@ function showPeek(inst) {
 function hidePeek() { const pk = $('#peek'); if (pk) pk.hidden = true; }
 function fieldDetailHTML(p) {
   const F = FIELDS[p.field.id];
+  if (F.cycle) {
+    const rows = F.stages.map((s, i) => {
+      const cur = i === (p.field.season || 0);
+      const cond = F.conds[i] ? `<div class="dk">次の季節に進む条件：${esc(condText(F.conds[i]))}</div>` : '';
+      return `<p${cur ? ' style="color:var(--field)"' : ''}><b>${SEASONS[i]}・${esc(s.name)}${cur ? '・いまここ' : ''}</b><br>${esc(stageText(s))}</p>${cond}`;
+    }).join('');
+    const gr = ['l1', 'l2'].filter(k => F.lapGrant[k]).map((k, i) => `${i + 1}周目で「${esc(cardName(F.lapGrant[k]))}」`).join('、');
+    return `<div class="dn">${esc(p.name)}の領域：${esc(F.name)}</div><p class="dk">春→夏→秋→冬→春…と回る。冬から春に戻るたびに昇華（今：${LV_NAME[p.field.lv - 1]}、季節が変わった回数 ${p.field.changes || 0}）。${gr ? '昇華した時に手札に加える：' + gr + '。' : ''}</p>${rows}`;
+  }
   const rows = F.stages.map((s, i) => {
     const cur = i === p.field.lv - 1;
     const cond = i < 2 && F.conds[i] ? `<div class="dk">次の昇華：${esc(condText(F.conds[i]))}</div>` : '';
@@ -3093,6 +3155,7 @@ function stepsEditor(list, p, mode, flips, depth) {
       const tmap = targetOptions(s.action, mode);
       const tsel = Object.keys(tmap).length ? `<label class="fl">だれに<select data-f="${sp}.target">${opts(tmap, s.target)}</select></label>` : '';
       let extra = '';
+      if (s.action === 'seasonStrike') extra += `<label class="fl">1回あたりのダメージ<input type="number" data-num data-f="${sp}.n" value="${s.n ?? 1}" min="1" max="5"></label>`;
       if (s.action === 'summon') extra += `<label class="fl">出すカード<select data-f="${sp}.id">${opts(Object.fromEntries(Object.entries(STORE.cards).filter(([, c]) => c.token && c.type === 'unit').map(([id, c]) => [id, c.name || id])), s.id, '選ぶ')}</select></label><label class="fl">数<input type="number" data-num data-f="${sp}.n" value="${s.n ?? 1}" min="1" max="5"></label>`;
       if (['draw', 'damage', 'heal', 'buff', 'reserveBlast', 'payLife', 'optPay', 'peek'].includes(s.action)) extra += `<label class="fl">${s.action === 'buff' ? '攻撃力' : s.action === 'reserveBlast' ? '1枚あたりのダメージ' : s.action === 'peek' ? '枚数' : s.action === 'draw' ? '枚数' : (s.action === 'payLife' || s.action === 'optPay') ? '払うライフ' : '数'}<input type="number" data-num data-f="${sp}.n" value="${s.n ?? 1}" min="-20" max="99"></label>`;
       if (s.action === 'buff') extra += `<label class="fl">体力<input type="number" data-num data-f="${sp}.hp" value="${s.hp ?? ''}" min="-20" max="20"></label><label class="chk"><input type="checkbox" data-f="${sp}.temp" ${s.temp ? 'checked' : ''}>このターンだけ</label>`;
@@ -3110,7 +3173,7 @@ function effectsEditor(effects, base, mode, card) {
     const steps = stepsEditor(e.steps, p, mode, e.flips, 0);
     const tag = e.trigger === 'use' ? `<label class="fl">タグ（空ならどのカードでも）<input type="text" data-f="${p}.tag" value="${esc(e.tag || '')}" size="6"></label>` : '';
     return `<div class="eff"><div class="effhead"><label class="fl">いつ<select data-f="${p}.trigger">${opts(triggerOptions(mode), e.trigger)}</select></label>${tag}
-      ${mode === 'field' ? '' : `<label class="fl">昇華<select data-f="${p}.lv" data-num>${opts({ 2: '昇華2以上', 3: '昇華3以上' }, String(e.lv || ''), 'いつでも')}</select></label>`}
+      ${mode === 'field' ? '' : `<label class="fl">昇華<select data-f="${p}.lv" data-num>${opts({ 2: '昇華2以上', 3: '昇華3以上' }, String(e.lv || ''), 'いつでも')}</select></label><label class="fl">季節<select data-f="${p}.season">${opts(Object.fromEntries(SEASONS.map(s => [s, s + 'なら'])), e.season, 'いつでも')}</select></label>`}
       <label class="fl">コイントス<select data-f="${p}.flips" data-num>${opts({ 1: '1回', 2: '2回', 3: '3回' }, String(e.flips || ''), 'しない')}</select></label>
       <button class="btn danger" type="button" data-ed="delEff:${base}:${i}">効果を消す</button></div>
       ${steps}<div><button class="btn" type="button" data-ed="addStep:${p}">＋ 処理を足す</button></div>
@@ -3139,7 +3202,7 @@ function fixStep(model, path) {
   if (s.action !== 'gamble') { delete s.game; delete s.need; }
   else if (!s.game) s.game = 'dice';
   if (s.on) { const keep = branchesOf(s); for (const k of Object.keys(s.on)) if (!keep.includes(k)) delete s.on[k]; if (!Object.keys(s.on).length) delete s.on; }
-  if (['destroy', 'search', 'revive', 'gamble', 'roulette'].includes(s.action)) delete s.n; else if (s.n == null) s.n = 1;
+  if (['destroy', 'search', 'revive', 'gamble', 'roulette', 'freeze', 'advanceSeason'].includes(s.action)) delete s.n; else if (s.n == null) s.n = 1;
 }
 
 /* ================= 9. 管理：カード ================= */
@@ -3211,7 +3274,7 @@ function renderCardEditor() {
       </div>
       <div class="sec"><h3>常に働く効果</h3><div class="frow">
         ${t !== 'art' ? `<label class="fl">味方全員の攻撃力+<input type="number" data-num data-f="aura" value="${c.aura ?? ''}" min="0" max="5"></label>` : ''}
-        ${t === 'unit' ? `<label class="fl">昇華で攻撃力アップ<select data-num data-f="lvAtk.lv">${opts({ 2: '昇華2以上', 3: '昇華3以上' }, String((c.lvAtk || {}).lv || ''), 'なし')}</select></label><label class="fl">上がる量<input type="number" data-num data-f="lvAtk.n" value="${(c.lvAtk || {}).n ?? ''}" min="0" max="10"></label>` : ''}
+        ${t === 'unit' ? `<label class="fl">季節の間だけ+1/+1<select data-f="seasonal">${opts(Object.fromEntries(SEASONS.map(s => [s, s])), c.seasonal, 'なし')}</select></label><label class="fl">昇華で攻撃力アップ<select data-num data-f="lvAtk.lv">${opts({ 2: '昇華2以上', 3: '昇華3以上' }, String((c.lvAtk || {}).lv || ''), 'なし')}</select></label><label class="fl">上がる量<input type="number" data-num data-f="lvAtk.n" value="${(c.lvAtk || {}).n ?? ''}" min="0" max="10"></label>` : ''}
         ${t === 'object' ? `<label class="fl">カウント<input type="number" data-num data-f="count" value="${c.count ?? ''}" min="0" max="9"></label>` : ''}
         ${t !== 'art' ? `<label class="chk"><input type="checkbox" data-f="fixed" ${c.fixed ? 'checked' : ''}>場を離れない</label>` : ''}
       </div><div class="frow">
@@ -3258,7 +3321,7 @@ function cardFormChange(e, structural) {
   if (structural) renderCardEditor(); else updateCardPreview();
 }
 function normalizeType(c) {
-  if (c.type !== 'unit') { delete c.atk; delete c.hp; delete c.part; delete c.quick; delete c.pierce; delete c.lvAtk; delete c.cheat; }
+  if (c.type !== 'unit') { delete c.atk; delete c.hp; delete c.part; delete c.quick; delete c.pierce; delete c.seasonal; delete c.lvAtk; delete c.cheat; }
   if (c.type === 'art') { delete c.fixed; delete c.diceBonus; delete c.dealerStand; delete c.winDamage; delete c.bustSave; }
   else { if (c.atk == null) c.atk = 1; if (c.hp == null) c.hp = 1; }
   if (c.type !== 'object') delete c.count;
@@ -3431,10 +3494,11 @@ function renderFieldEditor() {
   const box = $('#fieldEditor');
   if (!FEDIT) { box.innerHTML = '<p class="note">左の一覧から領域を選ぶか、「新しい領域」を押してください。</p>'; return; }
   const f = FEDIT.field, ro = !canEditData();
-  f.stages = f.stages || []; while (f.stages.length < 3) f.stages.push({ name: '', effects: [] });
-  f.conds = f.conds || []; while (f.conds.length < 2) f.conds.push({ type: 'units', n: 3 });
+  const NS = f.cycle ? 4 : 3, NC = f.cycle ? 4 : 2;
+  f.stages = f.stages || []; while (f.stages.length < NS) f.stages.push({ name: '', effects: [] });
+  f.conds = f.conds || []; while (f.conds.length < NC) f.conds.push({ type: 'units', n: 3 });
   const del = FEDIT.confirmDel ? `<button class="btn danger" type="button" data-fe="delYes">本当に消す</button><button class="btn" type="button" data-fe="delNo">やめる</button>` : `<button class="btn danger" type="button" data-fe="del" ${FEDIT.isNew || ro ? 'disabled' : ''}>削除</button>`;
-  const stage = (s, i) => `<div class="sec"><h3>${LV_NAME[i]}</h3>
+  const stage = (s, i) => `<div class="sec"><h3>${f.cycle ? SEASONS[i] : LV_NAME[i]}</h3>
     <div class="frow"><label class="fl">名前<input type="text" data-f="stages.${i}.name" value="${esc(s.name || '')}"></label>
       <label class="fl">コストを下げるタグ<input type="text" data-f="stages.${i}.costMod.tag" value="${esc((s.costMod || {}).tag || '')}"></label>
       <label class="fl">下げる量<input type="number" data-num data-f="stages.${i}.costMod.n" value="${(s.costMod || {}).n ?? ''}" min="0" max="5"></label>
@@ -3442,7 +3506,7 @@ function renderFieldEditor() {
       <label class="fl">ディーラー（自分の場に置く）<select data-f="stages.${i}.dealer">${opts(Object.fromEntries(sortCards(Object.entries(STORE.cards)).filter(([id, c]) => c.type === 'object').map(([id, c]) => [id, `${c.epithet ? '〈' + c.epithet + '〉' : ''}${c.name}（${c.set || 'テーマなし'}）`])), s.dealer, 'なし')}</select></label>
       <label class="fl">勝負に負けた時の代償<input type="number" data-num data-f="stages.${i}.penalty" value="${s.penalty ?? ''}" min="0" max="9"></label>
       <label class="chk"><input type="checkbox" data-f="stages.${i}.drawWins" ${s.drawWins ? 'checked' : ''}>勝負の引き分けは勝ち</label>
-      ${i > 0 ? `<label class="fl">昇華した時に手札に加えるカード<select data-f="stages.${i}.grant">${opts(Object.fromEntries(sortCards(Object.entries(STORE.cards)).map(([id, c]) => [id, `${c.name}（${c.set || 'テーマなし'}）`])), grantsOf(s)[0], 'なし')}</select></label>` : ''}</div>
+      ${i > 0 && !f.cycle ? `<label class="fl">昇華した時に手札に加えるカード<select data-f="stages.${i}.grant">${opts(Object.fromEntries(sortCards(Object.entries(STORE.cards)).map(([id, c]) => [id, `${c.name}（${c.set || 'テーマなし'}）`])), grantsOf(s)[0], 'なし')}</select></label>` : ''}</div>
     ${effectsEditor(s.effects, `stages.${i}.effects`, 'field', null)}
     <p class="effprev">まとめ：${esc(stageText(s))}</p>
     <div class="frow" style="grid-template-columns:minmax(0,1fr) auto;align-items:start">
@@ -3453,7 +3517,7 @@ function renderFieldEditor() {
       </div>
       <span class="stagethumb" style="${stageImageUrl(s) ? `background-image:url(${stageImageUrl(s)})` : ''}" aria-label="背景の絵"></span>
     </div>
-    ${i < 2 ? `<div class="frow"><label class="fl">次の昇華の条件<select data-f="conds.${i}.type">${opts(COND_LABEL, f.conds[i].type)}</select></label>
+    ${i < NC ? `<div class="frow"><label class="fl">${f.cycle ? '次の季節に進む条件' : '次の昇華の条件'}<select data-f="conds.${i}.type">${opts(COND_LABEL, f.conds[i].type)}</select></label>
       <label class="fl">数<input type="number" data-num data-f="conds.${i}.n" value="${f.conds[i].n ?? 3}" min="1" max="50"></label>
       ${f.conds[i].type === 'tag' ? `<label class="fl">タグ<input type="text" data-f="conds.${i}.tag" value="${esc(f.conds[i].tag || '')}"></label>` : ''}</div>
       <p class="note">条件：${esc(condText(f.conds[i]))}</p>` : ''}</div>`;
@@ -3464,7 +3528,9 @@ function renderFieldEditor() {
     <div class="frow"><label class="fl">領域の名前<input type="text" data-f="name" value="${esc(f.name || '')}"></label><label class="fl">色<select data-f="color">${opts(Object.fromEntries(COLOR_LIST.map(k => [k, k])), f.color, '無色')}</select></label>
       <label class="fl">テーマ（色）<input type="text" data-f="set" value="${esc(f.set || '')}" list="dlSets2"></label>
       <label class="fl">対戦の背景の景色<select data-f="scene">${opts(SCENE_NAME, f.scene, 'おまかせ')}</select></label></div>
-    ${f.stages.slice(0, 3).map(stage).join('')}
+    <div class="frow"><label class="chk"><input type="checkbox" data-f="cycle" ${f.cycle ? 'checked' : ''}>季節が回る（春夏秋冬の4段階。冬から春に戻るたびに昇華）</label>
+      ${f.cycle ? ['l1', 'l2'].map((k, j) => `<label class="fl">${j + 1}周目の昇華で手に入るカード<select data-f="lapGrant.${k}">${opts(Object.fromEntries(sortCards(Object.entries(STORE.cards)).map(([id, c]) => [id, `${c.name}（${c.set || 'テーマなし'}）`])), (f.lapGrant || {})[k], 'なし')}</select></label>`).join('') : ''}</div>
+    ${f.stages.slice(0, NS).map(stage).join('')}
     <datalist id="dlSets2">${setNames().map(s => `<option value="${esc(s)}">`).join('')}</datalist></div>`;
 }
 function fieldFormChange(e, structural) {

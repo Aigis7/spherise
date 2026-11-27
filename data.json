@@ -1727,6 +1727,383 @@
      ]
     }
    ]
+  },
+  "k_tamaki": {
+   "name": "環",
+   "set": "春夏秋冬",
+   "color": "緑",
+   "type": "unit",
+   "cost": 5,
+   "atk": 4,
+   "hp": 4,
+   "rarity": "L",
+   "tags": [
+    "春夏秋冬"
+   ],
+   "artPrompt": "和装の若い女性の剣士が、刀を一閃する。刀の軌跡に、桜・青葉・紅葉・雪が順番に舞って、輪を描いている。長い黒髪を高くまとめ、袴姿。",
+   "epithet": "四季の剣士",
+   "effects": [
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "advanceSeason"
+      }
+     ]
+    }
+   ]
+  },
+  "k_deer": {
+   "name": "春告げの鹿",
+   "set": "春夏秋冬",
+   "color": "緑",
+   "type": "unit",
+   "cost": 3,
+   "atk": 2,
+   "hp": 4,
+   "rarity": "SR",
+   "tags": [
+    "春夏秋冬",
+    "春"
+   ],
+   "artPrompt": "満開の桜の森に立つ、白い斑点のある若い鹿。角に小さな花が咲いている。足元に花びらが積もる。",
+   "effects": [
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "heal",
+       "target": "allAllies",
+       "n": 2
+      }
+     ]
+    }
+   ],
+   "seasonal": "春"
+  },
+  "k_swallow": {
+   "name": "夏空のツバメ",
+   "set": "春夏秋冬",
+   "color": "緑",
+   "type": "unit",
+   "cost": 2,
+   "atk": 2,
+   "hp": 1,
+   "rarity": "R",
+   "tags": [
+    "春夏秋冬",
+    "夏"
+   ],
+   "artPrompt": "入道雲の青い夏空を、ツバメが鋭く横切る。翼の先に、光る風の筋。下に青い田んぼ。",
+   "seasonal": "夏",
+   "quick": true
+  },
+  "k_fox": {
+   "name": "紅葉のキツネ",
+   "set": "春夏秋冬",
+   "color": "緑",
+   "type": "unit",
+   "cost": 2,
+   "atk": 2,
+   "hp": 2,
+   "rarity": "SR",
+   "tags": [
+    "春夏秋冬",
+    "秋"
+   ],
+   "artPrompt": "赤と金の紅葉が舞う山道で、ふさふさのしっぽのキツネが振り返る。しっぽの先が、灯りのようにほのかに光る。",
+   "effects": [
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "draw",
+       "target": "me",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "seasonal": "秋"
+  },
+  "k_wolf": {
+   "name": "雪原の白オオカミ",
+   "set": "春夏秋冬",
+   "color": "緑",
+   "type": "unit",
+   "cost": 5,
+   "atk": 5,
+   "hp": 5,
+   "rarity": "SR",
+   "tags": [
+    "春夏秋冬",
+    "冬"
+   ],
+   "artPrompt": "吹雪の雪原に立つ、大きな白いオオカミ。息が白く、青い目が光る。背中に雪が積もっている。",
+   "seasonal": "冬",
+   "pierce": true
+  },
+  "k_sprout": {
+   "name": "芽吹きの精",
+   "set": "春夏秋冬",
+   "color": "緑",
+   "type": "unit",
+   "cost": 1,
+   "atk": 1,
+   "hp": 2,
+   "rarity": "C",
+   "tags": [
+    "春夏秋冬"
+   ],
+   "artPrompt": "土から顔を出した、双葉の頭をした小さな精霊。両手で朝露のしずくを抱えている。",
+   "effects": [
+    {
+     "trigger": "start",
+     "steps": [
+      {
+       "action": "buff",
+       "target": "self",
+       "n": 0,
+       "hp": 1
+      }
+     ]
+    }
+   ]
+  },
+  "k_tree": {
+   "name": "古木の精",
+   "set": "春夏秋冬",
+   "color": "緑",
+   "type": "unit",
+   "cost": 4,
+   "atk": 2,
+   "hp": 6,
+   "rarity": "C",
+   "tags": [
+    "春夏秋冬"
+   ],
+   "artPrompt": "苔むした大きな古木に、やさしい顔が浮かんでいる。枝には四季の葉が一度に茂っている。",
+   "effects": [
+    {
+     "trigger": "end",
+     "steps": [
+      {
+       "action": "heal",
+       "target": "allAllies",
+       "n": 1
+      }
+     ]
+    }
+   ]
+  },
+  "k_sakura": {
+   "name": "環流・桜吹雪",
+   "set": "春夏秋冬",
+   "color": "緑",
+   "type": "art",
+   "cost": 2,
+   "rarity": "C",
+   "tags": [
+    "環流"
+   ],
+   "glyph": "star",
+   "artPrompt": "刀を振り抜いた軌跡から、桜の花びらが嵐のように舞い上がる。刀を握る手と袖だけが見える。",
+   "effects": [
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "draw",
+       "target": "me",
+       "n": 1
+      }
+     ],
+     "season": "春"
+    },
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "heal",
+       "target": "allAllies",
+       "n": 2
+      },
+      {
+       "action": "advanceSeason"
+      }
+     ]
+    }
+   ]
+  },
+  "k_kagero": {
+   "name": "環流・陽炎",
+   "set": "春夏秋冬",
+   "color": "緑",
+   "type": "art",
+   "cost": 1,
+   "rarity": "C",
+   "tags": [
+    "環流"
+   ],
+   "glyph": "burst",
+   "artPrompt": "真夏の日差しの中、刀身から陽炎がゆらめく。刃の向こうの景色がゆがんで見える。刀と手だけが見える。",
+   "effects": [
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "buff",
+       "target": "chosen",
+       "n": 1
+      }
+     ],
+     "season": "夏"
+    },
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "buff",
+       "target": "chosen",
+       "n": 2,
+       "temp": true
+      },
+      {
+       "action": "advanceSeason"
+      }
+     ]
+    }
+   ],
+   "target": "allyUnit"
+  },
+  "k_momiji": {
+   "name": "環流・紅葉狩り",
+   "set": "春夏秋冬",
+   "color": "緑",
+   "type": "art",
+   "cost": 3,
+   "rarity": "R",
+   "tags": [
+    "環流"
+   ],
+   "glyph": "cross",
+   "artPrompt": "紅葉の嵐の中を、刀の一閃が赤い弧を描いて走る。切られた紅葉が金色に光る。刀と手だけが見える。",
+   "effects": [
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "draw",
+       "target": "me",
+       "n": 1
+      }
+     ],
+     "season": "秋"
+    },
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "damage",
+       "target": "chosen",
+       "n": 3
+      },
+      {
+       "action": "advanceSeason"
+      }
+     ]
+    }
+   ],
+   "target": "enemyUnit"
+  },
+  "k_hyoka": {
+   "name": "環流・氷華",
+   "set": "春夏秋冬",
+   "color": "緑",
+   "type": "art",
+   "cost": 2,
+   "rarity": "R",
+   "tags": [
+    "環流"
+   ],
+   "glyph": "star",
+   "artPrompt": "刀の切っ先から氷の花が咲き広がり、あたりを凍らせていく。雪の結晶がきらめく。刀と手だけが見える。",
+   "effects": [
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "damage",
+       "target": "chosen",
+       "n": 2
+      }
+     ],
+     "season": "冬"
+    },
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "freeze",
+       "target": "chosen"
+      },
+      {
+       "action": "advanceSeason"
+      }
+     ]
+    }
+   ],
+   "target": "enemyUnit"
+  },
+  "k_meguri": {
+   "name": "秘剣・巡り咲き",
+   "set": "春夏秋冬",
+   "color": "緑",
+   "type": "art",
+   "cost": 4,
+   "rarity": "RR",
+   "tags": [
+    "環流"
+   ],
+   "glyph": "flame",
+   "artPrompt": "桜、青葉、紅葉、雪が大きな輪になって渦巻き、その中心を一筋の刀の光がつらぬく。輪の中で花が一斉に咲く。人物は小さく後ろ姿だけ。",
+   "effects": [
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "seasonStrike",
+       "n": 1
+      }
+     ]
+    }
+   ]
+  },
+  "k_senbon": {
+   "name": "千年桜",
+   "set": "春夏秋冬",
+   "color": "緑",
+   "type": "unit",
+   "cost": 5,
+   "atk": 3,
+   "hp": 8,
+   "rarity": "RR",
+   "tags": [
+    "春夏秋冬"
+   ],
+   "artPrompt": "千年生きた巨大な桜の木。季節に関係なく満開で、花びらが光の粒になって降りそそぐ。根元に小さな祠。",
+   "effects": [
+    {
+     "trigger": "start",
+     "steps": [
+      {
+       "action": "buff",
+       "target": "allAllies",
+       "n": 1
+      }
+     ]
+    }
+   ]
   }
  },
  "decks": {
@@ -2003,6 +2380,76 @@
     {
      "id": "b_strike",
      "n": 1
+    }
+   ]
+  },
+  "shiki": {
+   "name": "春夏秋冬",
+   "field": "shiki",
+   "list": [
+    {
+     "id": "k_tamaki",
+     "n": 3
+    },
+    {
+     "id": "k_deer",
+     "n": 3
+    },
+    {
+     "id": "k_swallow",
+     "n": 3
+    },
+    {
+     "id": "k_fox",
+     "n": 3
+    },
+    {
+     "id": "k_wolf",
+     "n": 2
+    },
+    {
+     "id": "k_sprout",
+     "n": 3
+    },
+    {
+     "id": "k_tree",
+     "n": 2
+    },
+    {
+     "id": "k_sakura",
+     "n": 3
+    },
+    {
+     "id": "k_kagero",
+     "n": 3
+    },
+    {
+     "id": "k_momiji",
+     "n": 3
+    },
+    {
+     "id": "k_hyoka",
+     "n": 3
+    },
+    {
+     "id": "c_exchange",
+     "n": 2
+    },
+    {
+     "id": "b_amp",
+     "n": 2
+    },
+    {
+     "id": "x_lamp",
+     "n": 2
+    },
+    {
+     "id": "h_signpost",
+     "n": 1
+    },
+    {
+     "id": "x_warden",
+     "n": 2
     }
    ]
   }
@@ -2579,6 +3026,103 @@
      "artPrompt": "夢のいちばん底。静かな紫の水面に、大きな月が映っている。水面に、これまでの夢のかけら（おもちゃ、鏡、羽根）が浮かぶ。神秘的で、少しさみしい。人物は描かない。"
     }
    ]
+  },
+  "shiki": {
+   "name": "春夏秋冬",
+   "set": "春夏秋冬",
+   "color": "緑",
+   "scene": "forest",
+   "cycle": true,
+   "lapGrant": {
+    "l1": "k_meguri",
+    "l2": "k_senbon"
+   },
+   "conds": [
+    {
+     "type": "units",
+     "n": 2
+    },
+    {
+     "type": "attacks",
+     "n": 2
+    },
+    {
+     "type": "uses",
+     "n": 3
+    },
+    {
+     "type": "taken",
+     "n": 3
+    }
+   ],
+   "stages": [
+    {
+     "name": "桜の丘",
+     "effects": [
+      {
+       "trigger": "unit",
+       "steps": [
+        {
+         "action": "buff",
+         "target": "self",
+         "n": 0,
+         "hp": 1
+        }
+       ]
+      }
+     ],
+     "artPrompt": "満開の桜が咲く、なだらかな丘。花びらが風に舞い、遠くに山が見える。やわらかい春の光。人物は描かない。"
+    },
+    {
+     "name": "青葉の渓谷",
+     "effects": [
+      {
+       "trigger": "start",
+       "steps": [
+        {
+         "action": "buff",
+         "target": "randomAlly",
+         "n": 1,
+         "temp": true
+        }
+       ]
+      }
+     ],
+     "artPrompt": "緑の木々に囲まれた夏の渓谷。澄んだ川と小さな滝、入道雲、強い日差し。人物は描かない。"
+    },
+    {
+     "name": "紅葉の山道",
+     "effects": [
+      {
+       "trigger": "start",
+       "steps": [
+        {
+         "action": "draw",
+         "target": "me",
+         "n": 1
+        }
+       ]
+      }
+     ],
+     "artPrompt": "赤と金の紅葉に包まれた山道。石段と古い鳥居のような門、夕暮れの光。人物は描かない。"
+    },
+    {
+     "name": "雪の社",
+     "effects": [
+      {
+       "trigger": "start",
+       "steps": [
+        {
+         "action": "heal",
+         "target": "allAllies",
+         "n": 2
+        }
+       ]
+      }
+     ],
+     "artPrompt": "雪に覆われた静かな森の中の小さな社。灯籠に火がともり、雪がしんしんと降る。人物は描かない。"
+    }
+   ]
   }
  },
  "settings": {
@@ -2588,7 +3132,8 @@
     "ソワレ": "テーマは夜会のカジノ。深い紺と金、ろうそくの光、緑のフェルト。上品だけど危うい空気。",
     "ノクティルカ": "ゴシックな尖塔がそびえる夜の現代の街。人ではない特徴を少しだけ持つ亜人の少女5人のガールズバンド「ノクティルカ」（リオラ、ウルカ、ノクス、ガルナ、フィーネ）。色は夜の青紫、ネオンのピンク、赤い光。演奏すると音が光や影になってあふれ出す。全員、ほのかに光る青緑のしずく型のピンを付けている。メンバーの見た目は、添付した設定画に合わせる。",
     "はじまりの灯": "どの領域にも属さない、領域と領域のあいだの場所や道具、そこにいる人や生き物。星空、境界、旅、はじまりの小さな灯りの雰囲気。",
-    "夢枕": "眠り続ける少女ルルナの夢の中。紫の夜空に、楽しい夢（おもちゃ、お菓子、ぬいぐるみ、星、遊園地）と悪夢（黒い影、割れた鏡、ゆがんだ道化）がまざりあって浮かんでいる。色は深い紫、月の白、ところどころにパステルの光。やさしくて、少しこわい。"
+    "夢枕": "眠り続ける少女ルルナの夢の中。紫の夜空に、楽しい夢（おもちゃ、お菓子、ぬいぐるみ、星、遊園地）と悪夢（黒い影、割れた鏡、ゆがんだ道化）がまざりあって浮かんでいる。色は深い紫、月の白、ところどころにパステルの光。やさしくて、少しこわい。",
+    "春夏秋冬": "和風の四季の世界。春は桜、夏は青葉と入道雲、秋は紅葉、冬は雪。季節がぐるぐると巡る。和装の剣士・環（たまき）と、鹿・ツバメ・キツネ・白いオオカミの4匹の相棒。色は季節ごとに変わるが、全体はやわらかい緑と自然の光。"
    }
   }
  }
