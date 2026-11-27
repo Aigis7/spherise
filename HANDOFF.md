@@ -17,6 +17,7 @@
 | 公開用 index.html の作り方 | `python3 src/make_site.py` |
 | 公開用のデータ | `data.json`（カード・デッキ・領域・絵の設定）、`img/`（カードと背景と動画） |
 | 設定資料のページ | `src/setting/soiree/`（`https://claude.ai/artifact/Vp5X6ozWuvezhyVMc3rWfS`）、`src/setting/noctiluca/`（`https://claude.ai/artifact/Ccm9dowTa4nESSpK4spAmn`） |
+| 夢枕の設定画（ルルナ、ムウ、ブラン、ジグ、グリム） | `src/setting/yumemakura/` |
 | リーダーの動画用の横長の絵（レティシア） | `src/letizia_16x9.png` |
 
 ## 作業の流れ（方式B）
