@@ -181,6 +181,12 @@ textarea{width:100%;font-family:var(--f-mono);font-size:.72rem}
 .card.can:hover{transform:translateY(-3px)}
 .card.sel{box-shadow:0 0 0 3px #7fb0ff,0 0 20px #7fb0ff;cursor:pointer}
 .card.tgt{box-shadow:0 0 0 3px #ff6b6b,0 0 22px #ff6b6b;cursor:crosshair;animation:pulse 1s infinite}
+/* レアの枠の光に上書きされないよう、状態は外側の線でも出す */
+.card.tgt{outline:3px solid #ff6b6b;outline-offset:2px}
+.card.sel{outline:3px solid #7fb0ff;outline-offset:2px}
+.card.can{outline:2px solid #ffd27a;outline-offset:1px}
+.card.rsv{outline:2px solid #4fe3d0;outline-offset:1px}
+.card.rsel{outline:3px solid #4fe3d0;outline-offset:2px}
 @keyframes pulse{50%{box-shadow:0 0 0 3px #ff6b6b,0 0 6px #ff6b6b}}
 .card.pick{box-shadow:0 0 0 3px #ffb35c,0 0 16px #ffb35c}
 .card.mull{cursor:pointer;transform:translateY(8px) scale(.96);box-shadow:0 0 0 3px #ff8a5c}
@@ -487,9 +493,22 @@ body.drag-reserve [data-drop="reserve"] .stack{box-shadow:0 0 0 3px #ffd27a,0 0 
 @keyframes rsvHot{50%{box-shadow:2px 2px 0 #0008,4px 4px 0 #0006,0 0 0 3px #4fe3d0,0 0 24px #4fe3d0}}
 .midline .msg.rsvmsg{color:#7ff0e0}
 #meBoard.rsvzone{position:relative}
-#meBoard.rsvzone::after{content:"リザーブフェーズ\Aここにドラッグしてリザーブに置く";white-space:pre;position:absolute;inset:-4px;display:grid;place-items:center;text-align:center;border:2px dashed #4fe3d0;border-radius:14px;background:rgb(8 40 44 / .55);color:#bff8ef;font-family:var(--f-display);font-size:clamp(1rem,3.6vw,1.5rem);line-height:1.6;letter-spacing:.06em;text-shadow:0 0 12px #4fe3d0,0 1px 3px #000;pointer-events:none;z-index:3}
-body.drag-reserve #meBoard.rsvzone::after{background:rgb(20 80 80 / .7);border-style:solid;box-shadow:0 0 24px #4fe3d0}
-@media (prefers-reduced-motion: reduce){.pile.reserve.hot .stack{animation:none;box-shadow:0 0 0 3px #4fe3d0}}
+.rsvover{position:absolute;inset:-4px;z-index:3;display:grid;place-content:center;justify-items:center;gap:6px;text-align:center;border:2px dashed #4fe3d0;border-radius:14px;background:rgb(8 40 44 / .6);color:#bff8ef;pointer-events:none;padding:8px}
+.rsvover b{font-family:var(--f-display);font-weight:400;font-size:clamp(1.1rem,4vw,1.6rem);letter-spacing:.08em;text-shadow:0 0 12px #4fe3d0,0 1px 3px #000}
+.rsvover span{font-size:clamp(.72rem,2.6vw,.9rem);text-shadow:0 1px 3px #000}
+.rsvbtns{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:4px}
+.rsvbtns .sbtn{pointer-events:auto;background:rgb(8 30 34 / .85);border-color:#4fe3d0;color:#dffcf7}
+.rsvbtns .sbtn.bonus{background:linear-gradient(180deg,#7ff0e0,#2fb8a8);color:#032a26;border:0;box-shadow:0 0 14px rgb(79 227 208 / .6)}
+.rsvbtns small{display:block;font-size:.66rem;font-weight:400;opacity:.85}
+body.drag-reserve .rsvover{background:rgb(20 80 80 / .75);border-style:solid;box-shadow:0 0 24px #4fe3d0}
+body.drag-reserve .rsvbtns{visibility:hidden}
+/* 対象を選ぶ時：真ん中の帯を大きく赤く */
+.midline .msg.tgtmsg{font-family:var(--f-display);font-weight:400;font-size:clamp(1.05rem,3.8vw,1.4rem);letter-spacing:.06em;color:#ffb3b3;text-shadow:0 0 12px #ff6b6b}
+.midline .msg.tgtmsg .hint{font-family:var(--f-body);font-size:.78rem;color:#ffd6d6;letter-spacing:0}
+.midline:has(.tgtmsg){border-color:#ff6b6b;box-shadow:inset 0 0 0 1px rgb(255 107 107 / .5);animation:tgtBand 1.4s ease-in-out infinite}
+@keyframes tgtBand{50%{box-shadow:inset 0 0 0 1px rgb(255 107 107 / .9),0 0 18px rgb(255 107 107 / .35)}}
+@media (prefers-reduced-motion: reduce){.midline:has(.tgtmsg){animation:none}}
+body.drag-reserve @media (prefers-reduced-motion: reduce){.pile.reserve.hot .stack{animation:none;box-shadow:0 0 0 3px #4fe3d0}}
 .drop-hover{outline:3px solid #ff6b6b!important;outline-offset:3px}
 .only-m{display:none!important}
 
@@ -2527,8 +2546,15 @@ function phaseHTML(g) {
     const sel = me.hand.find(i => i.uid === g.ui.rsv);
     return `<div class="msg me rsvmsg">${turn}リザーブの時間<span class="hint">${sel ? `「${esc(C[sel.cid].name)}」をリザーブに置く？` : `リザーブに置くカードを選ぶか、盤面へドラッグする（あと${left}枚）`}</span></div>
       ${sel ? '<button class="sbtn end" type="button" data-act="doReserve">リザーブに置く</button>' : ''}
-      ${me.bonus && left === 1 ? '<button class="sbtn" type="button" data-act="bonus">2枚置く（後攻1回）</button>' : ''}
-      <button class="sbtn" type="button" data-act="skipReserve">${left === 1 ? '置かない' : 'これで終わり'}</button>`;
+      `;
+  }
+  if (g.ui.mode === 'art' || g.ui.mode === 'attack') {
+    const ai = g.ui.mode === 'art' ? me.hand.find(i => i.uid === g.ui.uid) : null, ac = ai ? C[ai.cid] : null;
+    const what = g.ui.mode === 'attack' ? '相手のライフか、スリープ中の相手ユニット' : ac ? (CHOSEN_LABEL[ac.target] || '対象') : '対象';
+    const head = g.ui.mode === 'attack' ? '攻撃先を選んでください' : '対象を選んでください';
+    const sub = g.ui.mode === 'art' && ac ? `「${esc(ac.name)}」の対象：${esc(what)}` : esc(what);
+    return `<div class="msg tgtmsg">${head}<span class="hint">${sub}。赤く光っているものをタップ</span></div>
+      <button class="sbtn" type="button" data-act="cancel">やめる</button>`;
   }
   let hint = '手札を盤面へドラッグして出す。光っているユニットを相手へドラッグして攻撃。';
   if (g.ui.mode === 'attack') hint = '攻撃先を選ぶ：相手のライフか、スリープ中の相手ユニット';
@@ -2546,7 +2572,14 @@ function render() {
   $('#oppInfo').innerHTML = infoHTML(g, op, true);
   $('#oppBoard').innerHTML = boardHTML(g, op, true);
   $('#meBoard').innerHTML = boardHTML(g, me, false);
-  $('#meBoard').classList.toggle('rsvzone', !g.over && isMyTurn(g) && g.phase === 'reserve');
+  const rz = !g.over && isMyTurn(g) && g.phase === 'reserve';
+  $('#meBoard').classList.toggle('rsvzone', rz);
+  if (rz) {
+    const left = me.reserveLeft;
+    $('#meBoard').insertAdjacentHTML('beforeend', `<div class="rsvover"><b>リザーブフェーズ</b><span>手札を1枚ここにドラッグして、リザーブに置く（あと${left}枚）</span>
+      <div class="rsvbtns">${me.bonus && left === 1 ? '<button class="sbtn bonus" type="button" data-act="bonus">2枚置く<small>後攻ボーナス・1回だけ</small></button>' : ''}
+      <button class="sbtn" type="button" data-act="skipReserve">${left === 1 ? '置かずに進む' : 'もう置かずに進む'}<small>メインフェーズへ</small></button></div></div>`);
+  }
   $('#meInfo').innerHTML = infoHTML(g, me, false);
   g.lvFlash = null;
   $('#hand').innerHTML = handHTML(g, me, false);
