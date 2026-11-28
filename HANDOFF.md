@@ -20,6 +20,7 @@
 | 夢枕の設定画（ルルナ、ムウ、ブラン、ジグ、グリム）と設定資料のページ | `src/setting/yumemakura/`（`https://claude.ai/artifact/VfcxHaniiB9cvFJC4ru4gm`） |
 | 四季ノ環の設定画（環、霞、青嵐、稲穂、六花）と設定資料のページ | `src/setting/shiki/`（`https://claude.ai/artifact/JrfF1Xu23WeqicJdnhKseo`） |
 | はじまりの灯の設定資料のページ（さすらいの旅人、絵のプロンプト） | `src/setting/hajimari/`（`https://claude.ai/artifact/EMVxQSZh1o8VtvT3hCeYob`） |
+| 色の共通領域（青・黄・紫・緑）の背景12枚のプロンプト | `src/setting/colors/`（`https://claude.ai/artifact/EsVELHHbekfxe9VULgwFhM`）。作り直すときは scratchpad の prompts_colors.py と同じ手順（data.json の artPrompt から作る） |
 | リーダーの動画用の横長の絵（レティシア） | `src/letizia_16x9.png` |
 
 ## 作業の流れ（方式B）

@@ -1,0 +1,166 @@
+<title>色の領域プロンプト</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Klee+One:wght@600&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<style>
+/* Layout: 4色の共通領域（青・黄・紫・緑）の背景プロンプト。色ごとに3段階、コピーボタン付き */
+:root{
+  --bg:#0a0d1a; --surface:#121730; --surface-2:#1a2140; --ink:#eef0f8; --muted:#aab0c8; --line:#2a3358;
+  --lamp:#ffb35c; --star:#dfe6ff; --sheet:#ffffff;
+  --f-display:"Klee One","Hiragino Mincho ProN","Yu Mincho",serif;
+  --f-body:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",system-ui,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);line-height:1.75;
+  background-image:radial-gradient(40rem 22rem at 50% -6%,rgb(255 179 92 / .14),transparent 60%),radial-gradient(1.5px 1.5px at 10% 12%,#fff,transparent 60%),radial-gradient(1px 1px at 30% 6%,#fff,transparent 60%),radial-gradient(1.5px 1.5px at 70% 10%,#fff,transparent 60%),radial-gradient(1px 1px at 88% 22%,#fff,transparent 60%),radial-gradient(1px 1px at 55% 30%,#fff9,transparent 60%)}
+.wrap{max-width:1040px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:36px 56px;display:grid;gap:34px}
+.hero{display:grid;gap:10px;text-align:center;justify-items:center}
+.flame{width:22px;height:34px;border-radius:50% 50% 50% 50% / 62% 62% 38% 38%;background:radial-gradient(circle at 50% 70%,#fff4d6,var(--lamp) 55%,#c2541a);box-shadow:0 0 26px 8px rgb(255 179 92 / .35)}
+.eyebrow{font-size:.72rem;letter-spacing:.32em;color:var(--lamp);font-weight:700}
+h1{font-family:var(--f-display);font-weight:600;font-size:clamp(2.2rem,9vw,3.6rem);letter-spacing:.16em;margin:0 0 0 .16em;line-height:1.15;color:#fff;text-shadow:0 0 22px rgb(255 179 92 / .35)}
+.sub{letter-spacing:.42em;color:var(--lamp);font-size:.85rem;margin-left:.42em;font-weight:700}
+.rule{width:min(380px,70vw);height:1px;background:linear-gradient(90deg,transparent,var(--lamp),transparent)}
+.lead{color:var(--muted);max-width:60ch;margin:0;text-wrap:pretty}
+h2{font-size:.8rem;letter-spacing:.22em;color:var(--lamp);margin:0 0 12px;font-weight:700}
+h2 small{font-weight:500;letter-spacing:.06em;color:var(--muted);margin-left:8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;min-width:0}
+.box h3{margin:0 0 6px;font-size:1rem;font-family:var(--f-display)}
+.box p,.box ul{margin:0;font-size:.86rem;color:var(--muted)}
+.box ul{padding-left:1.1em}
+.stages{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media (max-width:720px){.stages{grid-template-columns:1fr}}
+.stage{position:relative;border-radius:12px;padding:14px 16px;border:1px solid var(--line);background:linear-gradient(165deg,var(--s1),var(--s2));min-height:150px;display:grid;align-content:end;gap:4px}
+.stage .lv{position:absolute;top:12px;left:16px;font-size:.66rem;letter-spacing:.2em;color:rgb(255 255 255 / .78);font-weight:700}
+.stage b{font-family:var(--f-display);font-size:1.15rem;color:#fff}
+.stage p{margin:0;font-size:.8rem}
+.stage .cond{font-size:.72rem;color:var(--lamp)}
+.person{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;min-width:0}
+@media (max-width:760px){.person{grid-template-columns:1fr}}
+.ph{position:relative;background:var(--sheet);aspect-ratio:16/10;max-width:100%;display:grid;place-items:center}
+.ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block}
+.ph .none{color:#5a6080;font-size:.85rem;text-align:center;padding:16px}
+.pbody{padding:16px 18px;display:grid;gap:8px;align-content:start;border-left:4px solid var(--lamp)}
+@media (max-width:760px){.pbody{border-left:0;border-top:4px solid var(--lamp)}}
+.name{font-family:var(--f-display);font-size:1.8rem;line-height:1.1;margin:0}
+.role{font-size:.8rem;color:var(--muted)}
+dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;margin:0;font-size:.85rem}
+dt{color:var(--muted);font-weight:700;white-space:nowrap}
+dd{margin:0}
+.copy{display:grid;gap:10px}
+.copyhead{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
+.btn{font:inherit;font-size:.85rem;font-weight:700;padding:6px 14px;border-radius:8px;border:1px solid var(--lamp);background:transparent;color:var(--lamp);cursor:pointer}
+.btn:hover{background:rgb(255 179 92 / .12)}
+.btn:focus-visible{outline:2px solid var(--lamp);outline-offset:2px}
+textarea{width:100%;font-family:var(--f-body);font-size:.8rem;line-height:1.65;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:12px}
+.msg{font-size:.8rem;color:var(--muted)}
+.tips{font-size:.84rem;color:var(--muted);margin:0;padding-left:1.2em}
+.imgbar{display:flex;gap:6px;flex-wrap:wrap;padding:8px 12px;background:var(--surface-2);grid-column:1 / -1}
+.imgbar button{font:inherit;font-size:.78rem;font-weight:700;cursor:pointer;padding:5px 12px;border-radius:999px;border:1px solid rgb(255 255 255 / .3);background:rgb(255 255 255 / .08);color:inherit}
+.imgbar button:focus-visible{outline:2px solid var(--lamp);outline-offset:2px}
+.imgbar .imsg{font-size:.72rem;opacity:.8;align-self:center}
+.ptitle{font-size:.95rem;margin:8px 0 0;font-family:var(--f-display)}
+.plist{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+.pitem{display:grid;gap:6px;min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.pitem small{color:var(--muted);font-size:.74rem}
+.pitem textarea{background:var(--surface-2)}
+.done{font-size:.68rem;font-weight:700;padding:1px 8px;border-radius:999px;background:rgb(255 179 92 / .16);color:var(--lamp);margin-left:6px}
+.colhead{display:flex;align-items:center;gap:10px}
+.dot{width:14px;height:14px;border-radius:50%;background:var(--c);box-shadow:0 0 12px var(--c)}
+</style>
+<div class="wrap">
+  <header class="hero">
+    <span class="eyebrow">FIELD ART PROMPTS</span>
+    <h1>色の領域</h1>
+    <div class="sub">COMMON FIELDS</div>
+    <div class="rule" aria-hidden="true"></div>
+    <p class="lead">テーマを持たない、色ごとの共通の領域。背景の絵のプロンプトを1枚ずつ「コピー」してGeminiに貼る。できた絵は、どの領域のどの段階か言ってチャットで送る。人物なし・添付なし。</p>
+  </header>
+  <section class="copy">
+    <h2 class="colhead" style="--c:#4aa8ff"><span class="dot" aria-hidden="true"></span>響き合いの領域<small>青</small></h2>
+    <div class="plist">
+      <div class="pitem"><div class="copyhead"><div><b>さざなみの岸</b><br><small>初期・横長16:9</small></div><span><button class="btn" type="button" data-copy="p_col_blue_1">コピー</button> <span class="msg" data-msg="p_col_blue_1" aria-live="polite"></span></span></div>
+        <textarea id="p_col_blue_1" rows="6" readonly aria-label="さざなみの岸のプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+どのテーマにも属さない、色の力そのものが形になった世界。キャラクターは出さず、風景だけを描く。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。この領域の色と雰囲気：響き合い。音と光の波、水面、光の柱。色は深い青と水色、白い光。
+描くもの（領域の背景）：夜の静かな海辺。打ち寄せる波が青い光の帯になって、岸にさざなみの模様を描く。人物は描かない。
+人物は描かない。横長（16:9）。全体を少し暗めのトーンにする。四角い帯や半透明の影を描き足さない。</textarea></div>
+      <div class="pitem"><div class="copyhead"><div><b>響きの回廊</b><br><small>第二昇華・横長16:9</small></div><span><button class="btn" type="button" data-copy="p_col_blue_2">コピー</button> <span class="msg" data-msg="p_col_blue_2" aria-live="polite"></span></span></div>
+        <textarea id="p_col_blue_2" rows="6" readonly aria-label="響きの回廊のプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+どのテーマにも属さない、色の力そのものが形になった世界。キャラクターは出さず、風景だけを描く。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。この領域の色と雰囲気：響き合い。音と光の波、水面、光の柱。色は深い青と水色、白い光。
+描くもの（領域の背景）：青い光の柱が並ぶ、長い回廊。床に響きの波紋が広がり、柱どうしが光の線でつながっている。人物は描かない。
+人物は描かない。横長（16:9）。全体を少し暗めのトーンにする。四角い帯や半透明の影を描き足さない。</textarea></div>
+      <div class="pitem"><div class="copyhead"><div><b>蒼穹の大聖歌</b><br><small>第三昇華・横長16:9</small></div><span><button class="btn" type="button" data-copy="p_col_blue_3">コピー</button> <span class="msg" data-msg="p_col_blue_3" aria-live="polite"></span></span></div>
+        <textarea id="p_col_blue_3" rows="6" readonly aria-label="蒼穹の大聖歌のプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+どのテーマにも属さない、色の力そのものが形になった世界。キャラクターは出さず、風景だけを描く。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。この領域の色と雰囲気：響き合い。音と光の波、水面、光の柱。色は深い青と水色、白い光。
+描くもの（領域の背景）：空いっぱいに広がる青い光のオーロラと、天へ昇る音の光の柱。下に広い祈りの広場。人物は描かない。
+人物は描かない。横長（16:9）。全体を少し暗めのトーンにする。四角い帯や半透明の影を描き足さない。</textarea></div>
+    </div>
+  </section>
+  <section class="copy">
+    <h2 class="colhead" style="--c:#ffcf4a"><span class="dot" aria-hidden="true"></span>運命の領域<small>黄</small></h2>
+    <div class="plist">
+      <div class="pitem"><div class="copyhead"><div><b>星詠みの間</b><br><small>初期・横長16:9</small></div><span><button class="btn" type="button" data-copy="p_col_yellow_1">コピー</button> <span class="msg" data-msg="p_col_yellow_1" aria-live="polite"></span></span></div>
+        <textarea id="p_col_yellow_1" rows="6" readonly aria-label="星詠みの間のプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+どのテーマにも属さない、色の力そのものが形になった世界。キャラクターは出さず、風景だけを描く。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。この領域の色と雰囲気：運命。星図、金の装飾、ろうそくと星の光。色は金と琥珀、夜の藍。
+描くもの（領域の背景）：金の装飾の小さな部屋。天井に星図が描かれ、机の上に水晶玉と、伏せたカードが並ぶ。ろうそくの光。人物は描かない。星図に文字は描かない。
+人物は描かない。横長（16:9）。全体を少し暗めのトーンにする。四角い帯や半透明の影を描き足さない。</textarea></div>
+      <div class="pitem"><div class="copyhead"><div><b>運命の書庫</b><br><small>第二昇華・横長16:9</small></div><span><button class="btn" type="button" data-copy="p_col_yellow_2">コピー</button> <span class="msg" data-msg="p_col_yellow_2" aria-live="polite"></span></span></div>
+        <textarea id="p_col_yellow_2" rows="6" readonly aria-label="運命の書庫のプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+どのテーマにも属さない、色の力そのものが形になった世界。キャラクターは出さず、風景だけを描く。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。この領域の色と雰囲気：運命。星図、金の装飾、ろうそくと星の光。色は金と琥珀、夜の藍。
+描くもの（領域の背景）：天井まで届く本棚が並ぶ、金色の光の書庫。宙に開いた本が浮かび、ページから光の糸がのびている。本に文字は描かない。人物は描かない。
+人物は描かない。横長（16:9）。全体を少し暗めのトーンにする。四角い帯や半透明の影を描き足さない。</textarea></div>
+      <div class="pitem"><div class="copyhead"><div><b>宿命の天文台</b><br><small>第三昇華・横長16:9</small></div><span><button class="btn" type="button" data-copy="p_col_yellow_3">コピー</button> <span class="msg" data-msg="p_col_yellow_3" aria-live="polite"></span></span></div>
+        <textarea id="p_col_yellow_3" rows="6" readonly aria-label="宿命の天文台のプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+どのテーマにも属さない、色の力そのものが形になった世界。キャラクターは出さず、風景だけを描く。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。この領域の色と雰囲気：運命。星図、金の装飾、ろうそくと星の光。色は金と琥珀、夜の藍。
+描くもの（領域の背景）：夜空に向かって開いた、大きな金色の天文台。巨大な望遠鏡と、まわりを回る金の輪の天球儀。満天の星。人物は描かない。
+人物は描かない。横長（16:9）。全体を少し暗めのトーンにする。四角い帯や半透明の影を描き足さない。</textarea></div>
+    </div>
+  </section>
+  <section class="copy">
+    <h2 class="colhead" style="--c:#b88cff"><span class="dot" aria-hidden="true"></span>残影の領域<small>紫</small></h2>
+    <div class="plist">
+      <div class="pitem"><div class="copyhead"><div><b>まどろみの淵</b><br><small>初期・横長16:9</small></div><span><button class="btn" type="button" data-copy="p_col_purple_1">コピー</button> <span class="msg" data-msg="p_col_purple_1" aria-live="polite"></span></span></div>
+        <textarea id="p_col_purple_1" rows="6" readonly aria-label="まどろみの淵のプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+どのテーマにも属さない、色の力そのものが形になった世界。キャラクターは出さず、風景だけを描く。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。この領域の色と雰囲気：残影。霧、夢、鏡、消えかけた記憶の光。色は紫とすみれ色、銀。
+描くもの（領域の背景）：紫の霧がたちこめる、夢と現実のあいだの淵。ゆっくり落ちていく枕や羽根、ぼやけた月。人物は描かない。
+人物は描かない。横長（16:9）。全体を少し暗めのトーンにする。四角い帯や半透明の影を描き足さない。</textarea></div>
+      <div class="pitem"><div class="copyhead"><div><b>残影の回廊</b><br><small>第二昇華・横長16:9</small></div><span><button class="btn" type="button" data-copy="p_col_purple_2">コピー</button> <span class="msg" data-msg="p_col_purple_2" aria-live="polite"></span></span></div>
+        <textarea id="p_col_purple_2" rows="6" readonly aria-label="残影の回廊のプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+どのテーマにも属さない、色の力そのものが形になった世界。キャラクターは出さず、風景だけを描く。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。この領域の色と雰囲気：残影。霧、夢、鏡、消えかけた記憶の光。色は紫とすみれ色、銀。
+描くもの（領域の背景）：割れた鏡が並ぶ、紫の光の回廊。鏡の中に、消えた誰かの影がうっすら映る。人物ははっきり描かない。
+人物は描かない。横長（16:9）。全体を少し暗めのトーンにする。四角い帯や半透明の影を描き足さない。</textarea></div>
+      <div class="pitem"><div class="copyhead"><div><b>忘却の玉座</b><br><small>第三昇華・横長16:9</small></div><span><button class="btn" type="button" data-copy="p_col_purple_3">コピー</button> <span class="msg" data-msg="p_col_purple_3" aria-live="polite"></span></span></div>
+        <textarea id="p_col_purple_3" rows="6" readonly aria-label="忘却の玉座のプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+どのテーマにも属さない、色の力そのものが形になった世界。キャラクターは出さず、風景だけを描く。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。この領域の色と雰囲気：残影。霧、夢、鏡、消えかけた記憶の光。色は紫とすみれ色、銀。
+描くもの（領域の背景）：紫の闇に浮かぶ、誰もいない玉座。まわりを、消えかけた思い出の光のかけらが漂う。人物は描かない。
+人物は描かない。横長（16:9）。全体を少し暗めのトーンにする。四角い帯や半透明の影を描き足さない。</textarea></div>
+    </div>
+  </section>
+  <section class="copy">
+    <h2 class="colhead" style="--c:#6fe08a"><span class="dot" aria-hidden="true"></span>芽吹きの領域<small>緑</small></h2>
+    <div class="plist">
+      <div class="pitem"><div class="copyhead"><div><b>芽吹きの庭</b><br><small>初期・横長16:9</small></div><span><button class="btn" type="button" data-copy="p_col_green_1">コピー</button> <span class="msg" data-msg="p_col_green_1" aria-live="polite"></span></span></div>
+        <textarea id="p_col_green_1" rows="6" readonly aria-label="芽吹きの庭のプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+どのテーマにも属さない、色の力そのものが形になった世界。キャラクターは出さず、風景だけを描く。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。この領域の色と雰囲気：芽吹き。若い芽、森、光る実、生命の光。色は若葉色と深緑、金色の木漏れ日。
+描くもの（領域の背景）：夜明け前の小さな庭。土から若い芽が顔を出し、露が光る。人物は描かない。
+人物は描かない。横長（16:9）。全体を少し暗めのトーンにする。四角い帯や半透明の影を描き足さない。</textarea></div>
+      <div class="pitem"><div class="copyhead"><div><b>深緑の森</b><br><small>第二昇華・横長16:9</small></div><span><button class="btn" type="button" data-copy="p_col_green_2">コピー</button> <span class="msg" data-msg="p_col_green_2" aria-live="polite"></span></span></div>
+        <textarea id="p_col_green_2" rows="6" readonly aria-label="深緑の森のプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+どのテーマにも属さない、色の力そのものが形になった世界。キャラクターは出さず、風景だけを描く。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。この領域の色と雰囲気：芽吹き。若い芽、森、光る実、生命の光。色は若葉色と深緑、金色の木漏れ日。
+描くもの（領域の背景）：大きな木々が茂る深い森。木漏れ日のような緑の光の粒が漂う。人物は描かない。
+人物は描かない。横長（16:9）。全体を少し暗めのトーンにする。四角い帯や半透明の影を描き足さない。</textarea></div>
+      <div class="pitem"><div class="copyhead"><div><b>世界樹の頂</b><br><small>第三昇華・横長16:9</small></div><span><button class="btn" type="button" data-copy="p_col_green_3">コピー</button> <span class="msg" data-msg="p_col_green_3" aria-live="polite"></span></span></div>
+        <textarea id="p_col_green_3" rows="6" readonly aria-label="世界樹の頂のプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+どのテーマにも属さない、色の力そのものが形になった世界。キャラクターは出さず、風景だけを描く。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。この領域の色と雰囲気：芽吹き。若い芽、森、光る実、生命の光。色は若葉色と深緑、金色の木漏れ日。
+描くもの（領域の背景）：雲の上までのびた世界樹の頂上。枝に光る実がなり、まわりに天球がいくつも浮かぶ。人物は描かない。
+人物は描かない。横長（16:9）。全体を少し暗めのトーンにする。四角い帯や半透明の影を描き足さない。</textarea></div>
+    </div>
+  </section>
+</div>
+<script>
+document.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click', () => {
+  const id = b.dataset.copy, t = document.getElementById(id), m = document.querySelector(`[data-msg="${id}"]`);
+  navigator.clipboard.writeText(t.value).then(() => { m.textContent = 'コピーしました'; }).catch(() => { t.focus(); t.select(); m.textContent = '選択しました。手動でコピーしてください'; });
+}));
+</script>
