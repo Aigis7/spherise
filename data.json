@@ -270,7 +270,7 @@
     }
    ],
    "epithet": "百の袖",
-   "hp": 2,
+   "hp": 3,
    "image": "img/s_lolo.jpg",
    "name": "ロロ",
    "rarity": "R",
@@ -616,7 +616,7 @@
     }
    ],
    "epithet": "命を鳴らす小鳥",
-   "hp": 2,
+   "hp": 3,
    "image": "img/s_canaria.jpg",
    "name": "カナリア",
    "rarity": "SR",
