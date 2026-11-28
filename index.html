@@ -1039,6 +1039,7 @@ body.drag-reserve @media (prefers-reduced-motion: reduce){.pile.reserve.hot .sta
   body.lock #view-home{height:100dvh;min-height:0;overflow:hidden;touch-action:pan-x}
   body.lock #view-title{touch-action:none}
   body.in-game .stage{touch-action:none}
+  body.in-game,body.in-game .sheet,body.in-game .modal{touch-action:manipulation}
   body.in-game{background:#0b0a1a}
   body.in-game .wrap{padding:0;gap:0}
   body.in-game header{display:none!important;flex-wrap:nowrap;align-items:center;gap:6px;height:32px;padding:0 8px;background:#0b0a1a;border-bottom:1px solid rgb(255 255 255 / .08)}
@@ -3852,11 +3853,24 @@ function fitStage() {
 }
 addEventListener('resize', fitStage);
 if (window.visualViewport) visualViewport.addEventListener('resize', fitStage);
+/* 対戦中は画面の拡大（2本指・ダブルタップ）を止める。もし拡大されてしまったら、すぐ元の大きさに戻す */
+const VPM = (() => { let m = document.querySelector('meta[name="viewport"]'); if (!m) { m = document.createElement('meta'); m.name = 'viewport'; m.content = 'width=device-width,initial-scale=1'; document.head.appendChild(m); } return m; })();
+const VP_BASE = VPM.content;
+function lockZoom(on) { VPM.content = on ? VP_BASE.replace(/,\s*(maximum-scale|user-scalable)=[^,]*/g, '') + ',maximum-scale=1,user-scalable=no' : VP_BASE; }
+const inGameNow = () => document.body.classList.contains('in-game');
+['gesturestart', 'gesturechange'].forEach(t => document.addEventListener(t, e => { if (inGameNow()) e.preventDefault(); }, { passive: false }));
+document.addEventListener('touchmove', e => { if (inGameNow() && e.touches.length > 1) e.preventDefault(); }, { passive: false });
+document.addEventListener('dblclick', e => { if (inGameNow()) e.preventDefault(); });
+if (window.visualViewport) visualViewport.addEventListener('resize', () => {
+  if (!inGameNow() || visualViewport.scale <= 1.01) return;
+  VPM.content = VP_BASE + ',maximum-scale=1'; requestAnimationFrame(() => { lockZoom(true); fitStage(); });
+});
 addEventListener('orientationchange', () => setTimeout(fitStage, 300));
 function setTab(t) {
   if (!VIEWS.includes(t)) t = 'home';
   activeTab = t;
   document.body.classList.toggle('in-game', t === 'game');
+  lockZoom(t === 'game');
   document.body.classList.toggle('in-scene', !TOOLS.includes(t));
   document.body.classList.toggle('lock', t === 'title' || t === 'home');
   requestAnimationFrame(fitStage);
