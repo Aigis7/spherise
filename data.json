@@ -1623,6 +1623,11 @@
      "steps": [
       {
        "action": "advanceSeason"
+      },
+      {
+       "action": "damage",
+       "target": "chosen",
+       "season": true
       }
      ]
     },
@@ -1637,7 +1642,8 @@
      ]
     }
    ],
-   "image": "img/k_tamaki.jpg"
+   "image": "img/k_tamaki.jpg",
+   "target": "enemyUnit"
   },
   "k_deer": {
    "name": "霞",

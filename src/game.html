@@ -1323,7 +1323,7 @@ function stepText(s, card, again) {
   const n = s.n ?? 1, T = tgtText(s, card, again);
   switch (s.action) {
     case 'draw': return (s.target === 'opponent' ? '相手はカードを' : 'カードを') + n + '枚引く';
-    case 'damage': return `${T}に${n}ダメージ`;
+    case 'damage': return s.season ? `${T}に、季節が変わった回数${n > 1 ? '×' + n : ''}ぶんダメージ` : `${T}に${n}ダメージ`;
     case 'heal':
       if (s.target === 'me') return `自分のライフを${n}回復`;
       return n >= 99 ? `${T}のダメージを全回復` : `${T}のダメージを${n}回復`;
@@ -1912,7 +1912,8 @@ function bestGrave(p, ex) { return graveUnits(p).filter(x => x !== ex).sort((a, 
 const reviveEx = (s, src) => s.excludeSelf && src ? src.cid : null;
 function doStep(g, p, src, s, chosen, opt) {
   if (g.over) return;
-  const n = s.n ?? 1;
+  const n = s.season ? (p.field.changes || 0) * (s.n ?? 1) : s.n ?? 1;
+  if (s.season) log(g, `季節が変わった回数：${p.field.changes || 0}`);
   if (s.action === 'draw') { draw(g, s.target === 'opponent' ? other(g, p) : p, n); return; }
   if (s.action === 'search') { search(g, p, s.filter); return; }
   if (s.action === 'summon') { summon(g, p, s.id, n); return; }
@@ -2055,7 +2056,7 @@ function targets(g, p, kind) {
   return [];
 }
 const needsTarget = c => !!c.target && playSteps(c).some(s => s.target === 'chosen');
-const mustTarget = c => !!c.target && (c.effects || []).some(e => e.trigger === 'play' && (e.steps || []).some(s => s.target === 'chosen'));
+const mustTarget = c => !!c.target && c.type !== 'unit' && (c.effects || []).some(e => e.trigger === 'play' && (e.steps || []).some(s => s.target === 'chosen'));
 const wantsTarget = (g, p, c) => needsTarget(c) && targets(g, p, c.target).length > 0;
 const lifeCost = c => playSteps(c).filter(s => s.action === 'payLife').reduce((a, s) => a + (s.n ?? 1), 0);
 function canPlay(g, p, inst) {
@@ -2213,7 +2214,7 @@ async function gameLoop(g) {
 function killValue(g, t, d) { if (rem(t) <= d) return 6 + getAtk(g, t) * 2 + C[t.cid].cost; return 1 + Math.min(d, rem(t)) * 0.4; }
 const readyCount = p => units(p).filter(u => !u.sleep && !u.sick).length;
 function stepValue(g, p, s, t, card) {
-  const n = s.n ?? 1, o = other(g, p);
+  const n = s.season ? (p.field.changes || 0) * (s.n ?? 1) : s.n ?? 1, o = other(g, p);
   const enemy = s.target === 'chosen' && t && t.owner !== p.idx;
   switch (s.action) {
     case 'draw': return s.target === 'opponent' ? -n : n * (p.hand.length <= 3 ? 3 : 1.2);
