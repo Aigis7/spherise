@@ -3411,7 +3411,7 @@
         {
          "action": "buff",
          "n": 1,
-         "target": "allAllies",
+         "target": "randomAlly",
          "temp": true
         }
        ],
