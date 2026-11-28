@@ -1,0 +1,346 @@
+<title>四季ノ環設定資料</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@600;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<style>
+/* Layout: 深い森の緑と生成りの1テーマ。上に題と物語、季節が回る領域（4つの輪）、主人公の環、季節の相棒4匹、剣の型、最後にコピー用の設定資料と絵のプロンプト */
+:root{
+  --bg:#0d1612; --surface:#14211b; --surface-2:#1b2c24; --ink:#f2eee2; --muted:#b5bba8; --line:#2d4236;
+  --gold:#e8cf8a; --spring:#f4b8c8; --summer:#6fd0b4; --autumn:#e8844a; --winter:#cfe4f2; --sheet:#ffffff;
+  --f-display:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif;
+  --f-body:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",system-ui,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);line-height:1.75;
+  background-image:radial-gradient(50rem 26rem at 15% -5%,rgb(244 184 200 / .10),transparent 60%),radial-gradient(50rem 26rem at 85% -5%,rgb(111 208 180 / .10),transparent 60%),radial-gradient(40rem 30rem at 100% 60%,rgb(232 132 74 / .06),transparent 60%)}
+.wrap{max-width:1040px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:36px 56px;display:grid;gap:34px}
+.hero{display:grid;gap:10px;text-align:center;justify-items:center}
+.ring{width:64px;height:64px;border-radius:50%;background:conic-gradient(var(--spring) 0 25%,var(--summer) 0 50%,var(--autumn) 0 75%,var(--winter) 0);-webkit-mask:radial-gradient(circle,transparent 52%,#000 54%);mask:radial-gradient(circle,transparent 52%,#000 54%)}
+.eyebrow{font-size:.72rem;letter-spacing:.32em;color:var(--gold);font-weight:700}
+h1{font-family:var(--f-display);font-weight:800;font-size:clamp(2.6rem,10vw,4.2rem);letter-spacing:.2em;margin:0 0 0 .2em;line-height:1.1;color:#fff}
+.sub{letter-spacing:.42em;color:var(--gold);font-size:.85rem;margin-left:.42em;font-weight:700}
+.rule{width:min(380px,70vw);height:2px;background:linear-gradient(90deg,var(--spring),var(--summer),var(--autumn),var(--winter))}
+.lead{color:var(--muted);max-width:60ch;margin:0;text-wrap:pretty}
+h2{font-size:.8rem;letter-spacing:.22em;color:var(--gold);margin:0 0 12px;font-weight:700}
+h2 small{font-weight:500;letter-spacing:.06em;color:var(--muted);margin-left:8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;min-width:0}
+.box h3{margin:0 0 6px;font-size:1rem;font-family:var(--f-display)}
+.box p,.box ul{margin:0;font-size:.86rem;color:var(--muted)}
+.box ul{padding-left:1.1em}
+.stages{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+@media (max-width:820px){.stages{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:460px){.stages{grid-template-columns:1fr}}
+.stage{position:relative;border-radius:12px;padding:14px 16px;border:1px solid var(--line);border-top:3px solid var(--sc);background:linear-gradient(170deg,color-mix(in srgb,var(--sc) 22%,var(--surface)),var(--surface));min-height:160px;display:grid;align-content:end;gap:4px}
+.stage .lv{position:absolute;top:12px;left:16px;font-family:var(--f-display);font-size:1.5rem;color:var(--sc);line-height:1}
+.stage b{font-family:var(--f-display);font-weight:800;font-size:1.1rem;color:#fff}
+.stage p{margin:0;font-size:.8rem;color:var(--ink)}
+.stage .cond{font-size:.72rem;color:var(--muted)}
+.loopnote{margin:10px 0 0;font-size:.84rem;color:var(--muted)}
+.person{display:grid;background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;min-width:0}
+.person.main{grid-template-columns:minmax(0,1fr) minmax(0,1.1fr)}
+@media (max-width:760px){.person.main{grid-template-columns:1fr}}
+.ph{position:relative;background:var(--sheet);aspect-ratio:1/1;max-width:100%}
+.ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block}
+.pbody{padding:16px 18px;display:grid;gap:8px;align-content:start;border-top:4px solid var(--c1)}
+.person.main .pbody{border-top:0;border-left:4px solid var(--c1)}
+@media (max-width:760px){.person.main .pbody{border-left:0;border-top:4px solid var(--c1)}}
+.epi{font-size:.8rem;color:var(--gold);font-weight:700;letter-spacing:.08em}
+.name{font-family:var(--f-display);font-weight:800;font-size:1.9rem;line-height:1.1;margin:0}
+.role{font-size:.8rem;color:var(--muted)}
+.tag{display:inline-block;font-size:.68rem;font-weight:700;letter-spacing:.1em;padding:1px 9px;border-radius:999px;margin-right:6px;vertical-align:.15em;border:1px solid var(--c1);color:var(--c1)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:.72rem;padding:2px 9px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line)}
+.sw{display:inline-block;width:.8em;height:.8em;border-radius:50%;vertical-align:-.05em;margin-right:4px;border:1px solid rgb(255 255 255 / .35)}
+dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;margin:0;font-size:.85rem}
+dt{color:var(--muted);font-weight:700;white-space:nowrap}
+dd{margin:0}
+.quad{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+@media (max-width:760px){.quad{grid-template-columns:1fr}}
+.forms{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.form{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--sc);border-radius:10px;padding:12px 14px}
+.form b{font-family:var(--f-display);font-size:1.05rem}
+.form p{margin:4px 0 0;font-size:.82rem;color:var(--muted)}
+.copy{display:grid;gap:10px}
+.copyhead{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
+.btn{font:inherit;font-size:.85rem;font-weight:700;padding:6px 14px;border-radius:8px;border:1px solid var(--gold);background:transparent;color:var(--gold);cursor:pointer}
+.btn:hover{background:rgb(232 207 138 / .12)}
+.btn:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+textarea{width:100%;font-family:var(--f-body);font-size:.8rem;line-height:1.65;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:12px}
+.msg{font-size:.8rem;color:var(--muted)}
+.tips{font-size:.84rem;color:var(--muted);margin:0;padding-left:1.2em}
+.imgbar{display:flex;gap:6px;flex-wrap:wrap;padding:8px 12px;background:var(--surface-2)}
+.imgbar button{font:inherit;font-size:.78rem;font-weight:700;cursor:pointer;padding:5px 12px;border-radius:999px;border:1px solid rgb(255 255 255 / .3);background:rgb(255 255 255 / .08);color:inherit}
+.imgbar button:hover{border-color:var(--gold)}
+.imgbar button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.imgbar .imsg{font-size:.72rem;opacity:.8;align-self:center}
+.ptitle{font-size:.95rem;margin:8px 0 0;font-family:var(--f-display)}
+.plist{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+.pitem{display:grid;gap:6px;min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.pitem small{color:var(--muted);font-size:.74rem}
+.pitem textarea{background:var(--surface-2)}
+.done{font-size:.68rem;font-weight:700;padding:1px 8px;border-radius:999px;background:rgb(232 207 138 / .16);color:var(--gold);margin-left:6px}
+</style>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="ring" aria-hidden="true"></div>
+    <span class="eyebrow">CHARACTER SHEET</span>
+    <h1>四季ノ環</h1>
+    <div class="sub">SHIKI NO TAMAKI</div>
+    <div class="rule" aria-hidden="true"></div>
+    <p class="lead">春夏秋冬がぐるぐると巡る、和風の天球の物語。剣士の環（たまき）は、季節ごとに剣の型を変えて戦う。そばには、それぞれの季節を守る4匹の相棒がいる。季節がひと回りするたび、物語はひとつ深くなる。</p>
+  </header>
+
+  <section>
+    <h2>世界観と画風</h2>
+    <div class="grid">
+      <div class="box"><h3>四季</h3><p>春は桜、夏は青葉と入道雲、秋は紅葉、冬は雪。冬が終わると、また春が来る。</p></div>
+      <div class="box"><h3>組紐</h3><p>環は4色の組紐で髪をまとめている。4匹は、自分の季節の色の組紐を1本ずつ付けている。仲間のしるし。</p></div>
+      <div class="box"><h3>環流</h3><p>環の剣の流派。桜吹雪・陽炎・秋時雨・氷華の4つの型がある。型を使うと、季節が先へ進む。</p></div>
+      <div class="box"><h3>画風</h3><ul><li>線は細め、日本のアニメらしいやわらかいセル塗り</li><li>全体はやわらかい緑と自然の光。季節ごとに色が変わる</li><li>キャラクターは画面の中で大きく</li><li>文字・枠は入れない。既存の作品やキャラクターに似せない</li></ul></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>領域：移ろいの郷<small>色は緑</small></h2>
+    <div class="stages">
+      <div class="stage" style="--sc:var(--spring)"><span class="lv">春</span><b>桜の丘</b><p>満開の桜のなだらかな丘。ユニットを出すと、その体力+1。</p><span class="cond">次へ：ユニットを2体出す</span></div>
+      <div class="stage" style="--sc:var(--summer)"><span class="lv">夏</span><b>青葉の渓谷</b><p>澄んだ川と滝、入道雲。ターン開始時、味方1体の攻撃力+1。</p><span class="cond">次へ：攻撃を2回する</span></div>
+      <div class="stage" style="--sc:var(--autumn)"><span class="lv">秋</span><b>紅葉の山道</b><p>赤と金の紅葉、石段と古い門。ターン開始時、カードを1枚引く。</p><span class="cond">次へ：カードを3回使う</span></div>
+      <div class="stage" style="--sc:var(--winter)"><span class="lv">冬</span><b>雪の社</b><p>雪の森の小さな社と灯籠。ターン開始時、味方全員を2回復。</p><span class="cond">次へ：ダメージを合計3受ける</span></div>
+    </div>
+    <p class="loopnote">冬から春に戻るたびに昇華する。1周目で「秘剣・巡り咲き」、2周目で「千年桜」が手に入る。</p>
+  </section>
+
+  <section>
+    <h2>主人公</h2>
+    <article class="person main" style="--c1:#e8cf8a">
+      <div class="ph"><img src="tamaki.jpg" alt="環の設定画。深い緑がかった黒髪を4色の組紐でまとめた剣士。白い着物に緑の羽織、紺の袴。袴に四季の柄。輪の形の鍔の刀を持っている。"></div>
+      <div class="pbody">
+        <span class="epi">〈四季の剣士〉</span>
+        <p class="name">環</p>
+        <span class="role">たまき。環流の剣士。季節を巡らせて戦う</span>
+        <div class="chips"><span class="chip"><span class="sw" style="background:#1f3329"></span>緑がかった黒</span><span class="chip"><span class="sw" style="background:#e3a64a"></span>琥珀</span><span class="chip"><span class="sw" style="background:#2f5d45"></span>深い緑</span><span class="chip"><span class="sw" style="background:#1d2747"></span>紺</span></div>
+        <dl>
+          <dt>年</dt><dd>18歳くらい</dd>
+          <dt>髪</dt><dd>腰まである、深い緑がかった黒髪。桜色・青・朱・白の4色の組紐で、高い位置にひとつにまとめる</dd>
+          <dt>目</dt><dd>琥珀色。凛とした表情</dd>
+          <dt>服</dt><dd>白い着物に、深い緑の羽織、紺の袴。袴のすそに、桜・青葉・紅葉・雪の柄</dd>
+          <dt>刀</dt><dd>鍔が輪の形で、桜色・青・朱・白の4つの小さな玉がはまっている</dd>
+          <dt>カード</dt><dd>場に出た時、季節を1つ進める。季節が変わるたび、攻撃力+1</dd>
+        </dl>
+      </div>
+    </article>
+  </section>
+
+  <section>
+    <h2>季節の相棒</h2>
+    <div class="quad">
+      <article class="person" style="--c1:#f4b8c8">
+        <div class="ph"><img src="kasumi.jpg" alt="霞の設定画。薄茶色に白い斑点の若い鹿。角に桜の花、首に桜色の組紐。"></div>
+        <div class="pbody">
+          <span class="epi"><span class="tag">春</span>〈春告げの鹿〉</span><p class="name">霞</p>
+          <dl><dt>体</dt><dd>やわらかい薄茶色の毛に白い斑点。やさしい目</dd><dt>しるし</dt><dd>角に桜の花。首に桜色の組紐</dd><dt>カード</dt><dd>春の間+1/+1。場に出た時、味方全員を2回復</dd></dl>
+        </div>
+      </article>
+      <article class="person" style="--c1:#6fd0b4">
+        <div class="ph"><img src="seiran.jpg" alt="青嵐の設定画。背中が深い青で、つばさの先が青緑に光るツバメ。足に青い組紐。"></div>
+        <div class="pbody">
+          <span class="epi"><span class="tag">夏</span>〈夏空のツバメ〉</span><p class="name">青嵐</p>
+          <dl><dt>体</dt><dd>背中は深い青、つばさの先が青緑に光る。おなかは白。長い二股の尾</dd><dt>しるし</dt><dd>足に青い組紐</dd><dt>カード</dt><dd>夏の間+1/+1。クイック</dd></dl>
+        </div>
+      </article>
+      <article class="person" style="--c1:#e8844a">
+        <div class="ph"><img src="inaho.jpg" alt="稲穂の設定画。金色がかった橙色のキツネ。しっぽの先が灯りのように光り、首に朱色の組紐と鈴。"></div>
+        <div class="pbody">
+          <span class="epi"><span class="tag">秋</span>〈紅葉のキツネ〉</span><p class="name">稲穂</p>
+          <dl><dt>体</dt><dd>金色がかった橙色、胸と足先は白。いたずらっぽい目</dd><dt>しるし</dt><dd>しっぽの先がちょうちんのように光る。首に朱色の組紐と小さな鈴</dd><dt>カード</dt><dd>秋の間+1/+1。場に出た時、カードを1枚引く</dd></dl>
+        </div>
+      </article>
+      <article class="person" style="--c1:#cfe4f2">
+        <div class="ph"><img src="rikka.jpg" alt="六花の設定画。毛並みに雪の結晶の模様がある大きな白いオオカミ。首に白と銀の組紐。"></div>
+        <div class="pbody">
+          <span class="epi"><span class="tag">冬</span>〈雪原の白オオカミ〉</span><p class="name">六花</p>
+          <dl><dt>体</dt><dd>大きな白いオオカミ。薄い青の目。毛並みにうっすら雪の結晶の模様</dd><dt>しるし</dt><dd>首に白と銀の組紐</dd><dt>カード</dt><dd>冬の間+1/+1。貫通</dd></dl>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <h2>環流の型</h2>
+    <div class="forms">
+      <div class="form" style="--sc:var(--spring)"><b>環流・桜吹雪</b><p>桜の花びらの嵐。味方全員を回復。春なら1枚引く。</p></div>
+      <div class="form" style="--sc:var(--summer)"><b>環流・陽炎</b><p>刀身にゆらめく陽炎。味方1体の攻撃力アップ。</p></div>
+      <div class="form" style="--sc:var(--autumn)"><b>環流・秋時雨</b><p>秋の通り雨と紅葉をまとめて斬る。相手1体に3ダメージ。</p></div>
+      <div class="form" style="--sc:var(--winter)"><b>環流・氷華</b><p>切っ先から咲く氷の花。相手1体を眠らせる。</p></div>
+    </div>
+  </section>
+
+  <section class="copy">
+    <div class="copyhead"><h2 style="margin:0">設定資料（画像生成AIに貼る用）</h2><span><button class="btn" type="button" data-copy="sheet">コピー</button> <span class="msg" data-msg="sheet" aria-live="polite"></span></span></div>
+    <textarea id="sheet" rows="16" readonly aria-label="設定資料の本文">これから、オリジナルのカードゲームのイラストを何枚もお願いします。
+全部、下の設定と画風でそろえてください。既存の作品やキャラクターには似せないでください。
+
+【画風】
+線は細め、日本のアニメらしいやわらかいセル塗り。鮮やかな色。
+横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。
+白いふちどりや枠は付けず、背景を画面いっぱいに描く。
+絵の中に文字・ロゴ・数字を入れない。キャラクターは画面の中で大きく描く。
+背景や小物は絵ごとに変え、毎回同じ構図をくり返さない。
+
+【世界観】
+和風の四季の世界。春は桜、夏は青葉と入道雲、秋は紅葉、冬は雪。季節がぐるぐると巡る。
+全体はやわらかい緑と自然の光。季節ごとに色が変わる。
+
+【主人公：環〈四季の剣士〉】
+18歳くらいの女性の剣士。腰まである深い緑がかった黒髪を、桜色・青・朱・白の4色の組紐で、高い位置にひとつにまとめている。目は琥珀色。凛とした表情。
+白い着物に深い緑の羽織、紺の袴。袴のすそに、桜・青葉・紅葉・雪の柄。
+刀の鍔は輪の形で、桜色・青・朱・白の4つの小さな玉がはまっている。
+
+【季節の相棒】
+霞〈春告げの鹿〉：若い鹿。やわらかい薄茶色の毛に白い斑点。角に桜の花が咲き、首に桜色の組紐。
+青嵐〈夏空のツバメ〉：背中は深い青で、つばさの先が青緑にほのかに光る。おなかは白、長い二股の尾。足に青い組紐。
+稲穂〈紅葉のキツネ〉：金色がかった橙色の毛、胸と足先は白。しっぽの先がちょうちんの灯りのようにほんのり光る。首に朱色の組紐と小さな鈴。
+六花〈雪原の白オオカミ〉：大きな白いオオカミ。目は薄い青。白い毛並みに、うっすらと雪の結晶の模様。首に白と銀の組紐。
+
+キャラクターの見た目は、添付した設定画に合わせてください。</textarea>
+    <ul class="tips">
+      <li>キャラが出るカードは、そのキャラの設定画を毎回添付する。上の「画像をコピー」で貼れる。</li>
+      <li>設定画を添付すると、ポーズまで設定画のままになりやすい。動きのある絵は、1回目を添付なしでポーズだけ作り、2回目に設定画を添付して見た目を合わせる。</li>
+      <li>手がおかしくなったら「腕は2本だけ」「両手の場所を1つずつ決める」と書き足す。</li>
+    </ul>
+  </section>
+  <section class="copy" id="prompts">
+    <h2 style="margin:0">カードの絵のプロンプト</h2>
+    <p class="lead" style="max-width:none">1枚ずつ「コピー」してGeminiに貼る。キャラが出る絵は、書いてある設定画を上の「画像をコピー」でいっしょに添付する。できた絵は、どのカードの絵か言ってチャットで送る。</p>
+    <h3 class="ptitle">キャラが出る絵</h3>
+    <div class="plist">
+      <div class="pitem"><div class="copyhead"><div><b>環〈四季の剣士〉</b> <span class="done">絵あり</span><br><small>ユニット・L　添付：環</small></div><span><button class="btn" type="button" data-copy="p_k_tamaki">コピー</button> <span class="msg" data-msg="p_k_tamaki" aria-live="polite"></span></span></div>
+        <textarea id="p_k_tamaki" rows="5" readonly aria-label="環〈四季の剣士〉のプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+和風の四季の世界。春は桜、夏は青葉と入道雲、秋は紅葉、冬は雪。季節がぐるぐると巡る。和装の剣士・環（たまき）と、4匹の相棒（鹿の霞、ツバメの青嵐、キツネの稲穂、白いオオカミの六花）。色は季節ごとに変わるが、全体はやわらかい緑と自然の光。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。キャラクター（環、霞、青嵐、稲穂、六花）は画面の中で大きく描き、見た目は添付した設定画に合わせる。
+描くもの：環（18歳くらいの女性の剣士。腰まである深い緑がかった黒髪を、桜色・青・朱・白の4色の組紐で高い位置にひとつにまとめる。琥珀色の目。白い着物に深い緑の羽織、紺の袴で、袴のすそに桜・青葉・紅葉・雪の柄。刀の鍔は輪の形で、4色の小さな玉がはまっている）が、刀を横に一閃した直後。刀の軌跡に、桜・青葉・紅葉・雪が順番に舞って、大きな輪を描いている。髪と組紐が風になびく。凛とした表情でこちらを見る。腕は2本だけ。両手で刀の柄をにぎっている。環は画面の中で大きく。</textarea></div>
+      <div class="pitem"><div class="copyhead"><div><b>霞〈春告げの鹿〉</b> <span class="done">絵あり</span><br><small>ユニット・SR　添付：霞</small></div><span><button class="btn" type="button" data-copy="p_k_deer">コピー</button> <span class="msg" data-msg="p_k_deer" aria-live="polite"></span></span></div>
+        <textarea id="p_k_deer" rows="5" readonly aria-label="霞〈春告げの鹿〉のプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+和風の四季の世界。春は桜、夏は青葉と入道雲、秋は紅葉、冬は雪。季節がぐるぐると巡る。和装の剣士・環（たまき）と、4匹の相棒（鹿の霞、ツバメの青嵐、キツネの稲穂、白いオオカミの六花）。色は季節ごとに変わるが、全体はやわらかい緑と自然の光。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。キャラクター（環、霞、青嵐、稲穂、六花）は画面の中で大きく描き、見た目は添付した設定画に合わせる。
+描くもの：霞（若い鹿。やわらかい薄茶色の毛に白い斑点。角に桜の花が咲き、首に桜色の組紐）が、満開の桜の森の中で、首をかしげてこちらを見ている。足元に花びらが積もり、木もれ日がさす。霞は画面の中で大きく。</textarea></div>
+      <div class="pitem"><div class="copyhead"><div><b>青嵐〈夏空のツバメ〉</b> <span class="done">絵あり</span><br><small>ユニット・R　添付：青嵐</small></div><span><button class="btn" type="button" data-copy="p_k_swallow">コピー</button> <span class="msg" data-msg="p_k_swallow" aria-live="polite"></span></span></div>
+        <textarea id="p_k_swallow" rows="5" readonly aria-label="青嵐〈夏空のツバメ〉のプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+和風の四季の世界。春は桜、夏は青葉と入道雲、秋は紅葉、冬は雪。季節がぐるぐると巡る。和装の剣士・環（たまき）と、4匹の相棒（鹿の霞、ツバメの青嵐、キツネの稲穂、白いオオカミの六花）。色は季節ごとに変わるが、全体はやわらかい緑と自然の光。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。キャラクター（環、霞、青嵐、稲穂、六花）は画面の中で大きく描き、見た目は添付した設定画に合わせる。
+描くもの：青嵐（ツバメ。背中は深い青で、つばさの先が青緑にほのかに光る。おなかは白、長い二股の尾、足に青い組紐）が、入道雲の夏空を、画面の手前に向かって鋭く飛んでくる。つばさの先に光る風の筋。下に青い田んぼ。青嵐は画面の中で大きく。</textarea></div>
+      <div class="pitem"><div class="copyhead"><div><b>稲穂〈紅葉のキツネ〉</b> <span class="done">絵あり</span><br><small>ユニット・SR　添付：稲穂</small></div><span><button class="btn" type="button" data-copy="p_k_fox">コピー</button> <span class="msg" data-msg="p_k_fox" aria-live="polite"></span></span></div>
+        <textarea id="p_k_fox" rows="5" readonly aria-label="稲穂〈紅葉のキツネ〉のプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+和風の四季の世界。春は桜、夏は青葉と入道雲、秋は紅葉、冬は雪。季節がぐるぐると巡る。和装の剣士・環（たまき）と、4匹の相棒（鹿の霞、ツバメの青嵐、キツネの稲穂、白いオオカミの六花）。色は季節ごとに変わるが、全体はやわらかい緑と自然の光。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。キャラクター（環、霞、青嵐、稲穂、六花）は画面の中で大きく描き、見た目は添付した設定画に合わせる。
+描くもの：稲穂（キツネ。金色がかった橙色の毛、胸と足先は白。しっぽの先がちょうちんの灯りのようにほんのり光る。首に朱色の組紐と小さな鈴）が、赤と金の紅葉が舞う山道で、いたずらっぽく振り返る。稲穂は画面の中で大きく。</textarea></div>
+      <div class="pitem"><div class="copyhead"><div><b>六花〈雪原の白オオカミ〉</b> <span class="done">絵あり</span><br><small>ユニット・SR　添付：六花</small></div><span><button class="btn" type="button" data-copy="p_k_wolf">コピー</button> <span class="msg" data-msg="p_k_wolf" aria-live="polite"></span></span></div>
+        <textarea id="p_k_wolf" rows="5" readonly aria-label="六花〈雪原の白オオカミ〉のプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+和風の四季の世界。春は桜、夏は青葉と入道雲、秋は紅葉、冬は雪。季節がぐるぐると巡る。和装の剣士・環（たまき）と、4匹の相棒（鹿の霞、ツバメの青嵐、キツネの稲穂、白いオオカミの六花）。色は季節ごとに変わるが、全体はやわらかい緑と自然の光。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。キャラクター（環、霞、青嵐、稲穂、六花）は画面の中で大きく描き、見た目は添付した設定画に合わせる。
+描くもの：六花（大きな白いオオカミ。薄い青の目。白い毛並みに、うっすらと雪の結晶の模様。首に白と銀の組紐）が、吹雪の雪原で頭を上げて遠吠えしている。息が白く、背中に雪が積もる。六花は画面の中で大きく。</textarea></div>
+      <div class="pitem"><div class="copyhead"><div><b>環流・桜吹雪</b> <span class="done">絵あり</span><br><small>アーツ・C　添付：環（1回目は添付なしでポーズだけ、2回目に添付）</small></div><span><button class="btn" type="button" data-copy="p_k_sakura">コピー</button> <span class="msg" data-msg="p_k_sakura" aria-live="polite"></span></span></div>
+        <textarea id="p_k_sakura" rows="5" readonly aria-label="環流・桜吹雪のプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+和風の四季の世界。春は桜、夏は青葉と入道雲、秋は紅葉、冬は雪。季節がぐるぐると巡る。和装の剣士・環（たまき）と、4匹の相棒（鹿の霞、ツバメの青嵐、キツネの稲穂、白いオオカミの六花）。色は季節ごとに変わるが、全体はやわらかい緑と自然の光。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。キャラクター（環、霞、青嵐、稲穂、六花）は画面の中で大きく描き、見た目は添付した設定画に合わせる。
+描くもの：満開の桜の森で、環（18歳くらいの女性の剣士。深い緑がかった黒髪を4色の組紐で高い位置にまとめる。琥珀色の目。白い着物に深い緑の羽織、紺の袴。刀の鍔は輪の形で4色の玉）が、体を大きくひねりながら刀を振り抜いた直後。右手1本で刀の柄の端をにぎり、刀は右上から左下へ振り抜かれて、刃先は画面の外側を向いている。刀は1本だけで、手の中の柄、鍔、その先に細身の刃が1本まっすぐのびる。刀の通った軌跡に沿って、桜の花びらが竜巻のように渦を巻き、まわりを桃色の大きな輪が囲む。髪と羽織が大きくなびく。少し下から見上げる構図。腕は2本だけ、手も2つだけ。右手で刀の柄をにぎる。左手は何も持たず、手のひらを開いて体のうしろへ広げる。鞘は腰の帯に差してあり、手では持たない。</textarea></div>
+      <div class="pitem"><div class="copyhead"><div><b>環流・陽炎</b> <span class="done">絵あり</span><br><small>アーツ・C　添付：環（1回目は添付なしでポーズだけ、2回目に添付）</small></div><span><button class="btn" type="button" data-copy="p_k_kagero">コピー</button> <span class="msg" data-msg="p_k_kagero" aria-live="polite"></span></span></div>
+        <textarea id="p_k_kagero" rows="5" readonly aria-label="環流・陽炎のプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+和風の四季の世界。春は桜、夏は青葉と入道雲、秋は紅葉、冬は雪。季節がぐるぐると巡る。和装の剣士・環（たまき）と、4匹の相棒（鹿の霞、ツバメの青嵐、キツネの稲穂、白いオオカミの六花）。色は季節ごとに変わるが、全体はやわらかい緑と自然の光。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。キャラクター（環、霞、青嵐、稲穂、六花）は画面の中で大きく描き、見た目は添付した設定画に合わせる。
+描くもの：真夏のひまわり畑と入道雲、強い日差し。環（18歳くらいの女性の剣士。深い緑がかった黒髪を4色の組紐で高い位置にまとめる。琥珀色の目。白い着物に深い緑の羽織、紺の袴。刀の鍔は輪の形で4色の玉）を真横から描く。低い姿勢で前へ踏みこみ、居合いで刀を横に抜き放った瞬間。両手で柄をにぎり、刀は体の前を水平に走る。刀は細身で少し反った日本刀が1本だけ。刃の幅はせまい。刀身全体が真夏の熱で白く光り、刃のまわりの空気がゆらゆらとゆがんで、刃の向こうのひまわりがゆがんで見える。髪と羽織が大きくなびき、足元から土ぼこりが舞う。スピード線。腕は2本だけ。</textarea></div>
+      <div class="pitem"><div class="copyhead"><div><b>環流・秋時雨</b> <span class="done">絵あり</span><br><small>アーツ・R　添付：環（1回目は添付なしでポーズだけ、2回目に添付）</small></div><span><button class="btn" type="button" data-copy="p_k_momiji">コピー</button> <span class="msg" data-msg="p_k_momiji" aria-live="polite"></span></span></div>
+        <textarea id="p_k_momiji" rows="5" readonly aria-label="環流・秋時雨のプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+和風の四季の世界。春は桜、夏は青葉と入道雲、秋は紅葉、冬は雪。季節がぐるぐると巡る。和装の剣士・環（たまき）と、4匹の相棒（鹿の霞、ツバメの青嵐、キツネの稲穂、白いオオカミの六花）。色は季節ごとに変わるが、全体はやわらかい緑と自然の光。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。キャラクター（環、霞、青嵐、稲穂、六花）は画面の中で大きく描き、見た目は添付した設定画に合わせる。
+描くもの：環（18歳くらいの女性の剣士。深い緑がかった黒髪を4色の組紐で高い位置にまとめる。琥珀色の目。白い着物に深い緑の羽織、紺の袴。刀の鍔は輪の形で4色の玉）が、高く跳び上がって、上から斬り下ろす瞬間。冷たい秋の通り雨の雨粒と、赤い紅葉が、刀の通った線で一直線に割れる。上から見下ろす構図。斜めの構図と強い遠近感、スピード線で、躍動感を強く出す。髪、組紐、羽織が大きくなびく。腕は2本だけ。刀は1本で、刃は鍔の片側だけ。</textarea></div>
+      <div class="pitem"><div class="copyhead"><div><b>環流・氷華</b> <span class="done">絵あり</span><br><small>アーツ・R　添付：環（1回目は添付なしでポーズだけ、2回目に添付）</small></div><span><button class="btn" type="button" data-copy="p_k_hyoka">コピー</button> <span class="msg" data-msg="p_k_hyoka" aria-live="polite"></span></span></div>
+        <textarea id="p_k_hyoka" rows="5" readonly aria-label="環流・氷華のプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+和風の四季の世界。春は桜、夏は青葉と入道雲、秋は紅葉、冬は雪。季節がぐるぐると巡る。和装の剣士・環（たまき）と、4匹の相棒（鹿の霞、ツバメの青嵐、キツネの稲穂、白いオオカミの六花）。色は季節ごとに変わるが、全体はやわらかい緑と自然の光。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。キャラクター（環、霞、青嵐、稲穂、六花）は画面の中で大きく描き、見た目は添付した設定画に合わせる。
+描くもの：環（18歳くらいの女性の剣士。深い緑がかった黒髪を4色の組紐で高い位置にまとめる。琥珀色の目。白い着物に深い緑の羽織、紺の袴。刀の鍔は輪の形で4色の玉）が、雪の上を低い姿勢ですべりながら、すれちがいざまに斬り抜けた瞬間。通った跡に、氷の花が一列に咲いていく。雪けむりが舞う。斜めの構図と強い遠近感、スピード線で、躍動感を強く出す。髪、組紐、羽織が大きくなびく。腕は2本だけ。刀は1本で、刃は鍔の片側だけ。</textarea></div>
+      <div class="pitem"><div class="copyhead"><div><b>秘剣・巡り咲き</b> <span class="done">絵あり</span><br><small>アーツ・RR　添付：環</small></div><span><button class="btn" type="button" data-copy="p_k_meguri">コピー</button> <span class="msg" data-msg="p_k_meguri" aria-live="polite"></span></span></div>
+        <textarea id="p_k_meguri" rows="5" readonly aria-label="秘剣・巡り咲きのプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+和風の四季の世界。春は桜、夏は青葉と入道雲、秋は紅葉、冬は雪。季節がぐるぐると巡る。和装の剣士・環（たまき）と、4匹の相棒（鹿の霞、ツバメの青嵐、キツネの稲穂、白いオオカミの六花）。色は季節ごとに変わるが、全体はやわらかい緑と自然の光。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。キャラクター（環、霞、青嵐、稲穂、六花）は画面の中で大きく描き、見た目は添付した設定画に合わせる。
+描くもの：桜・青葉・紅葉・雪が大きな輪になって渦巻き、その中心で、環（深い緑がかった黒髪を4色の組紐で高い位置にまとめる。深い緑の羽織、紺の袴）が後ろ姿で刀を振り抜く。刀の軌跡は、画面を横切る太くてまぶしい金色の光の線。輪の花と葉が、刀の光にあわせて一斉に咲き乱れ、外へ爆発するように舞い散る。輪の4か所に、季節の相棒が光の姿で小さく浮かぶ（桜のところに鹿、青葉にツバメ、紅葉にキツネ、雪に白いオオカミ）。金の火花と光の粒。背景は中心が白く光り、外へ向かって季節の色に変わる。豪華で派手な切り札の絵。腕は2本だけ。刀は1本で、刃は鍔の片側だけ。</textarea></div>
+    </div>
+    <h3 class="ptitle">設定画なしで作る絵</h3>
+    <div class="plist">
+      <div class="pitem"><div class="copyhead"><div><b>環流の門下生</b> <span class="done">絵あり</span><br><small>ユニット・C　添付なし</small></div><span><button class="btn" type="button" data-copy="p_k_pupil">コピー</button> <span class="msg" data-msg="p_k_pupil" aria-live="polite"></span></span></div>
+        <textarea id="p_k_pupil" rows="5" readonly aria-label="環流の門下生のプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+和風の四季の世界。春は桜、夏は青葉と入道雲、秋は紅葉、冬は雪。季節がぐるぐると巡る。和装の剣士・環（たまき）と、4匹の相棒（鹿の霞、ツバメの青嵐、キツネの稲穂、白いオオカミの六花）。色は季節ごとに変わるが、全体はやわらかい緑と自然の光。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。キャラクター（環、霞、青嵐、稲穂、六花）は画面の中で大きく描き、見た目は添付した設定画に合わせる。
+描くもの：剣を習っている、12〜13歳くらいの小柄で元気な女の子。栗色の髪を、肩につかない短いふたつ結びにしている。頭に白い鉢巻、鉢巻の結び目に緑の組紐。丸い目で、幼い顔立ち。白い着物に、明るい若草色の短い羽織、えんじ色の袴。道場の庭で、木刀を両手でにぎり、大きく振り下ろして素振りをしている。一生けんめいな表情で、少し汗が光る。まわりを桜・青葉・紅葉・雪のかけらが一枚ずつ舞う。斜めの構図で、髪と羽織がなびく。女の子は画面の中で大きく。腕は2本だけ、手も2つだけ。木刀は1本。</textarea></div>
+      <div class="pitem"><div class="copyhead"><div><b>雪の社の巫女</b> <span class="done">絵あり</span><br><small>ユニット・C　添付なし</small></div><span><button class="btn" type="button" data-copy="p_k_miko">コピー</button> <span class="msg" data-msg="p_k_miko" aria-live="polite"></span></span></div>
+        <textarea id="p_k_miko" rows="5" readonly aria-label="雪の社の巫女のプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+和風の四季の世界。春は桜、夏は青葉と入道雲、秋は紅葉、冬は雪。季節がぐるぐると巡る。和装の剣士・環（たまき）と、4匹の相棒（鹿の霞、ツバメの青嵐、キツネの稲穂、白いオオカミの六花）。色は季節ごとに変わるが、全体はやわらかい緑と自然の光。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。キャラクター（環、霞、青嵐、稲穂、六花）は画面の中で大きく描き、見た目は添付した設定画に合わせる。
+描くもの：雪の降る静かな夜、小さな社の前に立つ若い巫女。長い黒髪を低い位置で白い紙の飾りで結ぶ。白い着物に緋色の袴、上に白い千早。右手に神楽鈴を持ち、左手はそっと胸に当てて、やさしく目を伏せて祈っている。まわりの雪が、鈴の音に合わせて淡い光の粒になって舞う。灯籠の火があたたかい。巫女は画面の中で大きく。腕は2本だけ、手も2つだけ。</textarea></div>
+      <div class="pitem"><div class="copyhead"><div><b>千年桜</b> <span class="done">絵あり</span><br><small>ユニット・RR　添付なし</small></div><span><button class="btn" type="button" data-copy="p_k_senbon">コピー</button> <span class="msg" data-msg="p_k_senbon" aria-live="polite"></span></span></div>
+        <textarea id="p_k_senbon" rows="5" readonly aria-label="千年桜のプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+和風の四季の世界。春は桜、夏は青葉と入道雲、秋は紅葉、冬は雪。季節がぐるぐると巡る。和装の剣士・環（たまき）と、4匹の相棒（鹿の霞、ツバメの青嵐、キツネの稲穂、白いオオカミの六花）。色は季節ごとに変わるが、全体はやわらかい緑と自然の光。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。キャラクター（環、霞、青嵐、稲穂、六花）は画面の中で大きく描き、見た目は添付した設定画に合わせる。
+描くもの：千年生きた巨大な桜の木。季節に関係なく満開で、花びらが光の粒になって降りそそぐ。根元に小さな祠。</textarea></div>
+    </div>
+    <h3 class="ptitle">領域の背景（人物なし・添付なし）</h3>
+    <div class="plist">
+      <div class="pitem"><div class="copyhead"><div><b>春・桜の丘</b> <span class="done">絵あり</span><br><small>横長16:9</small></div><span><button class="btn" type="button" data-copy="p_stage1">コピー</button> <span class="msg" data-msg="p_stage1" aria-live="polite"></span></span></div>
+        <textarea id="p_stage1" rows="5" readonly aria-label="桜の丘のプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+和風の四季の世界。春は桜、夏は青葉と入道雲、秋は紅葉、冬は雪。季節がぐるぐると巡る。和装の剣士・環（たまき）と、4匹の相棒（鹿の霞、ツバメの青嵐、キツネの稲穂、白いオオカミの六花）。色は季節ごとに変わるが、全体はやわらかい緑と自然の光。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。キャラクター（環、霞、青嵐、稲穂、六花）は画面の中で大きく描き、見た目は添付した設定画に合わせる。
+描くもの（領域の背景）：満開の桜が咲く、なだらかな丘。花びらが風に舞い、遠くに山が見える。やわらかい春の光。人物は描かない。
+人物は入れないか、遠くに小さく。横長（16:9）。上にカードを重ねるので、画面の真ん中は落ち着いた暗めの絵にする。</textarea></div>
+      <div class="pitem"><div class="copyhead"><div><b>夏・青葉の渓谷</b> <span class="done">絵あり</span><br><small>横長16:9</small></div><span><button class="btn" type="button" data-copy="p_stage2">コピー</button> <span class="msg" data-msg="p_stage2" aria-live="polite"></span></span></div>
+        <textarea id="p_stage2" rows="5" readonly aria-label="青葉の渓谷のプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+和風の四季の世界。春は桜、夏は青葉と入道雲、秋は紅葉、冬は雪。季節がぐるぐると巡る。和装の剣士・環（たまき）と、4匹の相棒（鹿の霞、ツバメの青嵐、キツネの稲穂、白いオオカミの六花）。色は季節ごとに変わるが、全体はやわらかい緑と自然の光。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。キャラクター（環、霞、青嵐、稲穂、六花）は画面の中で大きく描き、見た目は添付した設定画に合わせる。
+描くもの（領域の背景）：緑の木々に囲まれた夏の渓谷。澄んだ川と小さな滝、入道雲、強い日差し。人物は描かない。
+人物は入れないか、遠くに小さく。横長（16:9）。上にカードを重ねるので、画面の真ん中は落ち着いた暗めの絵にする。</textarea></div>
+      <div class="pitem"><div class="copyhead"><div><b>秋・紅葉の山道</b> <span class="done">絵あり</span><br><small>横長16:9</small></div><span><button class="btn" type="button" data-copy="p_stage3">コピー</button> <span class="msg" data-msg="p_stage3" aria-live="polite"></span></span></div>
+        <textarea id="p_stage3" rows="5" readonly aria-label="紅葉の山道のプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+和風の四季の世界。春は桜、夏は青葉と入道雲、秋は紅葉、冬は雪。季節がぐるぐると巡る。和装の剣士・環（たまき）と、4匹の相棒（鹿の霞、ツバメの青嵐、キツネの稲穂、白いオオカミの六花）。色は季節ごとに変わるが、全体はやわらかい緑と自然の光。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。キャラクター（環、霞、青嵐、稲穂、六花）は画面の中で大きく描き、見た目は添付した設定画に合わせる。
+描くもの（領域の背景）：赤と金の紅葉に包まれた山道。石段と古い鳥居のような門、夕暮れの光。人物は描かない。
+人物は入れないか、遠くに小さく。横長（16:9）。上にカードを重ねるので、画面の真ん中は落ち着いた暗めの絵にする。</textarea></div>
+      <div class="pitem"><div class="copyhead"><div><b>冬・雪の社</b> <span class="done">絵あり</span><br><small>横長16:9</small></div><span><button class="btn" type="button" data-copy="p_stage4">コピー</button> <span class="msg" data-msg="p_stage4" aria-live="polite"></span></span></div>
+        <textarea id="p_stage4" rows="5" readonly aria-label="雪の社のプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+和風の四季の世界。春は桜、夏は青葉と入道雲、秋は紅葉、冬は雪。季節がぐるぐると巡る。和装の剣士・環（たまき）と、4匹の相棒（鹿の霞、ツバメの青嵐、キツネの稲穂、白いオオカミの六花）。色は季節ごとに変わるが、全体はやわらかい緑と自然の光。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。キャラクター（環、霞、青嵐、稲穂、六花）は画面の中で大きく描き、見た目は添付した設定画に合わせる。
+描くもの（領域の背景）：雪に覆われた静かな森の中の小さな社。灯籠に火がともり、雪がしんしんと降る。人物は描かない。
+人物は入れないか、遠くに小さく。横長（16:9）。上にカードを重ねるので、画面の真ん中は落ち着いた暗めの絵にする。</textarea></div>
+    </div>
+  </section>
+</div>
+<script>
+document.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click', () => {
+  const id = b.dataset.copy, t = document.getElementById(id), m = document.querySelector(`[data-msg="${id}"]`);
+  navigator.clipboard.writeText(t.value).then(() => { m.textContent = 'コピーしました'; }).catch(() => { t.focus(); t.select(); m.textContent = '選択しました。手動でコピーしてください'; });
+}));
+
+/* 設定画をコピー・保存する */
+(function () {
+  function nameOf(img) { const a = img.closest('article'); const n = a && a.querySelector('.name'); return n ? n.textContent.trim() : 'image'; }
+  async function pngBlob(img) {
+    const res = await fetch(img.currentSrc || img.src); const b = await res.blob();
+    if (b.type === 'image/png') return b;
+    const bmp = await createImageBitmap(b);
+    const cv = document.createElement('canvas'); cv.width = bmp.width; cv.height = bmp.height;
+    cv.getContext('2d').drawImage(bmp, 0, 0);
+    return await new Promise(r => cv.toBlob(r, 'image/png'));
+  }
+  document.querySelectorAll('article img').forEach(img => {
+    const art = img.closest('article'); if (!art) return;
+    const bar = document.createElement('div'); bar.className = 'imgbar';
+    bar.innerHTML = '<button type="button" data-act="copy">画像をコピー</button><button type="button" data-act="save">画像を保存</button><span class="imsg" aria-live="polite"></span>';
+    const body = art.querySelector('.pbody');
+    if (body) art.insertBefore(bar, body); else art.appendChild(bar);
+    if (art.classList.contains('main')) { bar.style.gridColumn = '1 / -1'; bar.style.order = '3'; }
+    const msg = bar.querySelector('.imsg');
+    bar.querySelector('[data-act="copy"]').addEventListener('click', async () => {
+      msg.textContent = 'コピー中…';
+      try {
+        if (!navigator.clipboard || !window.ClipboardItem) throw new Error('no');
+        await navigator.clipboard.write([new ClipboardItem({ 'image/png': pngBlob(img) })]);
+        msg.textContent = 'コピーしました。そのまま貼り付けられます';
+      } catch (e) { msg.textContent = 'コピーできませんでした。「画像を保存」か、画像を長押しして保存してください'; }
+    });
+    bar.querySelector('[data-act="save"]').addEventListener('click', async () => {
+      try {
+        const res = await fetch(img.currentSrc || img.src); const b = await res.blob();
+        const filename = nameOf(img) + (b.type === 'image/png' ? '.png' : '.jpg');
+        const dl = window.claude && window.claude.use ? await window.claude.use('downloads') : null;
+        if (!dl) { msg.textContent = '画像を長押しして保存してください'; return; }
+        await dl.save({ filename, data: b }); msg.textContent = '保存しました';
+      } catch (e) { msg.textContent = e && e.code === 'declined' ? '保存をやめました' : '保存できませんでした。画像を長押しして保存してください'; }
+    });
+  });
+})();
+</script>

@@ -1,0 +1,278 @@
+<title>ノクティルカ設定資料</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<style>
+/* Layout: 夜の街に合わせた暗い1テーマ。上にバンド名と世界観、5人の設定画をカードで並べ、最後にコピー用の設定資料 */
+:root{
+  --bg:#110f22; --surface:#1b1833; --surface-2:#242044; --ink:#ece9fb; --muted:#a7a2c8; --line:#37315c;
+  --glow:#4fe3d0; --neon:#ff4fb6;
+  --f-display:"Dela Gothic One","Hiragino Sans","Yu Gothic",sans-serif;
+  --f-body:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",system-ui,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);line-height:1.7;
+  background-image:radial-gradient(60rem 30rem at 85% -10%,rgb(255 79 182 / .14),transparent 60%),radial-gradient(50rem 30rem at 0% 0%,rgb(79 227 208 / .10),transparent 60%)}
+.wrap{max-width:1040px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:32px 48px;display:grid;gap:28px}
+.hero{display:grid;gap:8px}
+.eyebrow{font-size:.75rem;letter-spacing:.3em;color:var(--glow);font-weight:700}
+h1{font-family:var(--f-display);font-weight:400;font-size:clamp(2.2rem,7vw,3.6rem);margin:0;line-height:1.1;letter-spacing:.06em;text-shadow:0 0 18px rgb(79 227 208 / .45)}
+h1 .drop{display:inline-block;width:.42em;height:.56em;margin-left:.15em;vertical-align:.1em;background:var(--glow);border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;transform:rotate(180deg);box-shadow:0 0 16px var(--glow)}
+.lead{color:var(--muted);max-width:62ch;margin:0}
+h2{font-size:.8rem;letter-spacing:.2em;color:var(--muted);margin:0 0 10px;font-weight:700}
+.world{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;min-width:0}
+.box h3{margin:0 0 6px;font-size:.95rem}
+.box p,.box ul{margin:0;font-size:.86rem;color:var(--muted)}
+.box ul{padding-left:1.1em}
+.members{display:grid;gap:18px}
+.member{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:0;background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+@media (max-width:720px){.member{grid-template-columns:minmax(0,1fr)}}
+.member img{display:block;width:100%;height:100%;object-fit:cover;aspect-ratio:1024/637}
+.mbody{padding:16px 18px;display:grid;gap:8px;align-content:start;border-left:4px solid var(--c)}
+@media (max-width:720px){.mbody{border-left:0;border-top:4px solid var(--c)}}
+.epi{font-size:.8rem;color:var(--c);font-weight:700;letter-spacing:.08em}
+.name{font-family:var(--f-display);font-weight:400;font-size:1.9rem;line-height:1.1;margin:0}
+.role{font-size:.8rem;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:.72rem;padding:2px 8px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line);color:var(--ink)}
+.sw{display:inline-block;width:.8em;height:.8em;border-radius:50%;vertical-align:-.05em;margin-right:4px;border:1px solid rgb(255 255 255 / .3)}
+dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;margin:0;font-size:.84rem}
+dt{color:var(--muted);font-weight:700;white-space:nowrap}
+dd{margin:0}
+.copy{display:grid;gap:8px}
+.copyhead{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
+.btn{font:inherit;font-size:.85rem;font-weight:700;padding:6px 14px;border-radius:8px;border:1px solid var(--glow);background:transparent;color:var(--glow);cursor:pointer}
+.btn:hover{background:rgb(79 227 208 / .12)}
+.btn:focus-visible{outline:2px solid var(--glow);outline-offset:2px}
+textarea{width:100%;min-height:340px;font-family:var(--f-body);font-size:.8rem;line-height:1.6;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:12px}
+.msg{font-size:.8rem;color:var(--muted)}
+.tips{font-size:.84rem;color:var(--muted)}
+.tips li{margin:2px 0}
+
+.imgbar{display:flex;gap:6px;flex-wrap:wrap;padding:8px 12px 0}
+.imgbar button{font:inherit;font-size:.78rem;font-weight:700;cursor:pointer;padding:5px 12px;border-radius:999px;border:1px solid rgb(255 255 255 / .3);background:rgb(255 255 255 / .08);color:inherit}
+.imgbar button:hover{border-color:#ffd27a}
+.imgbar button:focus-visible{outline:2px solid #ffd27a;outline-offset:2px}
+.imgbar .imsg{font-size:.72rem;opacity:.8;align-self:center}
+</style>
+
+<div class="wrap">
+  <header class="hero">
+    <span class="eyebrow">CHARACTER SHEET</span>
+    <h1>ノクティルカ<span class="drop" aria-hidden="true"></span></h1>
+    <p class="lead">夜にだけ光る、5人組のガールズバンド。人ではない特徴を少しだけ持つ「亜人」の少女たちが、ゴシックな尖塔のそびえる夜の街で音を鳴らす。</p>
+  </header>
+
+  <section>
+    <h2>世界観と画風</h2>
+    <div class="world">
+      <div class="box"><h3>街</h3><p>ゴシックな尖塔がそびえる、夜の現代の街。色は夜の青紫、ネオンのピンク、赤い光。</p></div>
+      <div class="box"><h3>演奏</h3><p>演奏すると、音が光や影になってあふれ出す。メンバーごとに、あふれる光の色が違う。</p></div>
+      <div class="box"><h3>目印</h3><p>5人とも、ほのかに光る青緑のしずく型のピンをどこかに付けている。夜光虫の光。</p></div>
+      <div class="box"><h3>画風</h3><ul><li>線は細め、日本のアニメらしいやわらかいセル塗り</li><li>横長16:10、描くものは中央</li><li>白いふちどり・枠・文字は入れない</li><li>既存の作品やキャラクターに似せない</li></ul></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>メンバー</h2>
+    <div class="members">
+      <article class="member" style="--c:#3fd0c6">
+        <img src="riora.jpg" alt="リオラの設定画。夜の街でマイクスタンドの前に立つ、紺色の長いウェーブ髪の少女。まわりに青緑の水の光が流れている。">
+        <div class="mbody">
+          <span class="epi">〈潮騒の歌姫〉</span>
+          <p class="name">リオラ</p>
+          <span class="role">ボーカル／セイレーンの亜人</span>
+          <div class="chips"><span class="chip"><span class="sw" style="background:#1d2b6b"></span>深い紺</span><span class="chip"><span class="sw" style="background:#3fd0c6"></span>青緑</span></div>
+          <dl>
+            <dt>髪</dt><dd>腰までの長いウェーブ。紺色で、毛先だけ青緑のグラデーション</dd>
+            <dt>目</dt><dd>青緑</dd>
+            <dt>特徴</dt><dd>ひれの形の耳、鎖骨に小さなうろこ</dd>
+            <dt>服</dt><dd>黒のオフショルダー、すける紺の長いカーディガン、黒のロングスカート</dd>
+            <dt>性格</dt><dd>ふだんは静か。歌うと人が変わる</dd>
+          </dl>
+        </div>
+      </article>
+
+      <article class="member" style="--c:#ff5a5a">
+        <img src="urka.jpg" alt="ウルカの設定画。夜の街で赤いエレキギターを構える、銀髪に狼の耳としっぽの少女。">
+        <div class="mbody">
+          <span class="epi">〈月下の牙〉</span>
+          <p class="name">ウルカ</p>
+          <span class="role">ギター／人狼の亜人</span>
+          <div class="chips"><span class="chip"><span class="sw" style="background:#c9cdd6"></span>銀</span><span class="chip"><span class="sw" style="background:#d63a3a"></span>赤</span></div>
+          <dl>
+            <dt>髪</dt><dd>銀色のショートのウルフカット、内側だけ赤</dd>
+            <dt>目</dt><dd>琥珀色</dd>
+            <dt>特徴</dt><dd>狼の耳としっぽ、八重歯</dd>
+            <dt>服</dt><dd>ファーの襟の黒い革ジャン、赤いタンクトップ、黒のカーゴショートパンツ、ごついブーツ</dd>
+            <dt>性格</dt><dd>元気。いちばん前に出たがる</dd>
+          </dl>
+        </div>
+      </article>
+
+      <article class="member" style="--c:#b07cff">
+        <img src="nox.jpg" alt="ノクスの設定画。夜の街でベースを持つ、黒い長髪で片目が隠れた少女。足元から紫の影がゆらめいている。">
+        <div class="mbody">
+          <span class="epi">〈黄昏の刈り手〉</span>
+          <p class="name">ノクス</p>
+          <span class="role">ベース／死神の亜人</span>
+          <div class="chips"><span class="chip"><span class="sw" style="background:#111"></span>黒</span><span class="chip"><span class="sw" style="background:#8a4fd8"></span>紫</span></div>
+          <dl>
+            <dt>髪</dt><dd>まっすぐな黒のロング、毛先だけ紫。前髪で片目が隠れている</dd>
+            <dt>目</dt><dd>見えている目が、ほのかに紫に光る</dd>
+            <dt>特徴</dt><dd>青白い肌、足元の影がゆらぐ、首に小さな鎌のチャーム</dd>
+            <dt>服</dt><dd>フード付きの黒いロングコート、黒のワイドパンツ、厚底ブーツ</dd>
+            <dt>性格</dt><dd>眠そうで口数が少ない。でも低音は正確</dd>
+          </dl>
+        </div>
+      </article>
+
+      <article class="member" style="--c:#ff9a3c">
+        <img src="garna.jpg" alt="ガルナの設定画。夜の街の通りに立ち、ドラムスティックを肩にかつぐ、灰色のショートボブにオレンジの前髪の少女。背中に石の翼がある。">
+        <div class="mbody">
+          <span class="epi">〈刻む石像〉</span>
+          <p class="name">ガルナ</p>
+          <span class="role">ドラム／ガーゴイルの亜人</span>
+          <div class="chips"><span class="chip"><span class="sw" style="background:#8d9199"></span>灰色</span><span class="chip"><span class="sw" style="background:#ff8a2a"></span>オレンジ</span></div>
+          <dl>
+            <dt>髪</dt><dd>灰色のショートボブ、毛先が少しはねる。前髪の一房だけオレンジ</dd>
+            <dt>目</dt><dd>オレンジ</dd>
+            <dt>特徴</dt><dd>背中に小さな石の翼、両腕に石のひび模様、少しとがった耳。角はない</dd>
+            <dt>服</dt><dd>大きめのオレンジのパーカー、黒のショートパンツ、オレンジのスニーカー</dd>
+            <dt>性格</dt><dd>ボーイッシュで声が大きい。リズムは絶対にぶれない</dd>
+          </dl>
+        </div>
+      </article>
+
+      <article class="member" style="--c:#9fe6ff">
+        <img src="fine.jpg" alt="フィーネの設定画。夜の街で浮かぶ2台のキーボードを弾く、白に近い水色のふわふわ髪の少女。体がほのかに光り、足先が透けている。">
+        <div class="mbody">
+          <span class="epi">〈透き通る指先〉</span>
+          <p class="name">フィーネ</p>
+          <span class="role">キーボード／幽霊の亜人</span>
+          <div class="chips"><span class="chip"><span class="sw" style="background:#f3f7fb"></span>白</span><span class="chip"><span class="sw" style="background:#8fd8f5"></span>水色</span></div>
+          <dl>
+            <dt>髪</dt><dd>白に近い水色のふわふわロング、いつも少し浮いている</dd>
+            <dt>目</dt><dd>うすい水色</dd>
+            <dt>特徴</dt><dd>足先が少し透け、体のふちがほのかに光る</dd>
+            <dt>服</dt><dd>大きめの白いニットのワンピース、水色のリボン、すけた袖</dd>
+            <dt>性格</dt><dd>人見知り。鍵盤の前だと落ち着く</dd>
+          </dl>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="copy">
+    <div class="copyhead"><h2 style="margin:0">設定資料（画像生成AIに貼る用）</h2><span><button class="btn" type="button" id="copyBtn">コピー</button> <span class="msg" id="copyMsg" aria-live="polite"></span></span></div>
+    <textarea id="sheet" readonly aria-label="設定資料の本文">これから、オリジナルのカードゲームのイラストを何枚もお願いします。
+全部、下の設定と画風でそろえてください。既存の作品やキャラクターには似せないでください。
+添付した5人の設定画を、それぞれのキャラクターの見た目の基準にしてください。
+
+【画風】
+線は細め、日本のアニメらしいやわらかいセル塗り。鮮やかな色。
+横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。
+白いふちどりや枠は付けず、背景を画面いっぱいに描く。
+絵の中に文字・ロゴ・数字を入れない。
+
+【世界観】
+ゴシックな尖塔がそびえる、夜の現代の街。
+人ではない特徴を少しだけ持つ「亜人」の少女たちが、ふつうの学生のようにバンドをしている。
+色は夜の青紫、ネオンのピンク、赤い光。演奏すると、音が光や影になってあふれ出す。
+
+【バンド：ノクティルカ】
+5人組のガールズバンド。全員、ほのかに光る青緑のしずく型のピンをどこかに付けている。
+
+リオラ〈潮騒の歌姫〉（ボーカル／セイレーンの亜人）
+腰までの長いウェーブの紺色の髪、毛先だけ青緑。青緑の目。ひれの形の耳、鎖骨に小さなうろこ。
+黒のオフショルダー、すける紺の長いカーディガン、黒のロングスカート。ふだんは静か。
+
+ウルカ〈月下の牙〉（ギター／人狼の亜人）
+銀色のショートのウルフカット、内側だけ赤。琥珀色の目。狼の耳としっぽ、八重歯。
+ファーの襟の黒い革ジャン、赤いタンクトップ、黒のカーゴショートパンツ、ごついブーツ。元気。
+
+ノクス〈黄昏の刈り手〉（ベース／死神の亜人）
+まっすぐな黒のロング、毛先だけ紫。前髪で片目が隠れ、見えている目はほのかに紫に光る。
+青白い肌、足元の影がゆらぐ、首に小さな鎌のチャーム。
+フード付きの黒いロングコート、黒のワイドパンツ、厚底ブーツ。眠そう。
+
+ガルナ〈刻む石像〉（ドラム／ガーゴイルの亜人）
+ボーイッシュな女の子。灰色のショートボブで毛先が少しはねている。前髪の一房だけオレンジ色に染めている。
+オレンジの目、明るい笑顔、少しとがった耳。背中に小さな石の翼、両腕に石のひび模様。角はない。
+大きめのオレンジのパーカー、黒のショートパンツ、オレンジのスニーカー。声が大きい。
+
+フィーネ〈透き通る指先〉（キーボード／幽霊の亜人）
+白に近い水色のふわふわロング、いつも少し浮いている。うすい水色の目。
+足先が少し透け、体のふちがほのかに光る。
+大きめの白いニットのワンピース、水色のリボン、すけた袖。人見知り。</textarea>
+    <ul class="tips">
+      <li>新しい会話では、この文章と5人の設定画をいっしょに渡す。</li>
+      <li>絵柄がずれてきたら、会話を新しくして貼り直す。</li>
+      <li>直してほしいときは、前の絵を直させるより、新しく描かせたほうが変わりやすい。</li>
+    </ul>
+  </section>
+
+  <section class="copy">
+    <div class="copyhead"><h2 style="margin:0">リーダー：リオラ（青）</h2><span><button class="btn" type="button" data-copy="leader">コピー</button> <span class="msg" data-msg="leader" aria-live="polite"></span></span></div>
+    <textarea id="leader" rows="8" readonly aria-label="リーダー：リオラ（青）の依頼文">添付した絵の少女「リオラ」の、リーダー用の肖像を描いてください。顔・髪・服・ひれの耳は添付の絵に合わせる。
+オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。正方形（1:1）。白いふちどりや枠は付けない。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+・胸から上。顔が画面のちょうど真ん中に来るように。丸く切り抜いても顔と髪が欠けないよう、まわりに少し余白をとる。
+・こちらをまっすぐ見て、静かに微笑む。長い紺と青緑の髪が、水の中のようにふわりと広がる。
+・胸元の青緑のしずく型のピンが光る。
+・背景は深い青と青緑のグラデーションと、水の光の粒。シンプルに。</textarea>
+    <ul class="tips"><li>新しい会話で、リオラの設定画とカードの絵をいっしょに添付する。</li><li>丸く切り抜いて、対戦中のリーダーとして使う。顔が真ん中に大きいほど映える。</li></ul>
+  </section>
+</div>
+<script>
+document.getElementById('copyBtn').addEventListener('click', () => {
+  const t = document.getElementById('sheet'), m = document.getElementById('copyMsg');
+  navigator.clipboard.writeText(t.value).then(() => { m.textContent = 'コピーしました'; }).catch(() => { t.focus(); t.select(); m.textContent = '選択しました。手動でコピーしてください'; });
+});
+document.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click', () => {
+  const id = b.dataset.copy, t = document.getElementById(id), m = document.querySelector(`[data-msg="${id}"]`);
+  navigator.clipboard.writeText(t.value).then(() => { m.textContent = 'コピーしました'; }).catch(() => { t.focus(); t.select(); m.textContent = '選択しました。手動でコピーしてください'; });
+}));
+
+/* 設定画をコピー・保存する */
+(function () {
+  function nameOf(img) { const a = img.closest('article'); const n = a && a.querySelector('.name'); return n ? n.textContent.trim() : 'image'; }
+  async function pngBlob(img) {
+    const res = await fetch(img.currentSrc || img.src); const b = await res.blob();
+    if (b.type === 'image/png') return b;
+    const bmp = await createImageBitmap(b);
+    const cv = document.createElement('canvas'); cv.width = bmp.width; cv.height = bmp.height;
+    cv.getContext('2d').drawImage(bmp, 0, 0);
+    return await new Promise(r => cv.toBlob(r, 'image/png'));
+  }
+  document.querySelectorAll('article img').forEach(img => {
+    const art = img.closest('article'); if (!art) return;
+    const bar = document.createElement('div'); bar.className = 'imgbar';
+    bar.innerHTML = '<button type="button" data-act="copy">画像をコピー</button><button type="button" data-act="save">画像を保存</button><span class="imsg" aria-live="polite"></span>';
+    const body = art.querySelector('.pbody, .mbody');
+    if (body) art.insertBefore(bar, body); else art.appendChild(bar);
+    const msg = bar.querySelector('.imsg');
+    bar.querySelector('[data-act="copy"]').addEventListener('click', async () => {
+      msg.textContent = 'コピー中…';
+      try {
+        if (!navigator.clipboard || !window.ClipboardItem) throw new Error('no');
+        await navigator.clipboard.write([new ClipboardItem({ 'image/png': pngBlob(img) })]);
+        msg.textContent = 'コピーしました。そのまま貼り付けられます';
+      } catch (e) { msg.textContent = 'コピーできませんでした。「画像を保存」か、画像を長押しして保存してください'; }
+    });
+    bar.querySelector('[data-act="save"]').addEventListener('click', async () => {
+      try {
+        const res = await fetch(img.currentSrc || img.src); const b = await res.blob();
+        const filename = nameOf(img) + (b.type === 'image/png' ? '.png' : '.jpg');
+        const dl = window.claude && window.claude.use ? await window.claude.use('downloads') : null;
+        if (dl) { await dl.save({ filename, data: b }); msg.textContent = '保存しました'; return; }
+        const url = URL.createObjectURL(b); const a = document.createElement('a');
+        a.href = url; a.download = filename;
+        document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 2000);
+        msg.textContent = '保存しました';
+      } catch (e) { msg.textContent = e && e.code === 'declined' ? '保存をやめました' : '保存できませんでした。画像を長押しして保存してください'; }
+    });
+  });
+})();
+</script>

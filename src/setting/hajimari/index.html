@@ -1,0 +1,273 @@
+<title>はじまりの灯設定資料</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Klee+One:wght@600&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<style>
+/* Layout: 狭間の夜の紺と、灯りのオレンジの1テーマ。上に題と狭間の説明、領域の3段階、さすらいの旅人、コピー用の設定資料と絵のプロンプト */
+:root{
+  --bg:#0a0d1a; --surface:#121730; --surface-2:#1a2140; --ink:#eef0f8; --muted:#aab0c8; --line:#2a3358;
+  --lamp:#ffb35c; --star:#dfe6ff; --sheet:#ffffff;
+  --f-display:"Klee One","Hiragino Mincho ProN","Yu Mincho",serif;
+  --f-body:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",system-ui,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);line-height:1.75;
+  background-image:radial-gradient(40rem 22rem at 50% -6%,rgb(255 179 92 / .14),transparent 60%),radial-gradient(1.5px 1.5px at 10% 12%,#fff,transparent 60%),radial-gradient(1px 1px at 30% 6%,#fff,transparent 60%),radial-gradient(1.5px 1.5px at 70% 10%,#fff,transparent 60%),radial-gradient(1px 1px at 88% 22%,#fff,transparent 60%),radial-gradient(1px 1px at 55% 30%,#fff9,transparent 60%)}
+.wrap{max-width:1040px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:36px 56px;display:grid;gap:34px}
+.hero{display:grid;gap:10px;text-align:center;justify-items:center}
+.flame{width:22px;height:34px;border-radius:50% 50% 50% 50% / 62% 62% 38% 38%;background:radial-gradient(circle at 50% 70%,#fff4d6,var(--lamp) 55%,#c2541a);box-shadow:0 0 26px 8px rgb(255 179 92 / .35)}
+.eyebrow{font-size:.72rem;letter-spacing:.32em;color:var(--lamp);font-weight:700}
+h1{font-family:var(--f-display);font-weight:600;font-size:clamp(2.2rem,9vw,3.6rem);letter-spacing:.16em;margin:0 0 0 .16em;line-height:1.15;color:#fff;text-shadow:0 0 22px rgb(255 179 92 / .35)}
+.sub{letter-spacing:.42em;color:var(--lamp);font-size:.85rem;margin-left:.42em;font-weight:700}
+.rule{width:min(380px,70vw);height:1px;background:linear-gradient(90deg,transparent,var(--lamp),transparent)}
+.lead{color:var(--muted);max-width:60ch;margin:0;text-wrap:pretty}
+h2{font-size:.8rem;letter-spacing:.22em;color:var(--lamp);margin:0 0 12px;font-weight:700}
+h2 small{font-weight:500;letter-spacing:.06em;color:var(--muted);margin-left:8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;min-width:0}
+.box h3{margin:0 0 6px;font-size:1rem;font-family:var(--f-display)}
+.box p,.box ul{margin:0;font-size:.86rem;color:var(--muted)}
+.box ul{padding-left:1.1em}
+.stages{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media (max-width:720px){.stages{grid-template-columns:1fr}}
+.stage{position:relative;border-radius:12px;padding:14px 16px;border:1px solid var(--line);background:linear-gradient(165deg,var(--s1),var(--s2));min-height:150px;display:grid;align-content:end;gap:4px}
+.stage .lv{position:absolute;top:12px;left:16px;font-size:.66rem;letter-spacing:.2em;color:rgb(255 255 255 / .78);font-weight:700}
+.stage b{font-family:var(--f-display);font-size:1.15rem;color:#fff}
+.stage p{margin:0;font-size:.8rem}
+.stage .cond{font-size:.72rem;color:var(--lamp)}
+.person{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;min-width:0}
+@media (max-width:760px){.person{grid-template-columns:1fr}}
+.ph{position:relative;background:var(--sheet);aspect-ratio:16/10;max-width:100%;display:grid;place-items:center}
+.ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block}
+.ph .none{color:#5a6080;font-size:.85rem;text-align:center;padding:16px}
+.pbody{padding:16px 18px;display:grid;gap:8px;align-content:start;border-left:4px solid var(--lamp)}
+@media (max-width:760px){.pbody{border-left:0;border-top:4px solid var(--lamp)}}
+.name{font-family:var(--f-display);font-size:1.8rem;line-height:1.1;margin:0}
+.role{font-size:.8rem;color:var(--muted)}
+dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;margin:0;font-size:.85rem}
+dt{color:var(--muted);font-weight:700;white-space:nowrap}
+dd{margin:0}
+.copy{display:grid;gap:10px}
+.copyhead{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
+.btn{font:inherit;font-size:.85rem;font-weight:700;padding:6px 14px;border-radius:8px;border:1px solid var(--lamp);background:transparent;color:var(--lamp);cursor:pointer}
+.btn:hover{background:rgb(255 179 92 / .12)}
+.btn:focus-visible{outline:2px solid var(--lamp);outline-offset:2px}
+textarea{width:100%;font-family:var(--f-body);font-size:.8rem;line-height:1.65;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:12px}
+.msg{font-size:.8rem;color:var(--muted)}
+.tips{font-size:.84rem;color:var(--muted);margin:0;padding-left:1.2em}
+.imgbar{display:flex;gap:6px;flex-wrap:wrap;padding:8px 12px;background:var(--surface-2);grid-column:1 / -1}
+.imgbar button{font:inherit;font-size:.78rem;font-weight:700;cursor:pointer;padding:5px 12px;border-radius:999px;border:1px solid rgb(255 255 255 / .3);background:rgb(255 255 255 / .08);color:inherit}
+.imgbar button:focus-visible{outline:2px solid var(--lamp);outline-offset:2px}
+.imgbar .imsg{font-size:.72rem;opacity:.8;align-self:center}
+.ptitle{font-size:.95rem;margin:8px 0 0;font-family:var(--f-display)}
+.plist{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+.pitem{display:grid;gap:6px;min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.pitem small{color:var(--muted);font-size:.74rem}
+.pitem textarea{background:var(--surface-2)}
+.done{font-size:.68rem;font-weight:700;padding:1px 8px;border-radius:999px;background:rgb(255 179 92 / .16);color:var(--lamp);margin-left:6px}
+</style>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="flame" aria-hidden="true"></div>
+    <span class="eyebrow">CHARACTER SHEET</span>
+    <h1>はじまりの灯</h1>
+    <div class="sub">HAJIMARI NO HI</div>
+    <div class="rule" aria-hidden="true"></div>
+    <p class="lead">天球と天球のあいだに広がる、何もない夜の海のような「狭間」。さすらいの旅人は、まだ何色でもない小さな灯りを持って、天球から天球へ渡っていく。これは、旅人の物語のはじまり。</p>
+  </header>
+
+  <section>
+    <h2>世界観と画風</h2>
+    <div class="grid">
+      <div class="box"><h3>狭間</h3><p>どの天球にも属さない場所。夜空に岩場や道や門が浮かび、遠くに光る天球が見える。</p></div>
+      <div class="box"><h3>無色</h3><p>旅人はまだ何も持っていないから、色がない。基本の動きのカードが多く、どの色のデッキにも混ぜられる。</p></div>
+      <div class="box"><h3>旅の仲間</h3><p>灯守の少年、地図を描く少年、星を数える老学者、白い小狐、白い鳥、苔むした大亀。狭間で出会う人と生き物。</p></div>
+      <div class="box"><h3>画風</h3><ul><li>線は細め、日本のアニメらしいやわらかいセル塗り</li><li>夜の紺と星の白、灯りのあたたかいオレンジ</li><li>人や生き物は画面の中で大きく</li><li>文字・枠は入れない。既存の作品やキャラクターに似せない</li></ul></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>領域：狭間の旅路<small>無色</small></h2>
+    <div class="stages">
+      <div class="stage" style="--s1:#2a2a44;--s2:#0d1020"><span class="lv">初期</span><b>狭間の野営地</b><p>小さな岩場の焚き火。遠くに光る天球。</p><span class="cond">次へ：ユニットを3体出す</span></div>
+      <div class="stage" style="--s1:#1f3358;--s2:#0b1224"><span class="lv">第二昇華</span><b>星見の峠</b><p>古い道しるべと観測台。足元の雲海の下に天球。</p><span class="cond">次へ：アーツを3回使う</span></div>
+      <div class="stage" style="--s1:#6a4a3a;--s2:#1a1420"><span class="lv">第三昇華</span><b>夜明けの境界門</b><p>光でできた大きな門。夜明けの光があふれる。</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>主人公</h2>
+    <article class="person">
+      <div class="ph"><img src="wanderer.jpg" alt="さすらいの旅人の設定画。生成り色のフード付きマントで顔をかくし、内側は星空の色。木の杖とランタンを持つ。"></div>
+      <div class="pbody">
+        <p class="name">さすらいの旅人</p>
+        <span class="role">天球から天球へ渡っていく旅人。このゲームの主人公</span>
+        <dl>
+          <dt>顔</dt><dd>フードを深くかぶり、口元しか見えない。男か女かも決めない</dd>
+          <dt>服</dt><dd>生成り色の大きなフード付きマント。すそが少しすり切れ、内側は星が光る夜空の色。留め具は小さな星の形。茶色の旅のブーツ</dd>
+          <dt>持ち物</dt><dd>長い木の杖と、小さなランタン。ランタンの灯りだけがあたたかいオレンジ色</dd>
+          <dt>体つき</dt><dd>ほっそりしている</dd>
+        </dl>
+      </div>
+    </article>
+  </section>
+
+  <section class="copy">
+    <div class="copyhead"><h2 style="margin:0">旅人の設定画（画像生成AIに貼る用）</h2><span><button class="btn" type="button" data-copy="sheet">コピー</button> <span class="msg" data-msg="sheet" aria-live="polite"></span></span></div>
+    <textarea id="sheet" rows="8" readonly aria-label="旅人の設定画の依頼文">オリジナルキャラクターの設定画。アニメ調、線は細め、やわらかいセル塗り。白い背景に、全身を正面から1人だけ描く。文字やロゴは入れない。既存の作品やキャラクターに似せない。
+さすらいの旅人。生成り色の大きなフード付きマントを着て、フードを深くかぶり、顔は影になって口元しか見えない。男か女かわからない、ほっそりした体つき。
+マントのすそは少しすり切れていて、内側は星が光る夜空の色。マントの留め具は小さな星の形。茶色の旅のブーツ。
+腕は2本だけ。右手で長い木の杖を持ち、左手で腰に下げた小さなランタンにそっと触れている。ランタンの灯りだけがあたたかいオレンジ色。</textarea>
+    <ul class="tips">
+      <li>旅人が出る絵（さすらいの旅人、みんなの焚き火）は、旅人の設定画を添付する。</li>
+      <li>ほかは設定画なしでいい。1回だけ出る人や生き物は、絵の指示文に見た目が書いてある。</li>
+      <li>手がおかしくなったら「腕は2本だけ」「両手の場所を1つずつ決める」と書き足す。</li>
+    </ul>
+  </section>
+  <section class="copy" id="prompts">
+    <h2 style="margin:0">カードの絵のプロンプト</h2>
+    <p class="lead" style="max-width:none">1枚ずつ「コピー」してGeminiに貼る。できた絵は、どのカードの絵か言ってチャットで送る。</p>
+    <h3 class="ptitle">旅人が出る絵（旅人の設定画を添付）</h3>
+    <div class="plist">
+      <div class="pitem"><div class="copyhead"><div><b>さすらいの旅人</b> <span class="done">絵あり</span><br><small>ユニット　添付：さすらいの旅人</small></div><span><button class="btn" type="button" data-copy="p_x_wanderer">コピー</button> <span class="msg" data-msg="p_x_wanderer" aria-live="polite"></span></span></div>
+        <textarea id="p_x_wanderer" rows="5" readonly aria-label="さすらいの旅人のプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+どの天球にも属さない、天球と天球のあいだの「狭間」。何もない夜の海のような空間に、岩場や道や門が浮かび、遠くに光る天球が見える。星空、境界、旅、はじまりの小さな灯りの雰囲気。色は夜の紺と星の白、灯りのあたたかいオレンジ。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。人や生き物は画面の中で大きく。さすらいの旅人の見た目は、添付した設定画に合わせる。
+描くもの：旅人（生成り色の大きなフード付きマントでフードを深くかぶり、顔は口元しか見えない。マントの内側は夜空の色、星形の留め具。長い木の杖と、腰に小さなランタン）が、星空の下の丘に立ち、遠くを見ている。少し斜め後ろからの姿。遠くの地平線に、光る天球がいくつも浮かんでいる。風でマントが大きくなびく。旅人は画面の中で大きく。腕は2本だけ。</textarea></div>
+      <div class="pitem"><div class="copyhead"><div><b>みんなの焚き火</b> <span class="done">絵あり</span><br><small>アーツ　添付：さすらいの旅人</small></div><span><button class="btn" type="button" data-copy="p_h_campfire">コピー</button> <span class="msg" data-msg="p_h_campfire" aria-live="polite"></span></span></div>
+        <textarea id="p_h_campfire" rows="5" readonly aria-label="みんなの焚き火のプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+どの天球にも属さない、天球と天球のあいだの「狭間」。何もない夜の海のような空間に、岩場や道や門が浮かび、遠くに光る天球が見える。星空、境界、旅、はじまりの小さな灯りの雰囲気。色は夜の紺と星の白、灯りのあたたかいオレンジ。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。人や生き物は画面の中で大きく。さすらいの旅人の見た目は、添付した設定画に合わせる。
+描くもの：狭間の岩場で、焚き火を囲んで休む仲間たち。旅人（生成り色の大きなフード付きマントでフードを深くかぶり、顔は口元しか見えない。マントの内側は夜空の色、星形の留め具。長い木の杖と、腰に小さなランタン）、白い小狐、白い鳥、背中に苔の生えた大亀が、いっしょにあたたまっている。あたたかいオレンジの光。旅人の顔はフードの影で見えない。</textarea></div>
+    </div>
+    <h3 class="ptitle">人や生き物の絵（添付なし）</h3>
+    <div class="plist">
+      <div class="pitem"><div class="copyhead"><div><b>見習いの灯守</b> <span class="done">絵あり</span><br><small>ユニット　添付なし</small></div><span><button class="btn" type="button" data-copy="p_h_squire">コピー</button> <span class="msg" data-msg="p_h_squire" aria-live="polite"></span></span></div>
+        <textarea id="p_h_squire" rows="5" readonly aria-label="見習いの灯守のプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+どの天球にも属さない、天球と天球のあいだの「狭間」。何もない夜の海のような空間に、岩場や道や門が浮かび、遠くに光る天球が見える。星空、境界、旅、はじまりの小さな灯りの雰囲気。色は夜の紺と星の白、灯りのあたたかいオレンジ。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。人や生き物は画面の中で大きく。さすらいの旅人の見た目は、添付した設定画に合わせる。
+描くもの：10歳くらいの見習いの灯守の少年。赤茶の短い髪。体に大きすぎる紺の外套を着て、そでが手にかかっている。自分の体くらい大きなランタンを両腕で抱え、少し不安そうだけど、まっすぐ前を見ている。狭間の夜空と星。少年は画面の中で大きく。腕は2本だけ。</textarea></div>
+      <div class="pitem"><div class="copyhead"><div><b>地図を描く少年</b> <span class="done">絵あり</span><br><small>ユニット　添付なし</small></div><span><button class="btn" type="button" data-copy="p_h_mapper">コピー</button> <span class="msg" data-msg="p_h_mapper" aria-live="polite"></span></span></div>
+        <textarea id="p_h_mapper" rows="5" readonly aria-label="地図を描く少年のプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+どの天球にも属さない、天球と天球のあいだの「狭間」。何もない夜の海のような空間に、岩場や道や門が浮かび、遠くに光る天球が見える。星空、境界、旅、はじまりの小さな灯りの雰囲気。色は夜の紺と星の白、灯りのあたたかいオレンジ。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。人や生き物は画面の中で大きく。さすらいの旅人の見た目は、添付した設定画に合わせる。
+描くもの：14歳くらいの、栗色のくせ毛を後ろで短くひとつに結んだ少年。そばかすがあり、眼鏡はかけない。頭に小さなキャスケット帽。白いシャツに深緑のベスト、耳にペンをはさんでいる。岩に腰かけて、膝の上の大きな紙に星図のような地図を描いている。地図の線がほのかに光る。地図に文字は描かない。少年は画面の中で大きく。腕は2本だけ。</textarea></div>
+      <div class="pitem"><div class="copyhead"><div><b>星を数える老学者</b> <span class="done">絵あり</span><br><small>ユニット　添付なし</small></div><span><button class="btn" type="button" data-copy="p_h_scholar">コピー</button> <span class="msg" data-msg="p_h_scholar" aria-live="polite"></span></span></div>
+        <textarea id="p_h_scholar" rows="5" readonly aria-label="星を数える老学者のプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+どの天球にも属さない、天球と天球のあいだの「狭間」。何もない夜の海のような空間に、岩場や道や門が浮かび、遠くに光る天球が見える。星空、境界、旅、はじまりの小さな灯りの雰囲気。色は夜の紺と星の白、灯りのあたたかいオレンジ。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。人や生き物は画面の中で大きく。さすらいの旅人の見た目は、添付した設定画に合わせる。
+描くもの：長いひげの老学者が、望遠鏡をのぞいて星を数えている。まわりに古い本と羊皮紙。本に文字は描かない。</textarea></div>
+      <div class="pitem"><div class="copyhead"><div><b>境界の番人</b> <span class="done">絵あり</span><br><small>ユニット　添付なし</small></div><span><button class="btn" type="button" data-copy="p_x_warden">コピー</button> <span class="msg" data-msg="p_x_warden" aria-live="polite"></span></span></div>
+        <textarea id="p_x_warden" rows="5" readonly aria-label="境界の番人のプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+どの天球にも属さない、天球と天球のあいだの「狭間」。何もない夜の海のような空間に、岩場や道や門が浮かび、遠くに光る天球が見える。星空、境界、旅、はじまりの小さな灯りの雰囲気。色は夜の紺と星の白、灯りのあたたかいオレンジ。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。人や生き物は画面の中で大きく。さすらいの旅人の見た目は、添付した設定画に合わせる。
+描くもの：光でできた境界の門の前に立つ、大きな盾を持った鎧の番人。兜で顔は見えない。門の向こうに星空が広がる。</textarea></div>
+      <div class="pitem"><div class="copyhead"><div><b>狭間の流れ騎士</b> <span class="done">絵あり</span><br><small>ユニット　添付なし</small></div><span><button class="btn" type="button" data-copy="p_h_knight">コピー</button> <span class="msg" data-msg="p_h_knight" aria-live="polite"></span></span></div>
+        <textarea id="p_h_knight" rows="5" readonly aria-label="狭間の流れ騎士のプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+どの天球にも属さない、天球と天球のあいだの「狭間」。何もない夜の海のような空間に、岩場や道や門が浮かび、遠くに光る天球が見える。星空、境界、旅、はじまりの小さな灯りの雰囲気。色は夜の紺と星の白、灯りのあたたかいオレンジ。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。人や生き物は画面の中で大きく。さすらいの旅人の見た目は、添付した設定画に合わせる。
+描くもの：使いこんだ鎧とマントの騎士が、星空の下で剣を構える。どの天球にも仕えない、さすらいの騎士。兜で顔は見えない。</textarea></div>
+      <div class="pitem"><div class="copyhead"><div><b>灯をくわえた小狐</b> <span class="done">絵あり</span><br><small>ユニット　添付なし</small></div><span><button class="btn" type="button" data-copy="p_h_fox">コピー</button> <span class="msg" data-msg="p_h_fox" aria-live="polite"></span></span></div>
+        <textarea id="p_h_fox" rows="5" readonly aria-label="灯をくわえた小狐のプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+どの天球にも属さない、天球と天球のあいだの「狭間」。何もない夜の海のような空間に、岩場や道や門が浮かび、遠くに光る天球が見える。星空、境界、旅、はじまりの小さな灯りの雰囲気。色は夜の紺と星の白、灯りのあたたかいオレンジ。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。人や生き物は画面の中で大きく。さすらいの旅人の見た目は、添付した設定画に合わせる。
+描くもの：小さな灯りを口にくわえて、星空の下の岩場を駆ける、白くて小さな子ギツネ。しっぽの先がほのかに青白く光る。灯りに照らされた足元。子ギツネは画面の中で大きく。</textarea></div>
+      <div class="pitem"><div class="copyhead"><div><b>道案内の白い鳥</b> <span class="done">絵あり</span><br><small>ユニット　添付なし</small></div><span><button class="btn" type="button" data-copy="p_h_bird">コピー</button> <span class="msg" data-msg="p_h_bird" aria-live="polite"></span></span></div>
+        <textarea id="p_h_bird" rows="5" readonly aria-label="道案内の白い鳥のプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+どの天球にも属さない、天球と天球のあいだの「狭間」。何もない夜の海のような空間に、岩場や道や門が浮かび、遠くに光る天球が見える。星空、境界、旅、はじまりの小さな灯りの雰囲気。色は夜の紺と星の白、灯りのあたたかいオレンジ。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。人や生き物は画面の中で大きく。さすらいの旅人の見た目は、添付した設定画に合わせる。
+描くもの：羽の先が光る白い鳥が、狭間の夜空を先導するように飛んでいる。うしろに続く光の道。</textarea></div>
+      <div class="pitem"><div class="copyhead"><div><b>苔むした大亀</b> <span class="done">絵あり</span><br><small>ユニット　添付なし</small></div><span><button class="btn" type="button" data-copy="p_h_tortoise">コピー</button> <span class="msg" data-msg="p_h_tortoise" aria-live="polite"></span></span></div>
+        <textarea id="p_h_tortoise" rows="5" readonly aria-label="苔むした大亀のプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+どの天球にも属さない、天球と天球のあいだの「狭間」。何もない夜の海のような空間に、岩場や道や門が浮かび、遠くに光る天球が見える。星空、境界、旅、はじまりの小さな灯りの雰囲気。色は夜の紺と星の白、灯りのあたたかいオレンジ。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。人や生き物は画面の中で大きく。さすらいの旅人の見た目は、添付した設定画に合わせる。
+描くもの：背中に苔と小さな木が生えた、とても大きな亀が、狭間をゆっくり歩いている。甲羅の上に小さなランタンが揺れる。</textarea></div>
+    </div>
+    <h3 class="ptitle">人が出ない絵（添付なし）</h3>
+    <div class="plist">
+      <div class="pitem"><div class="copyhead"><div><b>火の粉</b> <span class="done">絵あり</span><br><small>アーツ　添付なし</small></div><span><button class="btn" type="button" data-copy="p_h_ember">コピー</button> <span class="msg" data-msg="p_h_ember" aria-live="polite"></span></span></div>
+        <textarea id="p_h_ember" rows="5" readonly aria-label="火の粉のプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+どの天球にも属さない、天球と天球のあいだの「狭間」。何もない夜の海のような空間に、岩場や道や門が浮かび、遠くに光る天球が見える。星空、境界、旅、はじまりの小さな灯りの雰囲気。色は夜の紺と星の白、灯りのあたたかいオレンジ。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。人や生き物は画面の中で大きく。さすらいの旅人の見た目は、添付した設定画に合わせる。
+描くもの：焚き火からはじけた火の粉が、夜空へ舞い上がる。人物なし。</textarea></div>
+      <div class="pitem"><div class="copyhead"><div><b>古い道しるべ</b> <span class="done">絵あり</span><br><small>アーツ　添付なし</small></div><span><button class="btn" type="button" data-copy="p_h_signpost">コピー</button> <span class="msg" data-msg="p_h_signpost" aria-live="polite"></span></span></div>
+        <textarea id="p_h_signpost" rows="5" readonly aria-label="古い道しるべのプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+どの天球にも属さない、天球と天球のあいだの「狭間」。何もない夜の海のような空間に、岩場や道や門が浮かび、遠くに光る天球が見える。星空、境界、旅、はじまりの小さな灯りの雰囲気。色は夜の紺と星の白、灯りのあたたかいオレンジ。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。人や生き物は画面の中で大きく。さすらいの旅人の見た目は、添付した設定画に合わせる。
+描くもの：狭間の岩場に立つ、古い木の道しるべ。矢印の板がいくつもの方向を指し、それぞれの先に光る天球が見える。板に文字は描かない。人物なし。</textarea></div>
+      <div class="pitem"><div class="copyhead"><div><b>境界を断つ刃</b> <span class="done">絵あり</span><br><small>アーツ　添付なし</small></div><span><button class="btn" type="button" data-copy="p_b_strike">コピー</button> <span class="msg" data-msg="p_b_strike" aria-live="polite"></span></span></div>
+        <textarea id="p_b_strike" rows="5" readonly aria-label="境界を断つ刃のプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+どの天球にも属さない、天球と天球のあいだの「狭間」。何もない夜の海のような空間に、岩場や道や門が浮かび、遠くに光る天球が見える。星空、境界、旅、はじまりの小さな灯りの雰囲気。色は夜の紺と星の白、灯りのあたたかいオレンジ。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。人や生き物は画面の中で大きく。さすらいの旅人の見た目は、添付した設定画に合わせる。
+描くもの：夜空に引かれた光の境界線を、銀の刃が一太刀で切り裂く瞬間。刃の軌跡が弧を描いて光る。刃を握る手だけが見える。</textarea></div>
+      <div class="pitem"><div class="copyhead"><div><b>流れ星の便り</b> <span class="done">絵あり</span><br><small>アーツ　添付なし</small></div><span><button class="btn" type="button" data-copy="p_c_exchange">コピー</button> <span class="msg" data-msg="p_c_exchange" aria-live="polite"></span></span></div>
+        <textarea id="p_c_exchange" rows="5" readonly aria-label="流れ星の便りのプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+どの天球にも属さない、天球と天球のあいだの「狭間」。何もない夜の海のような空間に、岩場や道や門が浮かび、遠くに光る天球が見える。星空、境界、旅、はじまりの小さな灯りの雰囲気。色は夜の紺と星の白、灯りのあたたかいオレンジ。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。人や生き物は画面の中で大きく。さすらいの旅人の見た目は、添付した設定画に合わせる。
+描くもの：夜空を横切る流れ星。その光の尾から、光る封筒の手紙がひらひらと舞い落ちてくる。手紙に文字は描かない。人物なし。</textarea></div>
+      <div class="pitem"><div class="copyhead"><div><b>共鳴の水晶</b> <span class="done">絵あり</span><br><small>オブジェクト　添付なし</small></div><span><button class="btn" type="button" data-copy="p_b_amp">コピー</button> <span class="msg" data-msg="p_b_amp" aria-live="polite"></span></span></div>
+        <textarea id="p_b_amp" rows="5" readonly aria-label="共鳴の水晶のプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+どの天球にも属さない、天球と天球のあいだの「狭間」。何もない夜の海のような空間に、岩場や道や門が浮かび、遠くに光る天球が見える。星空、境界、旅、はじまりの小さな灯りの雰囲気。色は夜の紺と星の白、灯りのあたたかいオレンジ。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。人や生き物は画面の中で大きく。さすらいの旅人の見た目は、添付した設定画に合わせる。
+描くもの：星空の下、岩場に浮かぶ大きな水晶。淡く光り、まわりの空気が波紋のように震えて、光が共鳴している。人物なし。</textarea></div>
+      <div class="pitem"><div class="copyhead"><div><b>ひとしずくの灯</b> <span class="done">絵あり</span><br><small>アーツ　添付なし</small></div><span><button class="btn" type="button" data-copy="p_x_lamp">コピー</button> <span class="msg" data-msg="p_x_lamp" aria-live="polite"></span></span></div>
+        <textarea id="p_x_lamp" rows="5" readonly aria-label="ひとしずくの灯のプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+どの天球にも属さない、天球と天球のあいだの「狭間」。何もない夜の海のような空間に、岩場や道や門が浮かび、遠くに光る天球が見える。星空、境界、旅、はじまりの小さな灯りの雰囲気。色は夜の紺と星の白、灯りのあたたかいオレンジ。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。人や生き物は画面の中で大きく。さすらいの旅人の見た目は、添付した設定画に合わせる。
+描くもの：夜の暗がりで、両手のひらでそっと包んだ、しずくの形をした小さな灯火。やさしい光が手と指先を照らす。手だけが見える。手は左右1つずつ、2つだけ。どちらの手も指は5本で、親指は外側。両腕とも同じ、生成り色のマントの袖。手袋はしない。画面の上下に黒い帯を入れない。</textarea></div>
+      <div class="pitem"><div class="copyhead"><div><b>星読みの砂時計</b> <span class="done">絵あり</span><br><small>オブジェクト　添付なし</small></div><span><button class="btn" type="button" data-copy="p_b_metro">コピー</button> <span class="msg" data-msg="p_b_metro" aria-live="polite"></span></span></div>
+        <textarea id="p_b_metro" rows="5" readonly aria-label="星読みの砂時計のプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+どの天球にも属さない、天球と天球のあいだの「狭間」。何もない夜の海のような空間に、岩場や道や門が浮かび、遠くに光る天球が見える。星空、境界、旅、はじまりの小さな灯りの雰囲気。色は夜の紺と星の白、灯りのあたたかいオレンジ。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。人や生き物は画面の中で大きく。さすらいの旅人の見た目は、添付した設定画に合わせる。
+描くもの：星図が広げられた古い木の机の上に、砂時計がひとつ。落ちる砂が星の光の粒になって流れている。星図に文字や数字は描かない。人物なし。</textarea></div>
+      <div class="pitem"><div class="copyhead"><div><b>灯の精のランタン</b> <span class="done">絵あり</span><br><small>オブジェクト　添付なし</small></div><span><button class="btn" type="button" data-copy="p_h_lantern">コピー</button> <span class="msg" data-msg="p_h_lantern" aria-live="polite"></span></span></div>
+        <textarea id="p_h_lantern" rows="5" readonly aria-label="灯の精のランタンのプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+どの天球にも属さない、天球と天球のあいだの「狭間」。何もない夜の海のような空間に、岩場や道や門が浮かび、遠くに光る天球が見える。星空、境界、旅、はじまりの小さな灯りの雰囲気。色は夜の紺と星の白、灯りのあたたかいオレンジ。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。人や生き物は画面の中で大きく。さすらいの旅人の見た目は、添付した設定画に合わせる。
+描くもの：古いランタンの中に、小さな光の精が住んでいて、ガラス越しに手をふっている。人物なし。</textarea></div>
+      <div class="pitem"><div class="copyhead"><div><b>星くずの雨</b> <span class="done">絵あり</span><br><small>アーツ　添付なし</small></div><span><button class="btn" type="button" data-copy="p_h_starfall">コピー</button> <span class="msg" data-msg="p_h_starfall" aria-live="polite"></span></span></div>
+        <textarea id="p_h_starfall" rows="5" readonly aria-label="星くずの雨のプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+どの天球にも属さない、天球と天球のあいだの「狭間」。何もない夜の海のような空間に、岩場や道や門が浮かび、遠くに光る天球が見える。星空、境界、旅、はじまりの小さな灯りの雰囲気。色は夜の紺と星の白、灯りのあたたかいオレンジ。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。人や生き物は画面の中で大きく。さすらいの旅人の見た目は、添付した設定画に合わせる。
+描くもの：狭間の夜空から、小さな星くずが雨のように降りそそぐ。人物なし。</textarea></div>
+    </div>
+    <h3 class="ptitle">領域の背景（人物なし・添付なし）</h3>
+    <div class="plist">
+      <div class="pitem"><div class="copyhead"><div><b>狭間の野営地</b> <span class="done">絵あり</span><br><small>初期・横長16:9</small></div><span><button class="btn" type="button" data-copy="p_stage1">コピー</button> <span class="msg" data-msg="p_stage1" aria-live="polite"></span></span></div>
+        <textarea id="p_stage1" rows="5" readonly aria-label="狭間の野営地のプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+どの天球にも属さない、天球と天球のあいだの「狭間」。何もない夜の海のような空間に、岩場や道や門が浮かび、遠くに光る天球が見える。星空、境界、旅、はじまりの小さな灯りの雰囲気。色は夜の紺と星の白、灯りのあたたかいオレンジ。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。人や生き物は画面の中で大きく。さすらいの旅人の見た目は、添付した設定画に合わせる。
+描くもの（領域の背景）：何もない夜の海のような狭間に浮かぶ、小さな岩場の野営地。焚き火がぱちぱちと燃え、そばに旅の荷物とランタン。頭上には満天の星。遠くに、光る天球がいくつも浮かんでいる。人物は描かない。
+人物は描かない。横長（16:9）。全体を少し暗めのトーンにする。四角い帯や半透明の影を描き足さない。</textarea></div>
+      <div class="pitem"><div class="copyhead"><div><b>星見の峠</b> <span class="done">絵あり</span><br><small>第二昇華・横長16:9</small></div><span><button class="btn" type="button" data-copy="p_stage2">コピー</button> <span class="msg" data-msg="p_stage2" aria-live="polite"></span></span></div>
+        <textarea id="p_stage2" rows="5" readonly aria-label="星見の峠のプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+どの天球にも属さない、天球と天球のあいだの「狭間」。何もない夜の海のような空間に、岩場や道や門が浮かび、遠くに光る天球が見える。星空、境界、旅、はじまりの小さな灯りの雰囲気。色は夜の紺と星の白、灯りのあたたかいオレンジ。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。人や生き物は画面の中で大きく。さすらいの旅人の見た目は、添付した設定画に合わせる。
+描くもの（領域の背景）：狭間に浮かぶ高い峠の頂上。古い石の道しるべ（文字は彫らず、小さな星の印だけ）と、星を見るための小さな観測台。空いっぱいの星と、流れ星。足元の雲海の下に、いくつもの天球が光っている。人物は描かない。石や看板に文字を書かない。
+人物は描かない。横長（16:9）。全体を少し暗めのトーンにする。四角い帯や半透明の影を描き足さない。</textarea></div>
+      <div class="pitem"><div class="copyhead"><div><b>夜明けの境界門</b> <span class="done">絵あり</span><br><small>第三昇華・横長16:9</small></div><span><button class="btn" type="button" data-copy="p_stage3">コピー</button> <span class="msg" data-msg="p_stage3" aria-live="polite"></span></span></div>
+        <textarea id="p_stage3" rows="5" readonly aria-label="夜明けの境界門のプロンプト">オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。
+どの天球にも属さない、天球と天球のあいだの「狭間」。何もない夜の海のような空間に、岩場や道や門が浮かび、遠くに光る天球が見える。星空、境界、旅、はじまりの小さな灯りの雰囲気。色は夜の紺と星の白、灯りのあたたかいオレンジ。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。人や生き物は画面の中で大きく。さすらいの旅人の見た目は、添付した設定画に合わせる。
+描くもの（領域の背景）：狭間の果てに立つ、光でできた大きな門。門の向こうから夜明けの光があふれ、まわりの夜空が金とばら色に染まっていく。門へ続く石の道。人物は描かない。
+人物は描かない。横長（16:9）。全体を少し暗めのトーンにする。四角い帯や半透明の影を描き足さない。</textarea></div>
+    </div>
+  </section>
+</div>
+<script>
+document.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click', () => {
+  const id = b.dataset.copy, t = document.getElementById(id), m = document.querySelector(`[data-msg="${id}"]`);
+  navigator.clipboard.writeText(t.value).then(() => { m.textContent = 'コピーしました'; }).catch(() => { t.focus(); t.select(); m.textContent = '選択しました。手動でコピーしてください'; });
+}));
+/* 設定画をコピー・保存する */
+(function () {
+  async function pngBlob(img) {
+    const res = await fetch(img.currentSrc || img.src); const b = await res.blob();
+    if (b.type === 'image/png') return b;
+    const bmp = await createImageBitmap(b);
+    const cv = document.createElement('canvas'); cv.width = bmp.width; cv.height = bmp.height;
+    cv.getContext('2d').drawImage(bmp, 0, 0);
+    return await new Promise(r => cv.toBlob(r, 'image/png'));
+  }
+  document.querySelectorAll('article img').forEach(img => {
+    const art = img.closest('article'); if (!art) return;
+    const bar = document.createElement('div'); bar.className = 'imgbar';
+    bar.innerHTML = '<button type="button" data-act="copy">画像をコピー</button><button type="button" data-act="save">画像を保存</button><span class="imsg" aria-live="polite"></span>';
+    art.appendChild(bar);
+    const msg = bar.querySelector('.imsg');
+    bar.querySelector('[data-act="copy"]').addEventListener('click', async () => {
+      msg.textContent = 'コピー中…';
+      try { if (!navigator.clipboard || !window.ClipboardItem) throw new Error('no'); await navigator.clipboard.write([new ClipboardItem({ 'image/png': pngBlob(img) })]); msg.textContent = 'コピーしました。そのまま貼り付けられます'; }
+      catch (e) { msg.textContent = 'コピーできませんでした。「画像を保存」か、画像を長押しして保存してください'; }
+    });
+    bar.querySelector('[data-act="save"]').addEventListener('click', async () => {
+      try {
+        const res = await fetch(img.currentSrc || img.src); const b = await res.blob();
+        const dl = window.claude && window.claude.use ? await window.claude.use('downloads') : null;
+        if (!dl) { msg.textContent = '画像を長押しして保存してください'; return; }
+        await dl.save({ filename: 'さすらいの旅人.jpg', data: b }); msg.textContent = '保存しました';
+      } catch (e) { msg.textContent = e && e.code === 'declined' ? '保存をやめました' : '保存できませんでした。画像を長押しして保存してください'; }
+    });
+  });
+})();
+</script>

@@ -1,0 +1,4016 @@
+{
+ "cards": {
+  "x_warden": {
+   "artPrompt": "光でできた境界の門の前に立つ、大きな盾を持った鎧の番人。兜で顔は見えない。門の向こうに星空が広がる。",
+   "atk": 1,
+   "cost": 3,
+   "effects": [
+    {
+     "steps": [
+      {
+       "action": "draw",
+       "n": 1,
+       "target": "me"
+      }
+     ],
+     "trigger": "play"
+    }
+   ],
+   "hp": 5,
+   "name": "境界の番人",
+   "rarity": "C",
+   "set": "はじまりの灯",
+   "type": "unit",
+   "color": "無",
+   "tags": [
+    "旅"
+   ],
+   "image": "img/x_warden.jpg"
+  },
+  "s_sweep": {
+   "artPrompt": "勝った人の腕が、テーブルの上のチップを両腕で一気にかき集める。散らばるトランプと、照明に光る金色のチップ。腕と手だけが見える。",
+   "cost": 3,
+   "effects": [
+    {
+     "steps": [
+      {
+       "action": "gamble",
+       "game": "poker",
+       "on": {
+        "lose": {
+         "steps": [
+          {
+           "action": "damage",
+           "n": 1,
+           "target": "randomEnemy"
+          }
+         ]
+        },
+        "pair": {
+         "steps": [
+          {
+           "action": "damage",
+           "n": 2,
+           "target": "allEnemies"
+          }
+         ]
+        },
+        "straight": {
+         "steps": [
+          {
+           "action": "damage",
+           "n": 3,
+           "target": "allEnemies"
+          }
+         ]
+        },
+        "three": {
+         "steps": [
+          {
+           "action": "destroy",
+           "target": "randomEnemy"
+          },
+          {
+           "action": "damage",
+           "n": 3,
+           "target": "allEnemies"
+          }
+         ]
+        }
+       }
+      }
+     ],
+     "trigger": "play"
+    }
+   ],
+   "glyph": "coins",
+   "image": "img/s_sweep.jpg",
+   "name": "総取り",
+   "rarity": "C",
+   "set": "ソワレ",
+   "tags": [
+    "賭け"
+   ],
+   "type": "art",
+   "color": "黄"
+  },
+  "b_metro": {
+   "artPrompt": "星図が広げられた古い木の机の上に、砂時計がひとつ。落ちる砂が星の光の粒になって流れている。星図に文字や数字は描かない。人物なし。",
+   "cost": 1,
+   "count": 3,
+   "effects": [
+    {
+     "steps": [
+      {
+       "action": "draw",
+       "n": 2,
+       "target": "me"
+      }
+     ],
+     "trigger": "countdownEnd"
+    }
+   ],
+   "glyph": "star",
+   "name": "星読みの砂時計",
+   "rarity": "C",
+   "set": "はじまりの灯",
+   "type": "object",
+   "color": "無",
+   "image": "img/b_metro.jpg"
+  },
+  "n_fine": {
+   "artPrompt": "フィーネが宙に浮かんでキーボードを弾いている。鍵盤から水色の光の帯が流れ出す。",
+   "atk": 1,
+   "cost": 2,
+   "effects": [
+    {
+     "steps": [
+      {
+       "action": "search",
+       "filter": {
+        "tag": "歌",
+        "type": "art"
+       }
+      }
+     ],
+     "trigger": "play"
+    }
+   ],
+   "epithet": "透き通る指先",
+   "hp": 2,
+   "image": "img/n_fine.jpg",
+   "name": "フィーネ",
+   "part": "キーボード",
+   "rarity": "R",
+   "set": "ノクティルカ",
+   "tags": [
+    "ノクティルカ"
+   ],
+   "type": "unit",
+   "color": "青"
+  },
+  "n_riora": {
+   "artPrompt": "スポットライトの中心で、リオラがマイクを握って歌う。青緑の水の光が渦を巻く。",
+   "atk": 3,
+   "cost": 4,
+   "costMod": {
+    "n": 1,
+    "tag": "歌"
+   },
+   "epithet": "潮騒の歌姫",
+   "hp": 4,
+   "image": "img/n_riora.jpg",
+   "name": "リオラ",
+   "part": "ボーカル",
+   "rarity": "L",
+   "set": "ノクティルカ",
+   "tags": [
+    "ノクティルカ"
+   ],
+   "type": "unit",
+   "color": "青"
+  },
+  "b_strike": {
+   "artPrompt": "夜空に引かれた光の境界線を、銀の刃が一太刀で切り裂く瞬間。刃の軌跡が弧を描いて光る。刃を握る手だけが見える。",
+   "cost": 2,
+   "effects": [
+    {
+     "steps": [
+      {
+       "action": "destroy",
+       "target": "chosen"
+      },
+      {
+       "action": "draw",
+       "n": 1,
+       "target": "me"
+      }
+     ],
+     "trigger": "play"
+    }
+   ],
+   "glyph": "cross",
+   "name": "境界を断つ刃",
+   "rarity": "R",
+   "set": "はじまりの灯",
+   "target": "enemyObject",
+   "type": "art",
+   "color": "無",
+   "image": "img/b_strike.jpg"
+  },
+  "s_roulette": {
+   "artPrompt": "回転するルーレット盤を斜め上から見たアップ。赤と黒のマスの上を白い玉が跳ねる。金の装飾がろうそくの光で輝く。盤の数字は描かない。人物なし。",
+   "cost": 2,
+   "effects": [
+    {
+     "steps": [
+      {
+       "action": "roulette",
+       "on": {
+        "black": {
+         "steps": [
+          {
+           "action": "draw",
+           "n": 2,
+           "target": "me"
+          }
+         ]
+        },
+        "red": {
+         "steps": [
+          {
+           "action": "damage",
+           "n": 2,
+           "target": "opponent"
+          }
+         ]
+        }
+       }
+      }
+     ],
+     "trigger": "play"
+    }
+   ],
+   "glyph": "wheel",
+   "image": "img/s_roulette.jpg",
+   "name": "ルーレット",
+   "rarity": "C",
+   "set": "ソワレ",
+   "tags": [
+    "賭け"
+   ],
+   "type": "art",
+   "color": "黄"
+  },
+  "s_lolo": {
+   "atk": 1,
+   "cheat": true,
+   "cost": 1,
+   "effects": [
+    {
+     "steps": [
+      {
+       "action": "gamble",
+       "game": "dice",
+       "need": 4,
+       "on": {
+        "win": {
+         "steps": [
+          {
+           "action": "damage",
+           "n": 2,
+           "target": "randomEnemy"
+          }
+         ]
+        }
+       }
+      }
+     ],
+     "trigger": "play"
+    }
+   ],
+   "epithet": "百の袖",
+   "hp": 3,
+   "image": "img/s_lolo.jpg",
+   "name": "ロロ",
+   "rarity": "R",
+   "set": "ソワレ",
+   "tags": [
+    "ギャンブラー"
+   ],
+   "type": "unit",
+   "color": "黄"
+  },
+  "n_heart": {
+   "artPrompt": "リオラが目を閉じて歌い、青緑の音の波が前に向かって広がっていく。",
+   "cost": 2,
+   "effects": [
+    {
+     "steps": [
+      {
+       "action": "damage",
+       "n": 3,
+       "target": "chosen"
+      }
+     ],
+     "trigger": "play"
+    }
+   ],
+   "glyph": "note",
+   "image": "img/n_heart.jpg",
+   "name": "心震わせる唄",
+   "rarity": "R",
+   "set": "ノクティルカ",
+   "tags": [
+    "歌"
+   ],
+   "target": "enemyUnit",
+   "type": "art",
+   "color": "青"
+  },
+  "n_urka": {
+   "artPrompt": "満月の下、ウルカがステージの最前列に飛び出してギターをかき鳴らす。赤い炎のような光。",
+   "atk": 3,
+   "cost": 3,
+   "epithet": "月下の牙",
+   "hp": 2,
+   "image": "img/n_urka.jpg",
+   "lvAtk": {
+    "lv": 2,
+    "n": 1
+   },
+   "name": "ウルカ",
+   "part": "ギター",
+   "quick": true,
+   "rarity": "SR",
+   "set": "ノクティルカ",
+   "tags": [
+    "ノクティルカ"
+   ],
+   "type": "unit",
+   "color": "青"
+  },
+  "n_nox": {
+   "artPrompt": "ノクスが無表情でベースを弾き、足元から紫の影が鎌のような形に伸びていく。",
+   "atk": 2,
+   "cost": 3,
+   "effects": [
+    {
+     "steps": [
+      {
+       "action": "damage",
+       "n": 2,
+       "target": "randomEnemy"
+      }
+     ],
+     "trigger": "death"
+    }
+   ],
+   "epithet": "黄昏の刈り手",
+   "hp": 5,
+   "image": "img/n_nox.jpg",
+   "name": "ノクス",
+   "part": "ベース",
+   "rarity": "SR",
+   "set": "ノクティルカ",
+   "tags": [
+    "ノクティルカ"
+   ],
+   "type": "unit",
+   "color": "青"
+  },
+  "n_shout": {
+   "artPrompt": "リオラとウルカがいっしょに叫び、ステージから音の衝撃波が爆発する。",
+   "cost": 4,
+   "effects": [
+    {
+     "steps": [
+      {
+       "action": "damage",
+       "n": 2,
+       "target": "allEnemies"
+      }
+     ],
+     "trigger": "play"
+    }
+   ],
+   "glyph": "burst",
+   "image": "img/n_shout.jpg",
+   "name": "夜を裂く叫び",
+   "rarity": "R",
+   "set": "ノクティルカ",
+   "tags": [
+    "歌"
+   ],
+   "type": "art",
+   "color": "青"
+  },
+  "n_garna": {
+   "artPrompt": "ガルナがドラムセットの後ろで、スティックを高く振り上げて笑っている。オレンジの火花のような光が飛び散る。",
+   "atk": 1,
+   "cost": 1,
+   "effects": [
+    {
+     "steps": [
+      {
+       "action": "buff",
+       "n": 1,
+       "target": "randomAlly",
+       "temp": true
+      }
+     ],
+     "trigger": "start"
+    }
+   ],
+   "epithet": "刻む石像",
+   "hp": 3,
+   "image": "img/n_garna.jpg",
+   "name": "ガルナ",
+   "part": "ドラム",
+   "rarity": "R",
+   "set": "ノクティルカ",
+   "tags": [
+    "ノクティルカ"
+   ],
+   "type": "unit",
+   "color": "青"
+  },
+  "c_exchange": {
+   "artPrompt": "夜空を横切る流れ星。その光の尾から、光る封筒の手紙がひらひらと舞い落ちてくる。手紙に文字は描かない。人物なし。",
+   "cost": 2,
+   "effects": [
+    {
+     "steps": [
+      {
+       "action": "draw",
+       "n": 2,
+       "target": "me"
+      }
+     ],
+     "trigger": "play"
+    }
+   ],
+   "glyph": "star",
+   "name": "流れ星の便り",
+   "rarity": "C",
+   "set": "はじまりの灯",
+   "type": "art",
+   "color": "無",
+   "image": "img/c_exchange.jpg"
+  },
+  "s_lucielle1": {
+   "artPrompt": "添付した設定画の女性ディーラー「ルシエラ」〈宵の支配人〉。白いシャツに体に合った黒いベスト、金の蝶ネクタイをきちんと結び、両手に黒い手袋。長い金髪は黒いリボンでゆるくまとめている。カジノのカウンターに肘をつき、トランプを扇のように広げて、退屈そうに笑っている。背景は上品なカジノ、シャンデリアの光。上半身が画面の中央に来るように描く。",
+   "cost": 0,
+   "diceBonus": 1,
+   "epithet": "宵の支配人",
+   "fixed": true,
+   "image": "img/s_lucielle1.jpg",
+   "name": "ルシエラ",
+   "rarity": "RR",
+   "set": "ソワレ",
+   "tags": [
+    "ディーラー"
+   ],
+   "token": true,
+   "type": "object",
+   "color": "黄"
+  },
+  "s_blackjack": {
+   "artPrompt": "緑のテーブルに表向きのトランプが2枚と、伏せられたカードが1枚。白い手袋をしたディーラーの手が、伏せたカードをめくろうとしている。手だけが見える。張りつめた空気。",
+   "cost": 3,
+   "effects": [
+    {
+     "steps": [
+      {
+       "action": "gamble",
+       "game": "blackjack",
+       "on": {
+        "lose": {
+         "steps": [
+          {
+           "action": "destroy",
+           "target": "randomAlly"
+          }
+         ]
+        },
+        "seven": {
+         "steps": [
+          {
+           "action": "damage",
+           "n": 3,
+           "target": "opponent"
+          }
+         ]
+        },
+        "win": {
+         "steps": [
+          {
+           "action": "destroy",
+           "target": "chosen"
+          }
+         ]
+        }
+       }
+      }
+     ],
+     "trigger": "play"
+    }
+   ],
+   "glyph": "coins",
+   "image": "img/s_blackjack.jpg",
+   "name": "ブラックジャック",
+   "rarity": "R",
+   "set": "ソワレ",
+   "tags": [
+    "賭け"
+   ],
+   "target": "enemyUnit",
+   "type": "art",
+   "color": "黄"
+  },
+  "s_chip": {
+   "artPrompt": "シャンデリアの下、カジノのホールに金と赤のチップが雨のように降り注ぐ。床の赤いじゅうたんに散らばるチップ。人物なし。",
+   "cost": 2,
+   "effects": [
+    {
+     "steps": [
+      {
+       "action": "roulette",
+       "on": {
+        "black": {
+         "steps": [
+          {
+           "action": "damage",
+           "n": 2,
+           "target": "chosen"
+          },
+          {
+           "action": "draw",
+           "n": 1,
+           "target": "me"
+          }
+         ]
+        },
+        "red": {
+         "steps": [
+          {
+           "action": "damage",
+           "n": 3,
+           "target": "chosen"
+          }
+         ]
+        }
+       }
+      }
+     ],
+     "trigger": "play"
+    }
+   ],
+   "glyph": "coin",
+   "image": "img/s_chip.jpg",
+   "name": "チップの雨",
+   "rarity": "C",
+   "set": "ソワレ",
+   "tags": [
+    "賭け"
+   ],
+   "target": "enemyUnit",
+   "type": "art",
+   "color": "黄"
+  },
+  "s_ring": {
+   "artPrompt": "テーブルの上、月の光を受けて輝く一つの指輪。そばに伏せたトランプが3枚。人物なし。",
+   "cost": 1,
+   "effects": [
+    {
+     "steps": [
+      {
+       "action": "replay"
+      }
+     ],
+     "trigger": "play"
+    }
+   ],
+   "glyph": "star",
+   "image": "img/s_ring.jpg",
+   "name": "約束の指輪",
+   "needs": "s_letizia",
+   "rarity": "RR",
+   "set": "ソワレ",
+   "type": "art",
+   "color": "黄"
+  },
+  "s_canaria": {
+   "atk": 2,
+   "cost": 2,
+   "effects": [
+    {
+     "steps": [
+      {
+       "action": "optPay",
+       "n": 3,
+       "on": {
+        "yes": {
+         "steps": [
+          {
+           "action": "damage",
+           "n": 4,
+           "target": "chosen"
+          }
+         ]
+        }
+       }
+      }
+     ],
+     "trigger": "play"
+    },
+    {
+     "steps": [
+      {
+       "action": "damage",
+       "n": 2,
+       "target": "opponent"
+      }
+     ],
+     "trigger": "gambleLose"
+    }
+   ],
+   "epithet": "命を鳴らす小鳥",
+   "hp": 3,
+   "image": "img/s_canaria.jpg",
+   "name": "カナリア",
+   "rarity": "SR",
+   "set": "ソワレ",
+   "tags": [
+    "ギャンブラー"
+   ],
+   "target": "enemyUnit",
+   "type": "unit",
+   "color": "黄"
+  },
+  "s_lucielle2": {
+   "artPrompt": "添付した設定画の女性ディーラー「ルシエラ」が変化した姿〈狂騒の女主人〉。顔と金髪は設定画と同じ。白いシャツに黒いベストと金の蝶ネクタイの上から、肩に深紅のコートをはおり、金のアクセサリーが増えている。リボンをほどいた金髪が大きく広がる。目を大きく開いて楽しそうに笑い、まわりにチップが舞っている。背景は熱気にあふれたカジノ、赤と金の光。上半身が画面の中央に来るように描く。",
+   "bustSave": true,
+   "cost": 0,
+   "diceBonus": 1,
+   "epithet": "狂騒の女主人",
+   "fixed": true,
+   "image": "img/s_lucielle2.jpg",
+   "name": "ルシエラ",
+   "rarity": "RR",
+   "set": "ソワレ",
+   "tags": [
+    "ディーラー"
+   ],
+   "token": true,
+   "type": "object",
+   "color": "黄"
+  },
+  "x_lamp": {
+   "artPrompt": "夜の暗がりで、両手のひらでそっと包んだ、しずくの形をした小さな灯火。やさしい光が手と指先を照らす。手だけが見える。手は左右1つずつ、2つだけ。どちらの手も指は5本で、親指は外側。両腕とも同じ、生成り色のマントの袖。手袋はしない。画面の上下に黒い帯を入れない。",
+   "cost": 1,
+   "effects": [
+    {
+     "steps": [
+      {
+       "action": "heal",
+       "n": 3,
+       "target": "chosen"
+      }
+     ],
+     "trigger": "play"
+    }
+   ],
+   "glyph": "star",
+   "name": "ひとしずくの灯",
+   "rarity": "C",
+   "set": "はじまりの灯",
+   "target": "allyUnit",
+   "type": "art",
+   "color": "無",
+   "image": "img/x_lamp.jpg"
+  },
+  "s_allin": {
+   "artPrompt": "テーブルの上のチップがすべて中央へ押し出される瞬間。崩れるチップの山と、宙に舞うトランプ。押し出す両手だけが見える。ろうそくの火が大きく揺れる。",
+   "cost": 4,
+   "effects": [
+    {
+     "steps": [
+      {
+       "action": "payLife",
+       "n": 5
+      },
+      {
+       "action": "gamble",
+       "game": "poker",
+       "on": {
+        "pair": {
+         "steps": [
+          {
+           "action": "damage",
+           "n": 4,
+           "target": "opponent"
+          }
+         ]
+        },
+        "straight": {
+         "steps": [
+          {
+           "action": "damage",
+           "n": 8,
+           "target": "opponent"
+          }
+         ]
+        },
+        "three": {
+         "steps": [
+          {
+           "action": "damage",
+           "n": 12,
+           "target": "opponent"
+          }
+         ]
+        }
+       }
+      }
+     ],
+     "trigger": "play"
+    }
+   ],
+   "glyph": "coin",
+   "image": "img/s_allin.jpg",
+   "name": "オールイン",
+   "rarity": "R",
+   "set": "ソワレ",
+   "tags": [
+    "賭け"
+   ],
+   "type": "art",
+   "color": "黄"
+  },
+  "n_lesson": {
+   "artPrompt": "屋根裏のような練習部屋で、5人が楽器の準備をしている。窓の外に夜の尖塔。",
+   "cost": 1,
+   "effects": [
+    {
+     "steps": [
+      {
+       "action": "search",
+       "filter": {
+        "type": "unit"
+       }
+      }
+     ],
+     "trigger": "play"
+    }
+   ],
+   "glyph": "search",
+   "image": "img/n_lesson.jpg",
+   "name": "はじまりの一音",
+   "rarity": "C",
+   "set": "ノクティルカ",
+   "tags": [
+    "歌"
+   ],
+   "type": "art",
+   "color": "青"
+  },
+  "b_amp": {
+   "artPrompt": "星空の下、岩場に浮かぶ大きな水晶。淡く光り、まわりの空気が波紋のように震えて、光が共鳴している。人物なし。",
+   "aura": 1,
+   "cost": 2,
+   "glyph": "star",
+   "name": "共鳴の水晶",
+   "rarity": "R",
+   "set": "はじまりの灯",
+   "type": "object",
+   "color": "無",
+   "image": "img/b_amp.jpg"
+  },
+  "n_call": {
+   "artPrompt": "ウルカがマイクに向かって叫び、客席の手がいっせいに上がる。",
+   "cost": 3,
+   "effects": [
+    {
+     "steps": [
+      {
+       "action": "buff",
+       "hp": 1,
+       "n": 1,
+       "target": "allAllies"
+      }
+     ],
+     "trigger": "play"
+    }
+   ],
+   "glyph": "notes",
+   "image": "img/n_call.jpg",
+   "name": "響き合う声",
+   "rarity": "C",
+   "set": "ノクティルカ",
+   "tags": [
+    "歌"
+   ],
+   "type": "art",
+   "color": "青"
+  },
+  "s_dice": {
+   "artPrompt": "ろうそくの光が揺れる夜会のカジノ。緑のフェルトの上で、白いサイコロが1つ高く跳ねている。手前に金色のチップの山。人物なし。",
+   "cost": 1,
+   "effects": [
+    {
+     "steps": [
+      {
+       "action": "gamble",
+       "game": "dice",
+       "need": 4,
+       "on": {
+        "win": {
+         "steps": [
+          {
+           "action": "damage",
+           "n": 3,
+           "target": "chosen"
+          }
+         ]
+        }
+       }
+      }
+     ],
+     "trigger": "play"
+    }
+   ],
+   "glyph": "dice",
+   "image": "img/s_dice.jpg",
+   "name": "ダイスロール",
+   "rarity": "C",
+   "set": "ソワレ",
+   "tags": [
+    "賭け"
+   ],
+   "target": "enemyUnit",
+   "type": "art",
+   "color": "黄"
+  },
+  "s_vera": {
+   "atk": 3,
+   "cost": 3,
+   "dealerStand": 4,
+   "effects": [
+    {
+     "steps": [
+      {
+       "action": "gamble",
+       "game": "blackjack",
+       "on": {
+        "win": {
+         "steps": [
+          {
+           "action": "destroy",
+           "target": "chosen"
+          }
+         ]
+        }
+       }
+      }
+     ],
+     "trigger": "play"
+    }
+   ],
+   "epithet": "裏切りのクルピエ",
+   "hp": 4,
+   "image": "img/s_vera.jpg",
+   "name": "ヴェラ",
+   "rarity": "SR",
+   "set": "ソワレ",
+   "tags": [
+    "ギャンブラー"
+   ],
+   "target": "enemyUnit",
+   "type": "unit",
+   "color": "黄"
+  },
+  "s_invite": {
+   "artPrompt": "夜会のテーブルの上に置かれた、黒い封筒の招待状。金色の封蝋と細いリボン。そばにワイングラスとろうそく。封筒の文字は読めないようにぼかす。人物なし。",
+   "cost": 1,
+   "effects": [
+    {
+     "steps": [
+      {
+       "action": "search",
+       "filter": {
+        "tag": "ギャンブラー",
+        "type": "unit"
+       }
+      }
+     ],
+     "trigger": "play"
+    }
+   ],
+   "glyph": "search",
+   "image": "img/s_invite.jpg",
+   "name": "招待状",
+   "rarity": "C",
+   "set": "ソワレ",
+   "type": "art",
+   "color": "黄"
+  },
+  "x_wanderer": {
+   "artPrompt": "旅人（生成り色の大きなフード付きマントでフードを深くかぶり、顔は口元しか見えない。マントの内側は夜空の色、星形の留め具。長い木の杖と、腰に小さなランタン）が、星空の下の丘に立ち、遠くを見ている。少し斜め後ろからの姿。遠くの地平線に、光る天球がいくつも浮かんでいる。風でマントが大きくなびく。旅人は画面の中で大きく。腕は2本だけ。",
+   "atk": 2,
+   "cost": 2,
+   "hp": 2,
+   "name": "さすらいの旅人",
+   "quick": true,
+   "rarity": "C",
+   "set": "はじまりの灯",
+   "type": "unit",
+   "color": "無",
+   "tags": [
+    "旅"
+   ],
+   "image": "img/x_wanderer.jpg"
+  },
+  "s_letizia": {
+   "atk": 4,
+   "cost": 5,
+   "effects": [
+    {
+     "steps": [
+      {
+       "action": "gamble",
+       "game": "poker",
+       "on": {
+        "pair": {
+         "steps": [
+          {
+           "action": "draw",
+           "n": 2,
+           "target": "me"
+          }
+         ]
+        },
+        "straight": {
+         "steps": [
+          {
+           "action": "damage",
+           "n": 3,
+           "target": "allEnemies"
+          }
+         ]
+        },
+        "three": {
+         "steps": [
+          {
+           "action": "damage",
+           "n": 7,
+           "target": "opponent"
+          }
+         ]
+        }
+       }
+      }
+     ],
+     "trigger": "play"
+    },
+    {
+     "steps": [
+      {
+       "action": "buff",
+       "n": 1,
+       "target": "self"
+      }
+     ],
+     "trigger": "gambleWin"
+    }
+   ],
+   "epithet": "微笑む勝負師",
+   "hp": 5,
+   "image": "img/s_letizia.jpg",
+   "name": "レティシア",
+   "rarity": "L",
+   "set": "ソワレ",
+   "tags": [
+    "ギャンブラー"
+   ],
+   "type": "unit",
+   "color": "黄"
+  },
+  "s_sigma": {
+   "atk": 1,
+   "cost": 2,
+   "effects": [
+    {
+     "steps": [
+      {
+       "action": "peek",
+       "n": 3
+      },
+      {
+       "action": "gamble",
+       "game": "dice",
+       "need": 4,
+       "on": {
+        "win": {
+         "steps": [
+          {
+           "action": "draw",
+           "n": 1,
+           "target": "me"
+          }
+         ]
+        }
+       }
+      }
+     ],
+     "trigger": "play"
+    }
+   ],
+   "epithet": "零度の計算機",
+   "hp": 4,
+   "image": "img/s_sigma.jpg",
+   "name": "シグマ",
+   "rarity": "R",
+   "set": "ソワレ",
+   "tags": [
+    "ギャンブラー"
+   ],
+   "type": "unit",
+   "color": "黄"
+  },
+  "n_encore": {
+   "artPrompt": "暗くなったステージに、5人がもう一度戻ってくる。客席にたくさんの光るペンライト。",
+   "cost": 3,
+   "effects": [
+    {
+     "steps": [
+      {
+       "action": "revive"
+      }
+     ],
+     "trigger": "play"
+    }
+   ],
+   "glyph": "star",
+   "image": "img/n_encore.jpg",
+   "name": "もう一度、灯る光",
+   "rarity": "C",
+   "set": "ノクティルカ",
+   "tags": [
+    "歌"
+   ],
+   "type": "art",
+   "color": "青"
+  },
+  "n_last": {
+   "artPrompt": "月下の大聖堂の前の野外ステージで、5人が最後の曲を演奏する。夜空に光が昇っていく。",
+   "cost": 6,
+   "effects": [
+    {
+     "steps": [
+      {
+       "action": "reserveBlast",
+       "n": 1
+      }
+     ],
+     "trigger": "play"
+    }
+   ],
+   "glyph": "flame",
+   "image": "img/n_last.jpg",
+   "name": "夜明けを呼ぶ歌",
+   "rarity": "RR",
+   "set": "ノクティルカ",
+   "tags": [
+    "歌"
+   ],
+   "type": "art",
+   "color": "青"
+  },
+  "s_lucielle3": {
+   "artPrompt": "添付した設定画の女性ディーラー「ルシエラ」が最後に変化した姿〈宿命の審判〉。顔と金髪は設定画と同じ。白と金の女王のような装いに長いマント、髪に金の冠のような飾り。まわりをトランプが浮かんで回り、目が金色に光っている。破滅を前に、いちばんきれいに笑う。背景は白と金の光に包まれた、最後の勝負の場。上半身が画面の中央に来るように描く。",
+   "bustSave": true,
+   "cost": 0,
+   "diceBonus": 1,
+   "epithet": "宿命の審判",
+   "fixed": true,
+   "image": "img/s_lucielle3.jpg",
+   "name": "ルシエラ",
+   "rarity": "RR",
+   "set": "ソワレ",
+   "tags": [
+    "ディーラー"
+   ],
+   "token": true,
+   "type": "object",
+   "winDamage": 2,
+   "color": "黄"
+  },
+  "h_squire": {
+   "set": "はじまりの灯",
+   "color": "無",
+   "type": "unit",
+   "tags": [
+    "旅"
+   ],
+   "name": "見習いの灯守",
+   "cost": 1,
+   "atk": 1,
+   "hp": 2,
+   "rarity": "C",
+   "artPrompt": "10歳くらいの見習いの灯守の少年。赤茶の短い髪。体に大きすぎる紺の外套を着て、そでが手にかかっている。自分の体くらい大きなランタンを両腕で抱え、少し不安そうだけど、まっすぐ前を見ている。狭間の夜空と星。少年は画面の中で大きく。腕は2本だけ。",
+   "image": "img/h_squire.jpg"
+  },
+  "h_fox": {
+   "set": "はじまりの灯",
+   "color": "無",
+   "type": "unit",
+   "tags": [
+    "旅"
+   ],
+   "name": "灯をくわえた小狐",
+   "cost": 1,
+   "atk": 1,
+   "hp": 1,
+   "quick": true,
+   "rarity": "C",
+   "artPrompt": "小さな灯りを口にくわえて、星空の下の岩場を駆ける、白くて小さな子ギツネ。しっぽの先がほのかに青白く光る。灯りに照らされた足元。子ギツネは画面の中で大きく。",
+   "image": "img/h_fox.jpg"
+  },
+  "h_bird": {
+   "set": "はじまりの灯",
+   "color": "無",
+   "type": "unit",
+   "tags": [
+    "旅"
+   ],
+   "name": "道案内の白い鳥",
+   "cost": 2,
+   "atk": 1,
+   "hp": 2,
+   "rarity": "C",
+   "effects": [
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "search",
+       "filter": {
+        "type": "art"
+       }
+      }
+     ]
+    }
+   ],
+   "artPrompt": "羽の先が光る白い鳥が、狭間の夜空を先導するように飛んでいる。うしろに続く光の道。",
+   "image": "img/h_bird.jpg"
+  },
+  "h_mapper": {
+   "set": "はじまりの灯",
+   "color": "無",
+   "type": "unit",
+   "tags": [
+    "旅"
+   ],
+   "name": "地図を描く少年",
+   "cost": 2,
+   "atk": 1,
+   "hp": 1,
+   "rarity": "C",
+   "effects": [
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "draw",
+       "target": "me",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "artPrompt": "14歳くらいの、栗色のくせ毛を後ろで短くひとつに結んだ少年。そばかすがあり、眼鏡はかけない。頭に小さなキャスケット帽。白いシャツに深緑のベスト、耳にペンをはさんでいる。岩に腰かけて、膝の上の大きな紙に星図のような地図を描いている。地図の線がほのかに光る。地図に文字は描かない。少年は画面の中で大きく。腕は2本だけ。",
+   "image": "img/h_mapper.jpg"
+  },
+  "h_scholar": {
+   "set": "はじまりの灯",
+   "color": "無",
+   "type": "unit",
+   "tags": [
+    "旅"
+   ],
+   "name": "星を数える老学者",
+   "cost": 3,
+   "atk": 2,
+   "hp": 3,
+   "rarity": "C",
+   "effects": [
+    {
+     "trigger": "end",
+     "steps": [
+      {
+       "action": "heal",
+       "target": "randomAlly",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "artPrompt": "長いひげの老学者が、望遠鏡をのぞいて星を数えている。まわりに古い本と羊皮紙。本に文字は描かない。",
+   "image": "img/h_scholar.jpg"
+  },
+  "h_tortoise": {
+   "set": "はじまりの灯",
+   "color": "無",
+   "type": "unit",
+   "tags": [
+    "旅"
+   ],
+   "name": "苔むした大亀",
+   "cost": 4,
+   "atk": 2,
+   "hp": 6,
+   "rarity": "C",
+   "artPrompt": "背中に苔と小さな木が生えた、とても大きな亀が、狭間をゆっくり歩いている。甲羅の上に小さなランタンが揺れる。",
+   "image": "img/h_tortoise.jpg"
+  },
+  "h_knight": {
+   "set": "はじまりの灯",
+   "color": "無",
+   "type": "unit",
+   "tags": [
+    "旅"
+   ],
+   "name": "狭間の流れ騎士",
+   "cost": 5,
+   "atk": 4,
+   "hp": 4,
+   "pierce": true,
+   "rarity": "R",
+   "artPrompt": "使いこんだ鎧とマントの騎士が、星空の下で剣を構える。どの天球にも仕えない、さすらいの騎士。兜で顔は見えない。",
+   "image": "img/h_knight.jpg"
+  },
+  "h_ember": {
+   "set": "はじまりの灯",
+   "color": "無",
+   "type": "art",
+   "name": "火の粉",
+   "cost": 1,
+   "target": "enemyUnit",
+   "rarity": "C",
+   "glyph": "burst",
+   "effects": [
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "damage",
+       "target": "chosen",
+       "n": 2
+      }
+     ]
+    }
+   ],
+   "artPrompt": "焚き火からはじけた火の粉が、夜空へ舞い上がる。人物なし。",
+   "image": "img/h_ember.jpg"
+  },
+  "h_signpost": {
+   "set": "はじまりの灯",
+   "color": "無",
+   "type": "art",
+   "name": "古い道しるべ",
+   "cost": 1,
+   "rarity": "C",
+   "glyph": "search",
+   "effects": [
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "search",
+       "filter": {
+        "type": "unit"
+       }
+      }
+     ]
+    }
+   ],
+   "artPrompt": "狭間の岩場に立つ、古い木の道しるべ。矢印の板がいくつもの方向を指し、それぞれの先に光る天球が見える。板に文字は描かない。人物なし。",
+   "image": "img/h_signpost.jpg"
+  },
+  "h_campfire": {
+   "set": "はじまりの灯",
+   "color": "無",
+   "type": "art",
+   "name": "みんなの焚き火",
+   "cost": 3,
+   "rarity": "R",
+   "glyph": "star",
+   "effects": [
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "buff",
+       "target": "allAllies",
+       "n": 1,
+       "temp": true
+      },
+      {
+       "action": "heal",
+       "target": "allAllies",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "artPrompt": "狭間の岩場で、焚き火を囲んで休む仲間たち。旅人（生成り色の大きなフード付きマントでフードを深くかぶり、顔は口元しか見えない。マントの内側は夜空の色、星形の留め具。長い木の杖と、腰に小さなランタン）、白い小狐、白い鳥、背中に苔の生えた大亀が、いっしょにあたたまっている。あたたかいオレンジの光。旅人の顔はフードの影で見えない。",
+   "image": "img/h_campfire.jpg"
+  },
+  "h_starfall": {
+   "set": "はじまりの灯",
+   "color": "無",
+   "type": "art",
+   "name": "星くずの雨",
+   "cost": 3,
+   "rarity": "R",
+   "glyph": "star",
+   "effects": [
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "damage",
+       "target": "allEnemies",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "artPrompt": "狭間の夜空から、小さな星くずが雨のように降りそそぐ。人物なし。",
+   "image": "img/h_starfall.jpg"
+  },
+  "h_lantern": {
+   "set": "はじまりの灯",
+   "color": "無",
+   "type": "object",
+   "name": "灯の精のランタン",
+   "cost": 2,
+   "rarity": "C",
+   "glyph": "star",
+   "effects": [
+    {
+     "trigger": "start",
+     "steps": [
+      {
+       "action": "heal",
+       "target": "randomAlly",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "artPrompt": "古いランタンの中に、小さな光の精が住んでいて、ガラス越しに手をふっている。人物なし。",
+   "image": "img/h_lantern.jpg"
+  },
+  "y_muu": {
+   "name": "ムウ",
+   "set": "夢枕",
+   "color": "紫",
+   "type": "unit",
+   "cost": 2,
+   "atk": 1,
+   "hp": 2,
+   "rarity": "SR",
+   "tags": [
+    "夢枕",
+    "良夢"
+   ],
+   "artPrompt": "ムウ（ねこくらいの大きさの、まるくてふわふわの獏。体の前半分が白、後ろ半分が薄紫の二色。少し長くて先が下に垂れた鼻、大きな紺色の目、丸いしっぽ。少し浮いている）が、鼻で黒いもやのような悪夢を吸いこんでいる。吸いこんだ悪夢が、おなかの中で星のように光る。",
+   "epithet": "夢喰いの獏",
+   "effects": [
+    {
+     "trigger": "allyDeath",
+     "steps": [
+      {
+       "action": "buff",
+       "target": "self",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "image": "img/y_muu.jpg"
+  },
+  "y_blanc": {
+   "name": "ブラン",
+   "set": "夢枕",
+   "color": "紫",
+   "type": "unit",
+   "cost": 1,
+   "atk": 1,
+   "hp": 1,
+   "rarity": "R",
+   "tags": [
+    "夢枕",
+    "良夢"
+   ],
+   "artPrompt": "ブラン（クリーム色のくまのぬいぐるみ。紫のチェックの布でつぎはぎ。目は右が黒、左が紫のボタン。ハンカチの青いマント）が、夢の中の子ども部屋で騎士のかまえをとる。腕は2本だけ。右手に色鉛筆の剣、左手に大きなボタンの盾。",
+   "epithet": "綿の騎士",
+   "effects": [
+    {
+     "trigger": "death",
+     "steps": [
+      {
+       "action": "draw",
+       "target": "me",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "image": "img/y_blanc.jpg"
+  },
+  "y_jig": {
+   "name": "ジグ",
+   "set": "夢枕",
+   "color": "紫",
+   "type": "unit",
+   "cost": 3,
+   "atk": 3,
+   "hp": 2,
+   "rarity": "SR",
+   "tags": [
+    "夢枕",
+    "悪夢"
+   ],
+   "artPrompt": "ジグ（背が高く、手足がとても細長い道化師。顔はひびの入った笑顔の白い仮面で見えない。黒と紫のひし形もようの服、先が垂れた鈴つきの帽子）が、こわれたメリーゴーランドの屋根の上に片足で立ち、体を大きくそらして、黒い風船の束を夜空に放している。下から紫のスポットライト。メリーゴーランドの木馬は首が折れ、明かりがちらついている。少し下から見上げる構図。腕は2本だけ。右手は風船を放したところ、左手は大きく広げている。道化はジグ1人だけ。",
+   "epithet": "悪夢の道化師",
+   "effects": [
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "damage",
+       "target": "allEnemies",
+       "n": 1
+      },
+      {
+       "action": "damage",
+       "target": "otherAllies",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "image": "img/y_jig.jpg"
+  },
+  "y_grim": {
+   "name": "グリム",
+   "set": "夢枕",
+   "color": "紫",
+   "type": "unit",
+   "cost": 4,
+   "atk": 3,
+   "hp": 4,
+   "rarity": "SR",
+   "tags": [
+    "夢枕",
+    "悪夢"
+   ],
+   "artPrompt": "グリム（大きな四本足の影のけもの。獅子のようなねこ科の顔で、耳は丸く鼻先は短い。体は夜空のように黒く、体の中に小さな星が光る。たてがみとしっぽは煙のようにゆらめき、目は紫に光る）が、紫の霧の深い底から、前足をかけてはい上がってくる。正面から少し下のアングルで、顔が画面に近く大きい。口を少し開けている。体からこぼれる影が、下へ滝のように落ちていく。背景は暗い紫の深い霧と、遠くの小さな光だけ。",
+   "epithet": "夢底の影獣",
+   "effects": [
+    {
+     "trigger": "death",
+     "steps": [
+      {
+       "action": "summon",
+       "id": "y_shade",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "image": "img/y_grim.jpg"
+  },
+  "y_shade": {
+   "name": "残影",
+   "set": "夢枕",
+   "color": "紫",
+   "type": "unit",
+   "cost": 0,
+   "atk": 1,
+   "hp": 1,
+   "rarity": "RR",
+   "tags": [
+    "夢枕",
+    "残影"
+   ],
+   "artPrompt": "紫の霧でできた、ぼんやりした人のかたちの影。顔は見えない。消えかけた夢の名残り。",
+   "token": true,
+   "image": "img/y_shade.jpg"
+  },
+  "y_wake": {
+   "name": "起きる時間だよ",
+   "set": "夢枕",
+   "color": "紫",
+   "type": "art",
+   "cost": 1,
+   "rarity": "C",
+   "tags": [
+    "悪夢"
+   ],
+   "glyph": "cross",
+   "artPrompt": "夢の世界の空に、大きな古い目覚まし時計が浮かんで鳴りひびく。音の輪が広がって、夢の景色がガラスのように割れていく。人物は描かない。",
+   "effects": [
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "destroy",
+       "target": "chosen"
+      },
+      {
+       "action": "draw",
+       "target": "me",
+       "n": 2
+      }
+     ]
+    }
+   ],
+   "target": "allyUnit",
+   "image": "img/y_wake.jpg"
+  },
+  "y_lullaby": {
+   "name": "おやすみの子守唄",
+   "set": "夢枕",
+   "color": "紫",
+   "type": "art",
+   "cost": 3,
+   "rarity": "RR",
+   "tags": [
+    "良夢"
+   ],
+   "glyph": "note",
+   "artPrompt": "月明かりの部屋で、眠っているルルナ（銀白で毛先だけ薄いラベンダー色の長い髪、額の上に閉じた目の刺しゅうのアイマスク、白い寝巻き）のまわりを、子守唄の音符が紫の光の蝶になって舞う。歌っている人は描かない。",
+   "effects": [
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "revive"
+      },
+      {
+       "action": "draw",
+       "target": "me",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "image": "img/y_lullaby.jpg"
+  },
+  "y_end": {
+   "name": "夢の終わり",
+   "set": "夢枕",
+   "color": "紫",
+   "type": "art",
+   "cost": 6,
+   "rarity": "RR",
+   "tags": [
+    "悪夢"
+   ],
+   "glyph": "burst",
+   "artPrompt": "夢の世界の空が、端から白い光にほどけていく。お城も遊園地も、光の粒になって消えていく。夜明け。人物は描かない。",
+   "effects": [
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "destroy",
+       "target": "allEnemies"
+      }
+     ]
+    }
+   ],
+   "image": "img/y_end.jpg"
+  },
+  "y_luluna": {
+   "name": "ルルナ",
+   "set": "夢枕",
+   "color": "紫",
+   "type": "unit",
+   "cost": 5,
+   "atk": 3,
+   "hp": 4,
+   "rarity": "L",
+   "tags": [
+    "夢枕"
+   ],
+   "artPrompt": "ルルナ（14歳くらいの少女。銀白で毛先だけ薄いラベンダー色の長い髪が、水の中のようにふわりと広がる。額の上に、閉じた目の刺しゅうがあるアイマスク。眠そうな半目。白い寝巻きのワンピースに紺紫のリボン、はだし）が、紫の夜空に浮かんで眠っている。まわりに、楽しい夢（おもちゃ、お菓子、星）と悪夢（黒い影、割れた鏡）のかけらが、シャボン玉のように浮かんでいる。腕は2本だけ。両腕で、星の刺しゅうがある紺紫のまん丸の枕を抱えている。",
+   "epithet": "夢見る少女",
+   "effects": [
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "revive",
+       "excludeSelf": true
+      }
+     ]
+    }
+   ],
+   "image": "img/y_luluna.jpg"
+  },
+  "k_tamaki": {
+   "name": "環",
+   "set": "四季ノ環",
+   "color": "緑",
+   "type": "unit",
+   "cost": 5,
+   "atk": 4,
+   "hp": 5,
+   "rarity": "L",
+   "tags": [
+    "四季ノ環"
+   ],
+   "artPrompt": "環（18歳くらいの女性の剣士。腰まである深い緑がかった黒髪を、桜色・青・朱・白の4色の組紐で高い位置にひとつにまとめる。琥珀色の目。白い着物に深い緑の羽織、紺の袴で、袴のすそに桜・青葉・紅葉・雪の柄。刀の鍔は輪の形で、4色の小さな玉がはまっている）が、刀を横に一閃した直後。刀の軌跡に、桜・青葉・紅葉・雪が順番に舞って、大きな輪を描いている。髪と組紐が風になびく。凛とした表情でこちらを見る。腕は2本だけ。両手で刀の柄をにぎっている。環は画面の中で大きく。",
+   "epithet": "四季の剣士",
+   "effects": [
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "advanceSeason"
+      },
+      {
+       "action": "damage",
+       "target": "chosen",
+       "season": true,
+       "max": 3
+      }
+     ]
+    },
+    {
+     "trigger": "seasonChange",
+     "steps": [
+      {
+       "action": "buff",
+       "target": "self",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "image": "img/k_tamaki.jpg",
+   "target": "enemyUnit"
+  },
+  "k_deer": {
+   "name": "霞",
+   "set": "四季ノ環",
+   "color": "緑",
+   "type": "unit",
+   "cost": 3,
+   "atk": 2,
+   "hp": 4,
+   "rarity": "SR",
+   "tags": [
+    "四季ノ環",
+    "春"
+   ],
+   "artPrompt": "霞（若い鹿。やわらかい薄茶色の毛に白い斑点。角に桜の花が咲き、首に桜色の組紐）が、満開の桜の森の中で、首をかしげてこちらを見ている。足元に花びらが積もり、木もれ日がさす。霞は画面の中で大きく。",
+   "effects": [
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "heal",
+       "target": "allAllies",
+       "n": 2
+      }
+     ]
+    }
+   ],
+   "seasonal": "春",
+   "epithet": "春告げの鹿",
+   "image": "img/k_deer.jpg"
+  },
+  "k_swallow": {
+   "name": "青嵐",
+   "set": "四季ノ環",
+   "color": "緑",
+   "type": "unit",
+   "cost": 2,
+   "atk": 2,
+   "hp": 1,
+   "rarity": "R",
+   "tags": [
+    "四季ノ環",
+    "夏"
+   ],
+   "artPrompt": "青嵐（ツバメ。背中は深い青で、つばさの先が青緑にほのかに光る。おなかは白、長い二股の尾、足に青い組紐）が、入道雲の夏空を、画面の手前に向かって鋭く飛んでくる。つばさの先に光る風の筋。下に青い田んぼ。青嵐は画面の中で大きく。",
+   "seasonal": "夏",
+   "quick": true,
+   "epithet": "夏空のツバメ",
+   "image": "img/k_swallow.jpg"
+  },
+  "k_fox": {
+   "name": "稲穂",
+   "set": "四季ノ環",
+   "color": "緑",
+   "type": "unit",
+   "cost": 2,
+   "atk": 2,
+   "hp": 2,
+   "rarity": "SR",
+   "tags": [
+    "四季ノ環",
+    "秋"
+   ],
+   "artPrompt": "稲穂（キツネ。金色がかった橙色の毛、胸と足先は白。しっぽの先がちょうちんの灯りのようにほんのり光る。首に朱色の組紐と小さな鈴）が、赤と金の紅葉が舞う山道で、いたずらっぽく振り返る。稲穂は画面の中で大きく。",
+   "effects": [
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "draw",
+       "target": "me",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "seasonal": "秋",
+   "epithet": "紅葉のキツネ",
+   "image": "img/k_fox.jpg"
+  },
+  "k_wolf": {
+   "name": "六花",
+   "set": "四季ノ環",
+   "color": "緑",
+   "type": "unit",
+   "cost": 5,
+   "atk": 5,
+   "hp": 5,
+   "rarity": "SR",
+   "tags": [
+    "四季ノ環",
+    "冬"
+   ],
+   "artPrompt": "六花（大きな白いオオカミ。薄い青の目。白い毛並みに、うっすらと雪の結晶の模様。首に白と銀の組紐）が、吹雪の雪原で頭を上げて遠吠えしている。息が白く、背中に雪が積もる。六花は画面の中で大きく。",
+   "seasonal": "冬",
+   "pierce": true,
+   "epithet": "雪原の白オオカミ",
+   "image": "img/k_wolf.jpg"
+  },
+  "k_sprout": {
+   "name": "芽吹きの精",
+   "set": "",
+   "color": "緑",
+   "type": "unit",
+   "cost": 1,
+   "atk": 1,
+   "hp": 2,
+   "rarity": "C",
+   "tags": [],
+   "artPrompt": "土から顔を出した、双葉の頭をした小さな精霊。両手で朝露のしずくを抱えている。",
+   "effects": [
+    {
+     "trigger": "start",
+     "steps": [
+      {
+       "action": "buff",
+       "target": "self",
+       "n": 0,
+       "hp": 1
+      }
+     ]
+    }
+   ],
+   "image": "img/k_sprout.jpg"
+  },
+  "k_tree": {
+   "name": "古木の精",
+   "set": "",
+   "color": "緑",
+   "type": "unit",
+   "cost": 4,
+   "atk": 2,
+   "hp": 6,
+   "rarity": "C",
+   "tags": [],
+   "artPrompt": "苔むした大きな古木に、やさしい顔が浮かんでいる。枝には四季の葉が一度に茂っている。",
+   "effects": [
+    {
+     "trigger": "end",
+     "steps": [
+      {
+       "action": "heal",
+       "target": "allAllies",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "image": "img/k_tree.jpg"
+  },
+  "k_sakura": {
+   "name": "環流・桜吹雪",
+   "set": "四季ノ環",
+   "color": "緑",
+   "type": "art",
+   "cost": 2,
+   "rarity": "C",
+   "tags": [
+    "環流"
+   ],
+   "glyph": "star",
+   "artPrompt": "満開の桜の森で、環（18歳くらいの女性の剣士。深い緑がかった黒髪を4色の組紐で高い位置にまとめる。琥珀色の目。白い着物に深い緑の羽織、紺の袴。刀の鍔は輪の形で4色の玉）が、体を大きくひねりながら刀を振り抜いた直後。右手1本で刀の柄の端をにぎり、刀は右上から左下へ振り抜かれて、刃先は画面の外側を向いている。刀は1本だけで、手の中の柄、鍔、その先に細身の刃が1本まっすぐのびる。刀の通った軌跡に沿って、桜の花びらが竜巻のように渦を巻き、まわりを桃色の大きな輪が囲む。髪と羽織が大きくなびく。少し下から見上げる構図。腕は2本だけ、手も2つだけ。右手で刀の柄をにぎる。左手は何も持たず、手のひらを開いて体のうしろへ広げる。鞘は腰の帯に差してあり、手では持たない。",
+   "effects": [
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "draw",
+       "target": "me",
+       "n": 1
+      }
+     ],
+     "season": "春"
+    },
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "heal",
+       "target": "allAllies",
+       "n": 2
+      },
+      {
+       "action": "advanceSeason"
+      }
+     ]
+    }
+   ],
+   "image": "img/k_sakura.jpg"
+  },
+  "k_kagero": {
+   "name": "環流・陽炎",
+   "set": "四季ノ環",
+   "color": "緑",
+   "type": "art",
+   "cost": 1,
+   "rarity": "C",
+   "tags": [
+    "環流"
+   ],
+   "glyph": "burst",
+   "artPrompt": "真夏のひまわり畑と入道雲、強い日差し。環（18歳くらいの女性の剣士。深い緑がかった黒髪を4色の組紐で高い位置にまとめる。琥珀色の目。白い着物に深い緑の羽織、紺の袴。刀の鍔は輪の形で4色の玉）を真横から描く。低い姿勢で前へ踏みこみ、居合いで刀を横に抜き放った瞬間。両手で柄をにぎり、刀は体の前を水平に走る。刀は細身で少し反った日本刀が1本だけ。刃の幅はせまい。刀身全体が真夏の熱で白く光り、刃のまわりの空気がゆらゆらとゆがんで、刃の向こうのひまわりがゆがんで見える。髪と羽織が大きくなびき、足元から土ぼこりが舞う。スピード線。腕は2本だけ。",
+   "effects": [
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "buff",
+       "target": "chosen",
+       "n": 1
+      }
+     ],
+     "season": "夏"
+    },
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "buff",
+       "target": "chosen",
+       "n": 2,
+       "temp": true
+      },
+      {
+       "action": "advanceSeason"
+      }
+     ]
+    }
+   ],
+   "target": "allyUnit",
+   "image": "img/k_kagero.jpg"
+  },
+  "k_momiji": {
+   "name": "環流・秋時雨",
+   "set": "四季ノ環",
+   "color": "緑",
+   "type": "art",
+   "cost": 3,
+   "rarity": "R",
+   "tags": [
+    "環流"
+   ],
+   "glyph": "cross",
+   "artPrompt": "環（18歳くらいの女性の剣士。深い緑がかった黒髪を4色の組紐で高い位置にまとめる。琥珀色の目。白い着物に深い緑の羽織、紺の袴。刀の鍔は輪の形で4色の玉）が、高く跳び上がって、上から斬り下ろす瞬間。冷たい秋の通り雨の雨粒と、赤い紅葉が、刀の通った線で一直線に割れる。上から見下ろす構図。斜めの構図と強い遠近感、スピード線で、躍動感を強く出す。髪、組紐、羽織が大きくなびく。腕は2本だけ。刀は1本で、刃は鍔の片側だけ。",
+   "effects": [
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "draw",
+       "target": "me",
+       "n": 1
+      }
+     ],
+     "season": "秋"
+    },
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "damage",
+       "target": "chosen",
+       "n": 3
+      },
+      {
+       "action": "advanceSeason"
+      }
+     ]
+    }
+   ],
+   "target": "enemyUnit",
+   "image": "img/k_momiji.jpg"
+  },
+  "k_hyoka": {
+   "name": "環流・氷華",
+   "set": "四季ノ環",
+   "color": "緑",
+   "type": "art",
+   "cost": 2,
+   "rarity": "R",
+   "tags": [
+    "環流"
+   ],
+   "glyph": "star",
+   "artPrompt": "環（18歳くらいの女性の剣士。深い緑がかった黒髪を4色の組紐で高い位置にまとめる。琥珀色の目。白い着物に深い緑の羽織、紺の袴。刀の鍔は輪の形で4色の玉）が、雪の上を低い姿勢ですべりながら、すれちがいざまに斬り抜けた瞬間。通った跡に、氷の花が一列に咲いていく。雪けむりが舞う。斜めの構図と強い遠近感、スピード線で、躍動感を強く出す。髪、組紐、羽織が大きくなびく。腕は2本だけ。刀は1本で、刃は鍔の片側だけ。",
+   "effects": [
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "damage",
+       "target": "chosen",
+       "n": 2
+      }
+     ],
+     "season": "冬"
+    },
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "freeze",
+       "target": "chosen"
+      },
+      {
+       "action": "advanceSeason"
+      }
+     ]
+    }
+   ],
+   "target": "enemyUnit",
+   "image": "img/k_hyoka.jpg"
+  },
+  "k_meguri": {
+   "name": "秘剣・巡り咲き",
+   "set": "四季ノ環",
+   "color": "緑",
+   "type": "art",
+   "cost": 4,
+   "rarity": "RR",
+   "tags": [
+    "環流"
+   ],
+   "glyph": "flame",
+   "artPrompt": "桜・青葉・紅葉・雪が大きな輪になって渦巻き、その中心で、環（深い緑がかった黒髪を4色の組紐で高い位置にまとめる。深い緑の羽織、紺の袴）が後ろ姿で刀を振り抜く。刀の軌跡は、画面を横切る太くてまぶしい金色の光の線。輪の花と葉が、刀の光にあわせて一斉に咲き乱れ、外へ爆発するように舞い散る。輪の4か所に、季節の相棒が光の姿で小さく浮かぶ（桜のところに鹿、青葉にツバメ、紅葉にキツネ、雪に白いオオカミ）。金の火花と光の粒。背景は中心が白く光り、外へ向かって季節の色に変わる。豪華で派手な切り札の絵。腕は2本だけ。刀は1本で、刃は鍔の片側だけ。",
+   "effects": [
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "seasonStrike",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "image": "img/k_meguri.jpg"
+  },
+  "k_senbon": {
+   "name": "千年桜",
+   "set": "四季ノ環",
+   "color": "緑",
+   "type": "unit",
+   "cost": 5,
+   "atk": 3,
+   "hp": 8,
+   "rarity": "RR",
+   "tags": [
+    "四季ノ環"
+   ],
+   "artPrompt": "千年生きた巨大な桜の木。季節に関係なく満開で、花びらが光の粒になって降りそそぐ。根元に小さな祠。",
+   "effects": [
+    {
+     "trigger": "start",
+     "steps": [
+      {
+       "action": "buff",
+       "target": "allAllies",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "image": "img/k_senbon.jpg"
+  },
+  "y_fly": {
+   "name": "風船うさぎ",
+   "set": "夢枕",
+   "color": "紫",
+   "type": "unit",
+   "cost": 2,
+   "atk": 2,
+   "hp": 1,
+   "rarity": "C",
+   "tags": [
+    "夢枕",
+    "良夢"
+   ],
+   "artPrompt": "たくさんの風船につかまって、紫の夜空をふわふわ飛んでいく白いうさぎ。下に小さな街の灯り。風船は色とりどり。",
+   "effects": [
+    {
+     "trigger": "death",
+     "steps": [
+      {
+       "action": "damage",
+       "target": "opponent",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "quick": true,
+   "image": "img/y_fly.jpg"
+  },
+  "y_chase": {
+   "name": "おいかけっこの影",
+   "set": "夢枕",
+   "color": "紫",
+   "type": "unit",
+   "cost": 2,
+   "atk": 2,
+   "hp": 2,
+   "rarity": "C",
+   "tags": [
+    "夢枕",
+    "悪夢"
+   ],
+   "artPrompt": "どこまでも続く暗い廊下を、黒い大きな影が手をのばして追いかけてくる。ドアがいくつも並び、遠くに小さな光。影の手が画面の手前にのびる。人物は描かない。",
+   "effects": [
+    {
+     "trigger": "death",
+     "steps": [
+      {
+       "action": "summon",
+       "id": "y_shade",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "image": "img/y_chase.jpg"
+  },
+  "y_sweets": {
+   "name": "わたあめひつじ",
+   "set": "夢枕",
+   "color": "紫",
+   "type": "unit",
+   "cost": 3,
+   "atk": 1,
+   "hp": 4,
+   "rarity": "C",
+   "tags": [
+    "夢枕",
+    "良夢"
+   ],
+   "artPrompt": "毛がピンクと水色のわたあめでできた、ふわふわのひつじ。紫の夜空に浮かぶ雲の上で、のんびり座っている。まわりに星形のお菓子が浮かぶ。",
+   "effects": [
+    {
+     "trigger": "end",
+     "steps": [
+      {
+       "action": "heal",
+       "target": "allAllies",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "image": "img/y_sweets.jpg"
+  },
+  "y_door": {
+   "name": "こっちにおいで",
+   "set": "夢枕",
+   "color": "紫",
+   "type": "art",
+   "cost": 1,
+   "rarity": "C",
+   "tags": [
+    "良夢"
+   ],
+   "glyph": "search",
+   "artPrompt": "暗闇の中に、ぽつんと立つ小さな木の扉。少し開いたすき間から、紫と金の夢の光と星がこぼれ、手招きするように光の筋がのびている。人物は描かない。",
+   "effects": [
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "search",
+       "filter": {
+        "tag": "夢枕",
+        "type": "unit"
+       }
+      }
+     ]
+    }
+   ],
+   "image": "img/y_door.jpg"
+  },
+  "y_mirror": {
+   "name": "それ、わたし？",
+   "set": "夢枕",
+   "color": "紫",
+   "type": "art",
+   "cost": 2,
+   "rarity": "C",
+   "tags": [
+    "悪夢"
+   ],
+   "glyph": "burst",
+   "artPrompt": "夜の中に浮かぶ大きな鏡が割れて、紫のガラスの破片が飛び散る。破片の一つ一つに、少しずつちがう、ぼやけた誰かの姿が映っている。顔ははっきり描かない。",
+   "effects": [
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "damage",
+       "target": "chosen",
+       "n": 3
+      },
+      {
+       "action": "damage",
+       "target": "randomAlly",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "target": "enemyUnit",
+   "image": "img/y_mirror.jpg"
+  },
+  "y_fall": {
+   "name": "みーつけた",
+   "set": "夢枕",
+   "color": "紫",
+   "type": "art",
+   "cost": 3,
+   "rarity": "R",
+   "tags": [
+    "悪夢"
+   ],
+   "glyph": "cross",
+   "artPrompt": "暗い子ども部屋。少しだけ開いたクローゼットの扉のすき間から、紫に光る目が二つ、こちらをのぞいている。床にぬいぐるみが転がる。少しこわい。人物ははっきり描かない。",
+   "effects": [
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "destroy",
+       "target": "chosen"
+      },
+      {
+       "action": "destroy",
+       "target": "randomAlly"
+      }
+     ]
+    }
+   ],
+   "target": "enemyUnit",
+   "image": "img/y_fall.jpg"
+  },
+  "y_true": {
+   "name": "また会えたね",
+   "set": "夢枕",
+   "color": "紫",
+   "type": "art",
+   "cost": 3,
+   "rarity": "R",
+   "tags": [
+    "良夢"
+   ],
+   "glyph": "star",
+   "artPrompt": "紫の夜が明けていく花畑に、光の粒が集まって、なつかしい誰かの形にもどっていく。やさしい金色の朝の光。人物は光の形だけで、顔は描かない。",
+   "effects": [
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "revive"
+      }
+     ]
+    }
+   ],
+   "image": "img/y_true.jpg"
+  },
+  "y_diary": {
+   "name": "夢日記",
+   "set": "夢枕",
+   "color": "紫",
+   "type": "object",
+   "cost": 2,
+   "rarity": "R",
+   "tags": [],
+   "glyph": "star",
+   "artPrompt": "枕元に置かれた、紫の表紙の日記帳。開いたページから、見た夢の景色が小さな光の絵になって浮かび上がる。ページに文字は描かない。人物は描かない。",
+   "effects": [
+    {
+     "trigger": "allyDeath",
+     "steps": [
+      {
+       "action": "draw",
+       "target": "me",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "image": "img/y_diary.jpg"
+  },
+  "y_still": {
+   "name": "まだ、終わらない",
+   "set": "夢枕",
+   "color": "紫",
+   "type": "art",
+   "cost": 6,
+   "rarity": "RR",
+   "tags": [],
+   "glyph": "star",
+   "effects": [
+    {
+     "trigger": "play",
+     "steps": [
+      {
+       "action": "reviveAll",
+       "clearObjects": true,
+       "per": 10,
+       "grantOn": {
+        "id": "y_luluna",
+        "grant": "y_end"
+       }
+      }
+     ]
+    }
+   ],
+   "artPrompt": "真っ暗な夢の底が下から割れて、紫と金の光の柱が天へ噴き上がる、逆転の瞬間。光の中心に、ルルナ（14歳くらいの少女。銀白で毛先だけ薄いラベンダー色の長い髪、額の上に閉じた目の刺しゅうのアイマスク、白い寝巻きのワンピースに紺紫のリボン、はだし）が浮かび、いつもの眠そうな顔ではなく、はじめてはっきり目を開いて、まっすぐこちらを見ている。髪と寝巻きが、下からの光の風で大きくなびく。腕は2本だけ。両腕で、星の刺しゅうがある紺紫のまん丸の枕を胸に抱えている。ルルナの後ろの左右に、光の粒が集まって、ムウ（白と薄紫のふわふわの獏）、ブラン（つぎはぎのくまのぬいぐるみの騎士）、ジグ（白い仮面の細長い道化）、グリム（星の光る黒い獅子のけもの）が、光の輪郭から姿を取り戻していく。4体はルルナより小さく、少し後ろ。足元では割れた闇のかけらが舞い上がり、まわりを金色の星と大きな光の輪が回る。少し下から見上げる構図で、ルルナは画面の真ん中に大きく。豪華で、きらびやかな切り札の絵。",
+   "image": "img/y_still.jpg"
+  },
+  "k_pupil": {
+   "name": "環流の門下生",
+   "set": "四季ノ環",
+   "color": "緑",
+   "type": "unit",
+   "cost": 1,
+   "atk": 1,
+   "hp": 1,
+   "rarity": "C",
+   "tags": [
+    "四季ノ環"
+   ],
+   "effects": [
+    {
+     "trigger": "seasonChange",
+     "steps": [
+      {
+       "action": "buff",
+       "target": "self",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "artPrompt": "剣を習っている、12〜13歳くらいの小柄で元気な女の子。栗色の髪を、肩につかない短いふたつ結びにしている。頭に白い鉢巻、鉢巻の結び目に緑の組紐。丸い目で、幼い顔立ち。白い着物に、明るい若草色の短い羽織、えんじ色の袴。道場の庭で、木刀を両手でにぎり、大きく振り下ろして素振りをしている。一生けんめいな表情で、少し汗が光る。まわりを桜・青葉・紅葉・雪のかけらが一枚ずつ舞う。斜めの構図で、髪と羽織がなびく。女の子は画面の中で大きく。腕は2本だけ、手も2つだけ。木刀は1本。",
+   "image": "img/k_pupil.jpg"
+  },
+  "k_miko": {
+   "name": "雪の社の巫女",
+   "set": "四季ノ環",
+   "color": "緑",
+   "type": "unit",
+   "cost": 4,
+   "atk": 2,
+   "hp": 6,
+   "rarity": "C",
+   "tags": [
+    "四季ノ環"
+   ],
+   "effects": [
+    {
+     "trigger": "end",
+     "steps": [
+      {
+       "action": "heal",
+       "target": "allAllies",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "artPrompt": "雪の降る静かな夜、小さな社の前に立つ若い巫女。長い黒髪を低い位置で白い紙の飾りで結ぶ。白い着物に緋色の袴、上に白い千早。右手に神楽鈴を持ち、左手はそっと胸に当てて、やさしく目を伏せて祈っている。まわりの雪が、鈴の音に合わせて淡い光の粒になって舞う。灯籠の火があたたかい。巫女は画面の中で大きく。腕は2本だけ、手も2つだけ。",
+   "image": "img/k_miko.jpg"
+  }
+ },
+ "decks": {
+  "soiree": {
+   "field": "soiree",
+   "list": [
+    {
+     "id": "s_lolo",
+     "n": 3
+    },
+    {
+     "id": "s_canaria",
+     "n": 3
+    },
+    {
+     "id": "s_sigma",
+     "n": 3
+    },
+    {
+     "id": "s_vera",
+     "n": 3
+    },
+    {
+     "id": "s_letizia",
+     "n": 3
+    },
+    {
+     "id": "s_dice",
+     "n": 3
+    },
+    {
+     "id": "s_invite",
+     "n": 3
+    },
+    {
+     "id": "s_roulette",
+     "n": 3
+    },
+    {
+     "id": "s_blackjack",
+     "n": 3
+    },
+    {
+     "id": "s_allin",
+     "n": 3
+    },
+    {
+     "id": "b_amp",
+     "n": 2
+    },
+    {
+     "id": "b_strike",
+     "n": 2
+    },
+    {
+     "id": "s_sweep",
+     "n": 3
+    },
+    {
+     "id": "s_chip",
+     "n": 3
+    }
+   ],
+   "name": "ソワレ"
+  },
+  "noctiluca": {
+   "field": "noctiluca",
+   "list": [
+    {
+     "id": "n_garna",
+     "n": 3
+    },
+    {
+     "id": "n_fine",
+     "n": 3
+    },
+    {
+     "id": "n_urka",
+     "n": 3
+    },
+    {
+     "id": "n_nox",
+     "n": 3
+    },
+    {
+     "id": "n_riora",
+     "n": 3
+    },
+    {
+     "id": "n_lesson",
+     "n": 3
+    },
+    {
+     "id": "n_heart",
+     "n": 3
+    },
+    {
+     "id": "n_encore",
+     "n": 3
+    },
+    {
+     "id": "n_call",
+     "n": 3
+    },
+    {
+     "id": "n_shout",
+     "n": 3
+    },
+    {
+     "id": "b_amp",
+     "n": 2
+    },
+    {
+     "id": "c_exchange",
+     "n": 2
+    },
+    {
+     "id": "b_metro",
+     "n": 3
+    },
+    {
+     "id": "b_strike",
+     "n": 2
+    },
+    {
+     "id": "x_lamp",
+     "n": 1
+    }
+   ],
+   "name": "ノクティルカ"
+  },
+  "hajimari": {
+   "name": "はじまりの灯",
+   "field": "hajimari",
+   "list": [
+    {
+     "id": "x_wanderer",
+     "n": 3
+    },
+    {
+     "id": "h_squire",
+     "n": 3
+    },
+    {
+     "id": "h_fox",
+     "n": 2
+    },
+    {
+     "id": "h_bird",
+     "n": 3
+    },
+    {
+     "id": "h_mapper",
+     "n": 3
+    },
+    {
+     "id": "x_warden",
+     "n": 3
+    },
+    {
+     "id": "h_scholar",
+     "n": 2
+    },
+    {
+     "id": "h_tortoise",
+     "n": 2
+    },
+    {
+     "id": "h_knight",
+     "n": 2
+    },
+    {
+     "id": "h_ember",
+     "n": 3
+    },
+    {
+     "id": "x_lamp",
+     "n": 2
+    },
+    {
+     "id": "c_exchange",
+     "n": 2
+    },
+    {
+     "id": "h_signpost",
+     "n": 2
+    },
+    {
+     "id": "h_campfire",
+     "n": 2
+    },
+    {
+     "id": "h_starfall",
+     "n": 1
+    },
+    {
+     "id": "b_strike",
+     "n": 1
+    },
+    {
+     "id": "b_amp",
+     "n": 2
+    },
+    {
+     "id": "b_metro",
+     "n": 2
+    }
+   ]
+  },
+  "yumemakura": {
+   "name": "夢枕",
+   "field": "yumemakura",
+   "list": [
+    {
+     "id": "y_luluna",
+     "n": 3
+    },
+    {
+     "id": "y_muu",
+     "n": 3
+    },
+    {
+     "id": "y_blanc",
+     "n": 3
+    },
+    {
+     "id": "y_jig",
+     "n": 3
+    },
+    {
+     "id": "y_grim",
+     "n": 3
+    },
+    {
+     "id": "y_fly",
+     "n": 3
+    },
+    {
+     "id": "y_chase",
+     "n": 3
+    },
+    {
+     "id": "y_sweets",
+     "n": 2
+    },
+    {
+     "id": "y_door",
+     "n": 3
+    },
+    {
+     "id": "y_wake",
+     "n": 3
+    },
+    {
+     "id": "y_mirror",
+     "n": 3
+    },
+    {
+     "id": "y_fall",
+     "n": 2
+    },
+    {
+     "id": "y_true",
+     "n": 2
+    },
+    {
+     "id": "y_diary",
+     "n": 2
+    },
+    {
+     "id": "c_exchange",
+     "n": 2
+    }
+   ]
+  },
+  "shiki": {
+   "name": "四季ノ環",
+   "field": "shiki",
+   "list": [
+    {
+     "id": "k_tamaki",
+     "n": 3
+    },
+    {
+     "id": "k_deer",
+     "n": 3
+    },
+    {
+     "id": "k_swallow",
+     "n": 3
+    },
+    {
+     "id": "k_fox",
+     "n": 3
+    },
+    {
+     "id": "k_wolf",
+     "n": 2
+    },
+    {
+     "id": "k_pupil",
+     "n": 3
+    },
+    {
+     "id": "k_miko",
+     "n": 2
+    },
+    {
+     "id": "k_sakura",
+     "n": 3
+    },
+    {
+     "id": "k_kagero",
+     "n": 3
+    },
+    {
+     "id": "k_momiji",
+     "n": 3
+    },
+    {
+     "id": "k_hyoka",
+     "n": 3
+    },
+    {
+     "id": "c_exchange",
+     "n": 2
+    },
+    {
+     "id": "b_amp",
+     "n": 2
+    },
+    {
+     "id": "x_lamp",
+     "n": 2
+    },
+    {
+     "id": "h_signpost",
+     "n": 1
+    },
+    {
+     "id": "x_warden",
+     "n": 2
+    }
+   ]
+  },
+  "easy_soiree": {
+   "name": "ソワレ（やさしい）",
+   "field": "col_yellow",
+   "list": [
+    {
+     "id": "s_lolo",
+     "n": 3
+    },
+    {
+     "id": "s_canaria",
+     "n": 3
+    },
+    {
+     "id": "s_sigma",
+     "n": 3
+    },
+    {
+     "id": "s_vera",
+     "n": 3
+    },
+    {
+     "id": "s_letizia",
+     "n": 3
+    },
+    {
+     "id": "s_dice",
+     "n": 3
+    },
+    {
+     "id": "s_invite",
+     "n": 3
+    },
+    {
+     "id": "s_roulette",
+     "n": 3
+    },
+    {
+     "id": "s_blackjack",
+     "n": 3
+    },
+    {
+     "id": "s_allin",
+     "n": 3
+    },
+    {
+     "id": "b_amp",
+     "n": 2
+    },
+    {
+     "id": "b_strike",
+     "n": 2
+    },
+    {
+     "id": "s_sweep",
+     "n": 3
+    },
+    {
+     "id": "s_chip",
+     "n": 3
+    }
+   ],
+   "cpu": "easy",
+   "base": "soiree"
+  },
+  "easy_noctiluca": {
+   "name": "ノクティルカ（やさしい）",
+   "field": "col_blue",
+   "list": [
+    {
+     "id": "n_garna",
+     "n": 3
+    },
+    {
+     "id": "n_fine",
+     "n": 3
+    },
+    {
+     "id": "n_urka",
+     "n": 3
+    },
+    {
+     "id": "n_nox",
+     "n": 3
+    },
+    {
+     "id": "n_riora",
+     "n": 3
+    },
+    {
+     "id": "n_lesson",
+     "n": 3
+    },
+    {
+     "id": "n_heart",
+     "n": 3
+    },
+    {
+     "id": "n_encore",
+     "n": 3
+    },
+    {
+     "id": "n_call",
+     "n": 3
+    },
+    {
+     "id": "n_shout",
+     "n": 3
+    },
+    {
+     "id": "b_amp",
+     "n": 2
+    },
+    {
+     "id": "c_exchange",
+     "n": 2
+    },
+    {
+     "id": "b_metro",
+     "n": 3
+    },
+    {
+     "id": "b_strike",
+     "n": 2
+    },
+    {
+     "id": "x_lamp",
+     "n": 1
+    }
+   ],
+   "cpu": "easy",
+   "base": "noctiluca"
+  },
+  "easy_yumemakura": {
+   "name": "夢枕（やさしい）",
+   "field": "col_purple",
+   "list": [
+    {
+     "id": "y_luluna",
+     "n": 3
+    },
+    {
+     "id": "y_muu",
+     "n": 3
+    },
+    {
+     "id": "y_blanc",
+     "n": 3
+    },
+    {
+     "id": "y_jig",
+     "n": 3
+    },
+    {
+     "id": "y_grim",
+     "n": 3
+    },
+    {
+     "id": "y_fly",
+     "n": 3
+    },
+    {
+     "id": "y_chase",
+     "n": 3
+    },
+    {
+     "id": "y_sweets",
+     "n": 2
+    },
+    {
+     "id": "y_door",
+     "n": 3
+    },
+    {
+     "id": "y_wake",
+     "n": 3
+    },
+    {
+     "id": "y_mirror",
+     "n": 3
+    },
+    {
+     "id": "y_fall",
+     "n": 2
+    },
+    {
+     "id": "y_true",
+     "n": 2
+    },
+    {
+     "id": "y_diary",
+     "n": 2
+    },
+    {
+     "id": "c_exchange",
+     "n": 2
+    }
+   ],
+   "cpu": "easy",
+   "base": "yumemakura"
+  },
+  "easy_shiki": {
+   "name": "四季ノ環（やさしい）",
+   "field": "col_green",
+   "list": [
+    {
+     "id": "k_tamaki",
+     "n": 3
+    },
+    {
+     "id": "k_deer",
+     "n": 3
+    },
+    {
+     "id": "k_swallow",
+     "n": 3
+    },
+    {
+     "id": "k_fox",
+     "n": 3
+    },
+    {
+     "id": "k_wolf",
+     "n": 2
+    },
+    {
+     "id": "k_pupil",
+     "n": 3
+    },
+    {
+     "id": "k_miko",
+     "n": 2
+    },
+    {
+     "id": "k_sakura",
+     "n": 3
+    },
+    {
+     "id": "k_kagero",
+     "n": 3
+    },
+    {
+     "id": "k_momiji",
+     "n": 3
+    },
+    {
+     "id": "k_hyoka",
+     "n": 3
+    },
+    {
+     "id": "c_exchange",
+     "n": 2
+    },
+    {
+     "id": "b_amp",
+     "n": 2
+    },
+    {
+     "id": "x_lamp",
+     "n": 2
+    },
+    {
+     "id": "h_signpost",
+     "n": 1
+    },
+    {
+     "id": "x_warden",
+     "n": 2
+    }
+   ],
+   "cpu": "easy",
+   "base": "shiki"
+  },
+  "hard_soiree": {
+   "name": "ソワレ（むずかしい）",
+   "field": "soiree",
+   "list": [
+    {
+     "id": "s_lolo",
+     "n": 3
+    },
+    {
+     "id": "s_canaria",
+     "n": 1
+    },
+    {
+     "id": "s_sigma",
+     "n": 3
+    },
+    {
+     "id": "s_vera",
+     "n": 3
+    },
+    {
+     "id": "s_letizia",
+     "n": 3
+    },
+    {
+     "id": "s_dice",
+     "n": 3
+    },
+    {
+     "id": "s_invite",
+     "n": 3
+    },
+    {
+     "id": "s_roulette",
+     "n": 3
+    },
+    {
+     "id": "s_blackjack",
+     "n": 3
+    },
+    {
+     "id": "b_strike",
+     "n": 2
+    },
+    {
+     "id": "s_sweep",
+     "n": 3
+    },
+    {
+     "id": "s_chip",
+     "n": 2
+    },
+    {
+     "id": "h_bird",
+     "n": 1
+    },
+    {
+     "id": "x_wanderer",
+     "n": 2
+    },
+    {
+     "id": "x_warden",
+     "n": 3
+    },
+    {
+     "id": "h_tortoise",
+     "n": 1
+    },
+    {
+     "id": "c_exchange",
+     "n": 1
+    }
+   ],
+   "cpu": "hard",
+   "base": "soiree"
+  },
+  "hard_noctiluca": {
+   "name": "ノクティルカ（むずかしい）",
+   "field": "noctiluca",
+   "list": [
+    {
+     "id": "n_garna",
+     "n": 3
+    },
+    {
+     "id": "n_fine",
+     "n": 3
+    },
+    {
+     "id": "n_urka",
+     "n": 3
+    },
+    {
+     "id": "n_nox",
+     "n": 3
+    },
+    {
+     "id": "n_riora",
+     "n": 3
+    },
+    {
+     "id": "n_lesson",
+     "n": 3
+    },
+    {
+     "id": "n_heart",
+     "n": 3
+    },
+    {
+     "id": "n_encore",
+     "n": 1
+    },
+    {
+     "id": "n_call",
+     "n": 3
+    },
+    {
+     "id": "n_shout",
+     "n": 3
+    },
+    {
+     "id": "c_exchange",
+     "n": 2
+    },
+    {
+     "id": "b_metro",
+     "n": 2
+    },
+    {
+     "id": "x_warden",
+     "n": 2
+    },
+    {
+     "id": "h_bird",
+     "n": 3
+    },
+    {
+     "id": "h_ember",
+     "n": 1
+    },
+    {
+     "id": "h_mapper",
+     "n": 2
+    }
+   ],
+   "cpu": "hard",
+   "base": "noctiluca"
+  },
+  "hard_yumemakura": {
+   "name": "夢枕（むずかしい）",
+   "field": "yumemakura",
+   "list": [
+    {
+     "id": "y_luluna",
+     "n": 3
+    },
+    {
+     "id": "y_muu",
+     "n": 3
+    },
+    {
+     "id": "y_blanc",
+     "n": 3
+    },
+    {
+     "id": "y_jig",
+     "n": 3
+    },
+    {
+     "id": "y_grim",
+     "n": 3
+    },
+    {
+     "id": "y_fly",
+     "n": 3
+    },
+    {
+     "id": "y_chase",
+     "n": 3
+    },
+    {
+     "id": "y_door",
+     "n": 3
+    },
+    {
+     "id": "y_wake",
+     "n": 3
+    },
+    {
+     "id": "y_mirror",
+     "n": 3
+    },
+    {
+     "id": "y_fall",
+     "n": 2
+    },
+    {
+     "id": "y_true",
+     "n": 2
+    },
+    {
+     "id": "y_diary",
+     "n": 1
+    },
+    {
+     "id": "c_exchange",
+     "n": 2
+    },
+    {
+     "id": "h_squire",
+     "n": 1
+    },
+    {
+     "id": "b_strike",
+     "n": 1
+    },
+    {
+     "id": "x_wanderer",
+     "n": 1
+    }
+   ],
+   "cpu": "hard",
+   "base": "yumemakura"
+  },
+  "hard_shiki": {
+   "name": "四季ノ環（むずかしい）",
+   "field": "shiki",
+   "list": [
+    {
+     "id": "k_tamaki",
+     "n": 3
+    },
+    {
+     "id": "k_deer",
+     "n": 3
+    },
+    {
+     "id": "k_swallow",
+     "n": 3
+    },
+    {
+     "id": "k_fox",
+     "n": 3
+    },
+    {
+     "id": "k_wolf",
+     "n": 3
+    },
+    {
+     "id": "k_pupil",
+     "n": 3
+    },
+    {
+     "id": "k_miko",
+     "n": 3
+    },
+    {
+     "id": "k_sakura",
+     "n": 2
+    },
+    {
+     "id": "k_kagero",
+     "n": 2
+    },
+    {
+     "id": "k_momiji",
+     "n": 3
+    },
+    {
+     "id": "k_hyoka",
+     "n": 3
+    },
+    {
+     "id": "c_exchange",
+     "n": 2
+    },
+    {
+     "id": "b_amp",
+     "n": 2
+    },
+    {
+     "id": "x_warden",
+     "n": 3
+    },
+    {
+     "id": "x_wanderer",
+     "n": 1
+    },
+    {
+     "id": "h_knight",
+     "n": 1
+    }
+   ],
+   "cpu": "hard",
+   "base": "shiki"
+  },
+  "hard_hajimari": {
+   "name": "はじまりの灯（むずかしい）",
+   "field": "hajimari",
+   "list": [
+    {
+     "id": "x_wanderer",
+     "n": 3
+    },
+    {
+     "id": "h_squire",
+     "n": 3
+    },
+    {
+     "id": "h_fox",
+     "n": 1
+    },
+    {
+     "id": "h_bird",
+     "n": 3
+    },
+    {
+     "id": "h_mapper",
+     "n": 3
+    },
+    {
+     "id": "x_warden",
+     "n": 3
+    },
+    {
+     "id": "h_scholar",
+     "n": 2
+    },
+    {
+     "id": "h_tortoise",
+     "n": 3
+    },
+    {
+     "id": "h_knight",
+     "n": 3
+    },
+    {
+     "id": "h_ember",
+     "n": 1
+    },
+    {
+     "id": "x_lamp",
+     "n": 1
+    },
+    {
+     "id": "c_exchange",
+     "n": 3
+    },
+    {
+     "id": "h_signpost",
+     "n": 2
+    },
+    {
+     "id": "h_campfire",
+     "n": 2
+    },
+    {
+     "id": "h_starfall",
+     "n": 1
+    },
+    {
+     "id": "b_strike",
+     "n": 2
+    },
+    {
+     "id": "b_amp",
+     "n": 3
+    },
+    {
+     "id": "b_metro",
+     "n": 1
+    }
+   ],
+   "cpu": "hard",
+   "base": "hajimari"
+  }
+ },
+ "fields": {
+  "soiree": {
+   "conds": [
+    {
+     "n": 3,
+     "type": "gambles"
+    },
+    {
+     "n": 3,
+     "type": "wins"
+    }
+   ],
+   "name": "ソワレ",
+   "scene": "city",
+   "set": "ソワレ",
+   "stages": [
+    {
+     "artPrompt": "夜会が始まったばかりの、暗い高級カジノのサロン。深い紺の壁と金の装飾、消えかけたシャンデリア。半円のカードテーブルが並び、ろうそくの小さな火だけがフェルトの緑を照らす。奥は闇に沈み、人影がかすかに見える。静かで、上品で、どこか妖しい。",
+     "dealer": "s_lucielle1",
+     "effects": [],
+     "image": "img/soiree-1.jpg",
+     "name": "カジノ・ソワレ",
+     "penalty": 1
+    },
+    {
+     "artPrompt": "熱狂に包まれたカジノのホール。赤と金の照明、宙を舞うチップとトランプ。奥にはこぶしを上げてわく客のシルエット。カードテーブルが並び、熱気で空気がゆらいでいる。",
+     "dealer": "s_lucielle2",
+     "effects": [
+      {
+       "steps": [
+        {
+         "action": "buff",
+         "n": 1,
+         "target": "allAllies",
+         "temp": true
+        }
+       ],
+       "trigger": "gamble"
+      }
+     ],
+     "image": "img/soiree-2.jpg",
+     "name": "狂騒の遊技場",
+     "penalty": 1
+    },
+    {
+     "artPrompt": "白と金の光に包まれた、最後の勝負の場。客は一人もいない。広いホールの真ん中に、カードテーブルが一つだけ残っている。宙に浮かんでゆっくり回るトランプ、光の粒。静かで、神聖で、少しこわい。",
+     "dealer": "s_lucielle3",
+     "drawWins": true,
+     "effects": [],
+     "grant": "s_ring",
+     "image": "img/soiree-3.jpg",
+     "name": "宿命の決戦場",
+     "penalty": 1
+    }
+   ],
+   "color": "黄"
+  },
+  "noctiluca": {
+   "conds": [
+    {
+     "n": 3,
+     "type": "parts"
+    },
+    {
+     "n": 3,
+     "tag": "歌",
+     "type": "tag"
+    }
+   ],
+   "name": "ノクティルカ",
+   "scene": "spires",
+   "set": "ノクティルカ",
+   "stages": [
+    {
+     "artPrompt": "路地裏の小さなガレージを改造した練習場所。シャッターが半分開いていて、中に古いアンプやドラムセットやケーブルが置いてある。裸電球のオレンジの光。外は夜の街。",
+     "effects": [
+      {
+       "steps": [
+        {
+         "action": "buff",
+         "n": 1,
+         "target": "randomAlly",
+         "temp": true
+        }
+       ],
+       "tag": "歌",
+       "trigger": "use"
+      }
+     ],
+     "image": "img/noctiluca-1.jpg",
+     "name": "路地裏のガレージ"
+    },
+    {
+     "artPrompt": "ネオンの看板が並ぶ夜の繁華街の地下にあるライブハウス。ピンクと紫のネオン。誰もいないステージにスポットライトが当たり、手前に客席のシルエット。",
+     "costMod": {
+      "n": 1,
+      "tag": "歌"
+     },
+     "effects": [
+      {
+       "steps": [
+        {
+         "action": "buff",
+         "n": 1,
+         "target": "randomAlly",
+         "temp": true
+        }
+       ],
+       "tag": "歌",
+       "trigger": "use"
+      }
+     ],
+     "grant": "n_call",
+     "image": "img/noctiluca-2.jpg",
+     "name": "ネオン街のライブハウス"
+    },
+    {
+     "artPrompt": "満月の下、ゴシックな大聖堂の前に組まれた野外ステージ。尖塔が並び、青白い月の光。ステージの照明が夜空に向かって伸びている。",
+     "costMod": {
+      "n": 1,
+      "tag": "歌"
+     },
+     "effects": [
+      {
+       "steps": [
+        {
+         "action": "buff",
+         "n": 1,
+         "target": "allAllies",
+         "temp": true
+        },
+        {
+         "action": "damage",
+         "n": 1,
+         "target": "opponent"
+        }
+       ],
+       "tag": "歌",
+       "trigger": "use"
+      }
+     ],
+     "grant": "n_last",
+     "image": "img/noctiluca-3.jpg",
+     "name": "月下の大聖堂"
+    }
+   ],
+   "color": "青"
+  },
+  "hajimari": {
+   "name": "狭間の旅路",
+   "set": "はじまりの灯",
+   "color": "無",
+   "scene": "forest",
+   "stages": [
+    {
+     "name": "狭間の野営地",
+     "effects": [
+      {
+       "trigger": "start",
+       "steps": [
+        {
+         "action": "buff",
+         "target": "randomAlly",
+         "n": 1,
+         "temp": true
+        }
+       ]
+      }
+     ],
+     "artPrompt": "何もない夜の海のような狭間に浮かぶ、小さな岩場の野営地。焚き火がぱちぱちと燃え、そばに旅の荷物とランタン。頭上には満天の星。遠くに、光る天球がいくつも浮かんでいる。人物は描かない。",
+     "image": "img/hajimari-1.jpg"
+    },
+    {
+     "name": "星見の峠",
+     "grant": "x_wanderer",
+     "effects": [
+      {
+       "trigger": "start",
+       "steps": [
+        {
+         "action": "buff",
+         "target": "randomAlly",
+         "n": 1,
+         "temp": true
+        }
+       ]
+      }
+     ],
+     "artPrompt": "狭間に浮かぶ高い峠の頂上。古い石の道しるべ（文字は彫らず、小さな星の印だけ）と、星を見るための小さな観測台。空いっぱいの星と、流れ星。足元の雲海の下に、いくつもの天球が光っている。人物は描かない。石や看板に文字を書かない。",
+     "image": "img/hajimari-2.jpg"
+    },
+    {
+     "name": "夜明けの境界門",
+     "effects": [
+      {
+       "trigger": "unit",
+       "steps": [
+        {
+         "action": "buff",
+         "target": "self",
+         "n": 1,
+         "hp": 1
+        }
+       ]
+      }
+     ],
+     "artPrompt": "狭間の果てに立つ、光でできた大きな門。門の向こうから夜明けの光があふれ、まわりの夜空が金とばら色に染まっていく。門へ続く石の道。人物は描かない。",
+     "image": "img/hajimari-3.jpg"
+    }
+   ],
+   "conds": [
+    {
+     "type": "units",
+     "n": 3
+    },
+    {
+     "type": "arts",
+     "n": 3
+    }
+   ]
+  },
+  "col_blue": {
+   "name": "響き合いの領域",
+   "set": "",
+   "color": "青",
+   "scene": "sea",
+   "stages": [
+    {
+     "name": "さざなみの岸",
+     "effects": [
+      {
+       "trigger": "unit",
+       "steps": [
+        {
+         "action": "buff",
+         "target": "randomAlly",
+         "n": 1,
+         "temp": true
+        }
+       ]
+      }
+     ],
+     "artPrompt": "夜の静かな海辺。打ち寄せる波が青い光の帯になって、岸にさざなみの模様を描く。人物は描かない。",
+     "image": "img/col_blue-1.jpg"
+    },
+    {
+     "name": "響きの回廊",
+     "effects": [
+      {
+       "trigger": "use",
+       "steps": [
+        {
+         "action": "buff",
+         "target": "randomAlly",
+         "n": 1,
+         "temp": true
+        }
+       ]
+      }
+     ],
+     "artPrompt": "青い光の柱が並ぶ、長い回廊。床に響きの波紋が広がり、柱どうしが光の線でつながっている。人物は描かない。",
+     "image": "img/col_blue-2.jpg"
+    },
+    {
+     "name": "蒼穹の大聖歌",
+     "effects": [
+      {
+       "trigger": "use",
+       "steps": [
+        {
+         "action": "buff",
+         "target": "allAllies",
+         "n": 1,
+         "temp": true
+        }
+       ]
+      }
+     ],
+     "artPrompt": "空いっぱいに広がる青い光のオーロラと、天へ昇る音の光の柱。下に広い祈りの広場。人物は描かない。",
+     "image": "img/col_blue-3.jpg"
+    }
+   ],
+   "conds": [
+    {
+     "type": "units",
+     "n": 3
+    },
+    {
+     "type": "uses",
+     "n": 6
+    }
+   ]
+  },
+  "col_yellow": {
+   "name": "運命の領域",
+   "set": "",
+   "color": "黄",
+   "scene": "city",
+   "stages": [
+    {
+     "name": "星詠みの間",
+     "effects": [
+      {
+       "trigger": "start",
+       "steps": [
+        {
+         "action": "peek",
+         "n": 2
+        }
+       ]
+      }
+     ],
+     "artPrompt": "金の装飾の小さな部屋。天井に星図が描かれ、机の上に水晶玉と、伏せたカードが並ぶ。ろうそくの光。人物は描かない。星図に文字は描かない。",
+     "image": "img/col_yellow-1.jpg"
+    },
+    {
+     "name": "運命の書庫",
+     "effects": [
+      {
+       "trigger": "start",
+       "steps": [
+        {
+         "action": "peek",
+         "n": 3
+        }
+       ]
+      }
+     ],
+     "artPrompt": "天井まで届く本棚が並ぶ、金色の光の書庫。宙に開いた本が浮かび、ページから光の糸がのびている。本に文字は描かない。人物は描かない。",
+     "image": "img/col_yellow-2.jpg"
+    },
+    {
+     "name": "宿命の天文台",
+     "effects": [
+      {
+       "trigger": "start",
+       "steps": [
+        {
+         "action": "peek",
+         "n": 3
+        },
+        {
+         "action": "draw",
+         "target": "me",
+         "n": 1
+        }
+       ]
+      }
+     ],
+     "artPrompt": "夜空に向かって開いた、大きな金色の天文台。巨大な望遠鏡と、まわりを回る金の輪の天球儀。満天の星。人物は描かない。",
+     "image": "img/col_yellow-3.jpg"
+    }
+   ],
+   "conds": [
+    {
+     "type": "arts",
+     "n": 3
+    },
+    {
+     "type": "units",
+     "n": 3
+    }
+   ]
+  },
+  "col_purple": {
+   "name": "残影の領域",
+   "set": "",
+   "color": "紫",
+   "scene": "spires",
+   "stages": [
+    {
+     "name": "まどろみの淵",
+     "effects": [
+      {
+       "trigger": "end",
+       "steps": [
+        {
+         "action": "damage",
+         "target": "randomEnemy",
+         "n": 1
+        }
+       ]
+      }
+     ],
+     "artPrompt": "紫の霧がたちこめる、夢と現実のあいだの淵。ゆっくり落ちていく枕や羽根、ぼやけた月。人物は描かない。",
+     "image": "img/col_purple-1.jpg"
+    },
+    {
+     "name": "残影の回廊",
+     "effects": [
+      {
+       "trigger": "end",
+       "steps": [
+        {
+         "action": "damage",
+         "target": "randomEnemy",
+         "n": 2
+        }
+       ]
+      }
+     ],
+     "artPrompt": "割れた鏡が並ぶ、紫の光の回廊。鏡の中に、消えた誰かの影がうっすら映る。人物ははっきり描かない。",
+     "image": "img/col_purple-2.jpg"
+    },
+    {
+     "name": "忘却の玉座",
+     "effects": [
+      {
+       "trigger": "end",
+       "steps": [
+        {
+         "action": "damage",
+         "target": "randomEnemy",
+         "n": 2
+        }
+       ]
+      },
+      {
+       "trigger": "start",
+       "steps": [
+        {
+         "action": "draw",
+         "target": "me",
+         "n": 1
+        }
+       ]
+      }
+     ],
+     "artPrompt": "紫の闇に浮かぶ、誰もいない玉座。まわりを、消えかけた思い出の光のかけらが漂う。人物は描かない。",
+     "image": "img/col_purple-3.jpg"
+    }
+   ],
+   "conds": [
+    {
+     "type": "arts",
+     "n": 3
+    },
+    {
+     "type": "units",
+     "n": 3
+    }
+   ]
+  },
+  "col_green": {
+   "name": "芽吹きの領域",
+   "set": "",
+   "color": "緑",
+   "scene": "forest",
+   "stages": [
+    {
+     "name": "芽吹きの庭",
+     "effects": [
+      {
+       "trigger": "start",
+       "steps": [
+        {
+         "action": "buff",
+         "target": "randomAlly",
+         "n": 0,
+         "hp": 1
+        }
+       ]
+      }
+     ],
+     "artPrompt": "夜明け前の小さな庭。土から若い芽が顔を出し、露が光る。人物は描かない。",
+     "image": "img/col_green-1.jpg"
+    },
+    {
+     "name": "深緑の森",
+     "effects": [
+      {
+       "trigger": "start",
+       "steps": [
+        {
+         "action": "buff",
+         "target": "randomAlly",
+         "n": 1,
+         "hp": 1
+        }
+       ]
+      }
+     ],
+     "artPrompt": "大きな木々が茂る深い森。木漏れ日のような緑の光の粒が漂う。人物は描かない。",
+     "image": "img/col_green-2.jpg"
+    },
+    {
+     "name": "世界樹の頂",
+     "effects": [
+      {
+       "trigger": "start",
+       "steps": [
+        {
+         "action": "buff",
+         "target": "allAllies",
+         "n": 0,
+         "hp": 1
+        },
+        {
+         "action": "buff",
+         "target": "randomAlly",
+         "n": 1
+        }
+       ]
+      }
+     ],
+     "artPrompt": "雲の上までのびた世界樹の頂上。枝に光る実がなり、まわりに天球がいくつも浮かぶ。人物は描かない。",
+     "image": "img/col_green-3.jpg"
+    }
+   ],
+   "conds": [
+    {
+     "type": "units",
+     "n": 3
+    },
+    {
+     "type": "units",
+     "n": 3
+    }
+   ]
+  },
+  "yumemakura": {
+   "name": "夢枕",
+   "set": "夢枕",
+   "color": "紫",
+   "scene": "city",
+   "conds": [
+    {
+     "type": "lost",
+     "n": 4
+    },
+    {
+     "type": "kills",
+     "n": 3
+    }
+   ],
+   "stages": [
+    {
+     "name": "まくらもとの小部屋",
+     "effects": [
+      {
+       "trigger": "allyDeath",
+       "steps": [
+        {
+         "action": "damage",
+         "target": "randomEnemy",
+         "n": 1
+        }
+       ]
+      }
+     ],
+     "artPrompt": "夜の小さな子ども部屋。窓から月明かり。ベッドの上に大きな枕と、ぬいぐるみ。枕から紫の光のもやが立ちのぼり、天井が少しずつ夢の夜空に変わっていく。人物は描かない。",
+     "image": "img/yumemakura-1.jpg"
+    },
+    {
+     "name": "ゆめうつつの遊園地",
+     "grant": "y_lullaby",
+     "effects": [
+      {
+       "trigger": "allyDeath",
+       "steps": [
+        {
+         "action": "damage",
+         "target": "randomEnemy",
+         "n": 1
+        }
+       ]
+      }
+     ],
+     "artPrompt": "夢の中の夜の遊園地。半分はお菓子と光でできた楽しいメリーゴーランドと観覧車、もう半分はゆがんで黒く溶けた悪夢の乗り物。紫の空に月が二つ。人物は描かない。",
+     "image": "img/yumemakura-2.jpg"
+    },
+    {
+     "name": "夢の底の月",
+     "grant": "y_still",
+     "effects": [
+      {
+       "trigger": "allyDeath",
+       "steps": [
+        {
+         "action": "damage",
+         "target": "opponent",
+         "n": 1
+        }
+       ]
+      }
+     ],
+     "artPrompt": "夢のいちばん底。静かな紫の水面に、大きな月が映っている。水面に、これまでの夢のかけら（おもちゃ、鏡、羽根）が浮かぶ。神秘的で、少しさみしい。人物は描かない。",
+     "image": "img/yumemakura-3.jpg"
+    }
+   ]
+  },
+  "shiki": {
+   "name": "移ろいの郷",
+   "set": "四季ノ環",
+   "color": "緑",
+   "scene": "forest",
+   "cycle": true,
+   "lapGrant": {
+    "l1": "k_meguri",
+    "l2": "k_senbon"
+   },
+   "conds": [
+    {
+     "type": "units",
+     "n": 2
+    },
+    {
+     "type": "attacks",
+     "n": 2
+    },
+    {
+     "type": "uses",
+     "n": 3
+    },
+    {
+     "type": "taken",
+     "n": 3
+    }
+   ],
+   "stages": [
+    {
+     "name": "桜の丘",
+     "effects": [
+      {
+       "trigger": "unit",
+       "steps": [
+        {
+         "action": "buff",
+         "target": "self",
+         "n": 0,
+         "hp": 1
+        }
+       ]
+      }
+     ],
+     "artPrompt": "満開の桜が咲く、なだらかな丘。花びらが風に舞い、遠くに山が見える。やわらかい春の光。人物は描かない。",
+     "image": "img/shiki-1.jpg"
+    },
+    {
+     "name": "青葉の渓谷",
+     "effects": [
+      {
+       "trigger": "start",
+       "steps": [
+        {
+         "action": "buff",
+         "target": "randomAlly",
+         "n": 1,
+         "temp": true
+        }
+       ]
+      }
+     ],
+     "artPrompt": "緑の木々に囲まれた夏の渓谷。澄んだ川と小さな滝、入道雲、強い日差し。人物は描かない。",
+     "image": "img/shiki-2.jpg"
+    },
+    {
+     "name": "紅葉の山道",
+     "effects": [
+      {
+       "trigger": "start",
+       "steps": [
+        {
+         "action": "draw",
+         "target": "me",
+         "n": 1
+        }
+       ]
+      }
+     ],
+     "artPrompt": "赤と金の紅葉に包まれた山道。石段と古い鳥居のような門、夕暮れの光。人物は描かない。",
+     "image": "img/shiki-3.jpg"
+    },
+    {
+     "name": "雪の社",
+     "effects": [
+      {
+       "trigger": "start",
+       "steps": [
+        {
+         "action": "heal",
+         "target": "allAllies",
+         "n": 2
+        }
+       ]
+      }
+     ],
+     "artPrompt": "雪に覆われた静かな森の中の小さな社。灯籠に火がともり、雪がしんしんと降る。人物は描かない。",
+     "image": "img/shiki-4.jpg"
+    }
+   ]
+  }
+ },
+ "settings": {
+  "art": {
+   "base": "オリジナルキャラクターのアニメ調イラスト。線は細め、日本のアニメらしいやわらかいセル塗り、鮮やかな色。横長（16:10）の構図で、描くものを画面の中央に置く。端は切れてもいいように余白をとる。白いふちどりや枠は付けず、背景を画面いっぱいに描く。絵の中に文字・ロゴ・数字を入れない。既存の作品やキャラクターに似せない。",
+   "themes": {
+    "ソワレ": "テーマは夜会のカジノ。深い紺と金、ろうそくの光、緑のフェルト。上品だけど危うい空気。",
+    "ノクティルカ": "ゴシックな尖塔がそびえる夜の現代の街。人ではない特徴を少しだけ持つ亜人の少女5人のガールズバンド「ノクティルカ」（リオラ、ウルカ、ノクス、ガルナ、フィーネ）。色は夜の青紫、ネオンのピンク、赤い光。演奏すると音が光や影になってあふれ出す。全員、ほのかに光る青緑のしずく型のピンを付けている。メンバーの見た目は、添付した設定画に合わせる。",
+    "はじまりの灯": "どの天球にも属さない、天球と天球のあいだの「狭間」。何もない夜の海のような空間に、岩場や道や門が浮かび、遠くに光る天球が見える。星空、境界、旅、はじまりの小さな灯りの雰囲気。色は夜の紺と星の白、灯りのあたたかいオレンジ。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。人や生き物は画面の中で大きく。さすらいの旅人の見た目は、添付した設定画に合わせる。",
+    "夢枕": "眠り続ける少女ルルナの夢の中。色は深い紫、月の白、ところどころにパステルの光。やさしくて、少しこわい。背景や小物は「描くもの」に合わせて決め、毎回同じ構図や同じ小物（三日月、観覧車、シャボン玉、ピエロの顔）をくり返さない。悪夢の側の道化は、ひびの入った白い仮面だけにする（赤い鼻のピエロは描かない）。キャラクター（ルルナ、ムウ、ブラン、ジグ、グリム）の見た目は、添付した設定画に合わせる。",
+    "四季ノ環": "和風の四季の世界。春は桜、夏は青葉と入道雲、秋は紅葉、冬は雪。季節がぐるぐると巡る。和装の剣士・環（たまき）と、4匹の相棒（鹿の霞、ツバメの青嵐、キツネの稲穂、白いオオカミの六花）。色は季節ごとに変わるが、全体はやわらかい緑と自然の光。背景や小物は「描くもの」に合わせて決め、毎回同じ構図をくり返さない。キャラクター（環、霞、青嵐、稲穂、六花）は画面の中で大きく描き、見た目は添付した設定画に合わせる。"
+   }
+  }
+ }
+}
