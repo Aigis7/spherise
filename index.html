@@ -1639,10 +1639,18 @@ function compile() {
     FIELDS[id] = { id, name: f.name || id, set: f.set, scene: f.scene, stages: st, conds: (f.conds || []).slice(0, f.cycle ? 4 : 2), cycle: !!f.cycle, lapGrant: f.lapGrant || {} };
   }
 }
+/* デッキに入れられないカード：トークンと、RR（ライズレア）。RRは領域やカードの効果で手札に加わる */
+const noDeck = c => !!c && (!!c.token || c.rarity === 'RR');
+function grantSource(id) {
+  const hit = o => JSON.stringify(o).includes(`"${id}"`);
+  const f = Object.values(STORE.fields).find(hit); if (f) return `領域「${f.name}」`;
+  const c = Object.entries(STORE.cards).find(([k, v]) => k !== id && hit(v)); if (c) return `「${c[1].name}」`;
+  return '';
+}
 function deckCards(deckId) {
   const d = getDeck(deckId); const out = [];
   if (!d) return out;
-  for (const e of d.list || []) if (C[e.id] && STORE.cards[e.id]) for (let i = 0; i < e.n; i++) out.push(e.id);
+  for (const e of d.list || []) if (C[e.id] && STORE.cards[e.id] && !noDeck(STORE.cards[e.id])) for (let i = 0; i < e.n; i++) out.push(e.id);
   return out;
 }
 function deckField(deckId) { const d = getDeck(deckId); return d && FIELDS[d.field] ? d.field : Object.keys(FIELDS)[0]; }
@@ -4738,7 +4746,7 @@ function renderBuilder() {
   const inDeck = id => ((d.list || []).find(x => x.id === id) || { n: 0 }).n;
   const sets = setNames();
   const dcol = deckColor(d);
-  const pool = sortCards(Object.entries(STORE.cards)).filter(([id, c]) => ownedCount(id) > 0 && !c.token && (cardColor(c) === '無' || cardColor(c) === dcol) && (!BF.set || c.set === BF.set) && (!BF.type || c.type === BF.type) && qMatch(c, BF.q) && (BF.cost === '' || (BF.cost === '6' ? c.cost >= 6 : c.cost === +BF.cost)));
+  const pool = sortCards(Object.entries(STORE.cards)).filter(([id, c]) => ownedCount(id) > 0 && !noDeck(c) && (cardColor(c) === '無' || cardColor(c) === dcol) && (!BF.set || c.set === BF.set) && (!BF.type || c.type === BF.type) && qMatch(c, BF.q) && (BF.cost === '' || (BF.cost === '6' ? c.cost >= 6 : c.cost === +BF.cost)));
   const issues = builderIssues(d);
   const curve = Array.from({ length: 7 }, () => 0);
   for (const x of d.list || []) { const c = STORE.cards[x.id]; if (c) curve[Math.min(6, c.cost)] += x.n; }
@@ -4779,6 +4787,7 @@ function builderIssues(d) {
   for (const x of d.list || []) {
     const c = STORE.cards[x.id];
     if (!c) { out.push('消されたカードが入っています'); continue; }
+    if (noDeck(c)) { out.push(`${c.name}はデッキに入れられないカード（${grantSource(x.id) || '効果'}で手に入る）。−で外してください`); continue; }
     if (x.n > 3) out.push(`${c.name}は3枚まで`);
     else if (x.n > ownedCount(x.id)) out.push(`${c.name}は${ownedCount(x.id)}枚しか持っていません`);
   }
@@ -4788,7 +4797,7 @@ function bChange(id, delta) {
   const d = BUILD.deck; d.list = d.list || [];
   let x = d.list.find(y => y.id === id);
   if (!x) { x = { id, n: 0 }; d.list.push(x); }
-  const cap = Math.min(3, ownedCount(id));
+  const cap = noDeck(STORE.cards[id]) ? 0 : Math.min(3, ownedCount(id));
   x.n = Math.max(0, Math.min(cap, x.n + delta));
   d.list = d.list.filter(y => y.n > 0);
   BUILD.dirty = true; BUILD.msg = '';
@@ -4836,7 +4845,7 @@ function renderCollection() {
       <select id="cfRar" aria-label="レア度"><option value="">すべてのレア度</option>${Object.entries(RARITY).map(([k, v]) => `<option value="${k}"${k === CF.rar ? ' selected' : ''}>${v}</option>`).join('')}</select>
       <select id="cfOwn" aria-label="持っているか"><option value="">持っていないカードも</option><option value="yes"${CF.own === 'yes' ? ' selected' : ''}>持っているカードだけ</option><option value="no"${CF.own === 'no' ? ' selected' : ''}>持っていないカードだけ</option></select>
     </div>
-    <div class="cgrid">${list.map(([id, c]) => { const o = ownedCount(id); return `<div class="ccard${o ? '' : ' none'}"><span class="card ${c.type}">${cardFace(c)}</span><span class="own">${o ? `持っている：${PLAYER.testAll ? '∞' : o}枚` : 'まだ持っていない'}・${RARITY[c.rarity || 'C']}（${RAR_ABBR[c.rarity || 'C']}）</span></div>`; }).join('') || '<p class="note">条件に合うカードがありません。</p>'}</div>
+    <div class="cgrid">${list.map(([id, c]) => { const o = ownedCount(id), nd = noDeck(c); return `<div class="ccard${o || nd ? '' : ' none'}"><span class="card ${c.type}">${cardFace(c)}</span><span class="own">${nd ? `デッキには入らない（${esc(grantSource(id) || '効果')}で手に入る）` : o ? `持っている：${PLAYER.testAll ? '∞' : o}枚` : 'まだ持っていない'}・${RARITY[c.rarity || 'C']}（${RAR_ABBR[c.rarity || 'C']}）</span></div>`; }).join('') || '<p class="note">条件に合うカードがありません。</p>'}</div>
     <p class="note" style="margin-top:16px">かけらでカードを作る機能は、パックといっしょに追加します。</p>`;
 }
 $('#collection').addEventListener('change', e => {
