@@ -1627,7 +1627,8 @@
       {
        "action": "damage",
        "target": "chosen",
-       "season": true
+       "season": true,
+       "max": 3
       }
      ]
     },
