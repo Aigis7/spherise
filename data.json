@@ -124,14 +124,16 @@
    "cost": 2,
    "effects": [
     {
-     "trigger": "play",
      "steps": [
       {
-       "action": "draw",
-       "n": 1,
-       "target": "me"
+       "action": "search",
+       "filter": {
+        "tag": "歌",
+        "type": "art"
+       }
       }
-     ]
+     ],
+     "trigger": "play"
     }
    ],
    "epithet": "透き通る指先",
@@ -3438,7 +3440,7 @@
         },
         {
          "action": "damage",
-         "n": 2,
+         "n": 1,
          "target": "opponent"
         }
        ],
