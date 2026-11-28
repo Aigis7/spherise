@@ -858,7 +858,7 @@
     }
    ],
    "epithet": "裏切りのクルピエ",
-   "hp": 3,
+   "hp": 4,
    "image": "img/s_vera.jpg",
    "name": "ヴェラ",
    "rarity": "SR",
@@ -965,7 +965,7 @@
     }
    ],
    "epithet": "微笑む勝負師",
-   "hp": 4,
+   "hp": 5,
    "image": "img/s_letizia.jpg",
    "name": "レティシア",
    "rarity": "L",
@@ -1007,7 +1007,7 @@
     }
    ],
    "epithet": "零度の計算機",
-   "hp": 3,
+   "hp": 4,
    "image": "img/s_sigma.jpg",
    "name": "シグマ",
    "rarity": "R",
